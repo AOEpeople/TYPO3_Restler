@@ -1,0 +1,11 @@
+# cat=basic; type=boolean; label=refresh cache: When refreshing the cache is set, than restler will update the cache on each request
+refreshCache = 1
+
+# cat=basic; type=boolean; label=ProductionContext: When productionContext is not set, than restler will show debug-informations and parse the API-classes every time to map it to the URL
+productionContext = 0
+
+# cat=basic; type=boolean; label=Enable online documentation: Defines whether to enable the online documentation of the REST-API
+enableOnlineDocumentation = 1
+
+# cat=basic; type=string; label=Path to online documentation: Defines the path to the online documentation of the REST-API (e.g. www.myDomain.com/[pathToOnlineDocumentation]/)
+pathToOnlineDocumentation = api_explorer
