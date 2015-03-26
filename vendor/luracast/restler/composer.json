@@ -1,0 +1,65 @@
+{
+    "name":"luracast/restler",
+    "description":"Restler is a simple and effective multi-format Web API Server framework written in PHP. Just deal with your business logic in php, Restler will take care of the REST!",
+    "type":"library",
+    "keywords":["server","api","framework","REST"],
+    "homepage":"http://luracast.com/products/restler/",
+    "license":"LGPL-2.1",
+    "authors":[
+        {
+            "name":"Luracast",
+            "email":"arul@luracast.com"
+        }
+    ],
+    "extra":{
+        "branch-alias":{
+            "v3":"v3.0.x-dev"
+        }
+    },
+    "suggest":{
+        "guzzle/guzzle":"RESTful api HTTP client framework (see require-dev for details)",
+        "behat/behat":"Behaviour driven development testing framework (see require-dev for details)",
+        "rodneyrehm/plist":"If you need Apple plist binary/xml format",
+        "zendframework/zendamf":"If you need AMF format",
+        "symfony/yaml":"If you need YAML format",
+        "twig/twig":"If you want to use twig templates with Html format",
+        "mustache/mustache":"If you want to use mustache/handlebar templates with Html format",
+        "illuminate/view":"If you want to use laravel blade templates with Html format",
+        "bshaffer/oauth2-server-php":"If you want to use OAuth2 for authentication"
+    },
+    "require":{
+        "php":">=5.3.0"
+    },
+    "require-dev":{
+        "symfony/finder":"2.5.x-dev",
+        "guzzle/guzzle":"~3.1.1",
+        "behat/behat":"2.5.*@stable",
+        "bshaffer/oauth2-server-php":"v1.0"
+    },
+    "repositories":[
+        {
+            "type":"vcs",
+            "url":"https://github.com/zendframework/ZendAmf.git"
+        },
+        {
+            "type":"package",
+            "package":{
+                "name":"luracast/explorer",
+                "version":"v3.0.0",
+                "dist":{
+                    "type":"zip",
+                    "url":"https://github.com/Luracast/Restler-API-Explorer/zipball/v3.0.0"
+                }
+            }
+        }
+    ],
+    "autoload":{
+        "psr-0":{
+            "Luracast\\Restler":"vendor/"
+        }
+    },
+    "minimum-stability": "dev",
+    "conflict": {
+        "restler/framework":"3.*"
+    }
+}

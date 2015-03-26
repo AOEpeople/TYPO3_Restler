@@ -1,0 +1,25 @@
+{
+    "name": "aoe/congstar-restler",
+    "require": {
+        "luracast/restler": "dev-v3"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "luracast/restler",
+                "version": "dev-v3",
+                "source": {
+                    "url": "https://github.com/AOEpeople/Restler.git",
+                    "type": "git",
+                    "reference": "origin/v3"
+                }
+            }
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Luracast\\Restler\\": "vendor/luracast/restler/vendor/"
+        }
+    }
+}
