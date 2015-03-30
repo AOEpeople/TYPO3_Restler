@@ -51,7 +51,7 @@ class BuilderTest extends BaseTest
      * original server-configuration ($_SERVER)
      * @var array
      */
-    protected $originalServerConfiguration;
+    protected $originalServerVars;
     /**
      * @var Restler
      */
@@ -65,7 +65,7 @@ class BuilderTest extends BaseTest
         parent::setUp();
 
         $this->originalRestlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
-        $this->originalServerConfiguration = $_SERVER;
+        $this->originalServerVars = $_SERVER;
 
         // configure test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array(
@@ -91,7 +91,7 @@ class BuilderTest extends BaseTest
      */
     protected function tearDown() {
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = $this->originalRestlerConfigurationClasses;
-        $_SERVER = $this->originalServerConfiguration;
+        $_SERVER = $this->originalServerVars;
         parent::tearDown();
     }
 
