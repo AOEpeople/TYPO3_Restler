@@ -10,7 +10,7 @@
         </testsuite>
     </testsuites>
     <filter>
-        <whitelist>
+        <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../Classes</directory>
         </whitelist>
     </filter>
