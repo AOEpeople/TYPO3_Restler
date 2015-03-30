@@ -47,7 +47,7 @@ class ExtensionConfigurationTest extends BaseTest
     /**
      * setup
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

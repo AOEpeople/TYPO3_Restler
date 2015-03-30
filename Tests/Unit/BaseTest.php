@@ -65,5 +65,19 @@ abstract class BaseTest extends UnitTestCase
 
         $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
         $this->objectManager = clone $objectManager;
+
+        $this->setAutoLoadingForRestler();
+    }
+
+    /**
+     * use auto-loading for PHP-classes of restler-framework
+     */
+    private function setAutoLoadingForRestler()
+    {
+        // set auto-loading for restler
+        $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
+        if (file_exists($autoload)) {
+            require_once $autoload;
+        }
     }
 }
