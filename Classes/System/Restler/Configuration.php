@@ -50,6 +50,10 @@ class Configuration implements ConfigurationInterface
     }
 
     /**
+     * configure restler:
+     *  - add API- and authentication-class, when online documentation is enabled
+     *  - add common authentication-class (which can be used for TYPO3-FrontEnd-User-authentication)
+     *
      * @param Restler $restler
      * @return void
      */

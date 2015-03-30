@@ -84,7 +84,7 @@ class Builder implements SingletonInterface
     }
 
     /**
-     * Call all classes, which implements the interface 'Aoe\Restler\System\RestlerConfigurationInterface'.
+     * Call all classes, which implements the interface 'Aoe\Restler\System\Restler\ConfigurationInterface'.
      * Those classes includes further restler-configurations, e.g.:
      *  - add API-classes
      *  - add authentication-classes
@@ -112,7 +112,7 @@ class Builder implements SingletonInterface
             /* @var $configurationObj ConfigurationInterface */
             if (false === $configurationObj instanceof ConfigurationInterface) {
                 $message = 'class "' . $restlerConfigurationClass . '" did not implement the ';
-                $message.= 'interface "Aoe\Restler\System\Restler\\ConfigurationInterface"!';
+                $message.= 'interface "Aoe\Restler\System\Restler\ConfigurationInterface"!';
                 throw new InvalidArgumentException($message);
             }
 
