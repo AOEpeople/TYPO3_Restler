@@ -3,7 +3,6 @@ namespace Aoe\Restler\Tests\Unit\Controller;
 use Aoe\Restler\Controller\FeUserAuthenticationController;
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Aoe\Restler\Tests\Unit\BaseTest;
-use Luracast\Restler\Data\ApiMethodInfo;
 
 /***************************************************************
  *  Copyright notice
@@ -38,10 +37,6 @@ use Luracast\Restler\Data\ApiMethodInfo;
 class FeUserAuthenticationControllerTest extends BaseTest
 {
     /**
-     * @var ApiMethodInfo
-     */
-    protected $apiMethodInfoMock;
-    /**
      * @var FeUserAuthenticationController
      */
     protected $controller;
@@ -63,15 +58,8 @@ class FeUserAuthenticationControllerTest extends BaseTest
 
         $this->originalGlobalVars = $GLOBALS;
 
-        $this->apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
         $this->typo3LoaderMock = $this->getMockBuilder('Aoe\\Restler\\System\\TYPO3\\Loader')->disableOriginalConstructor()->getMock();
-
-        /* @var $restlerMock \Luracast\Restler\Restler */
-        $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
-        $restlerMock->apiMethodInfo = $this->apiMethodInfoMock;
-
         $this->controller = $this->objectManager->get('Aoe\\Restler\\Controller\\FeUserAuthenticationController');
-        $this->inject($this->controller, 'restler', $restlerMock);
         $this->inject($this->controller, 'typo3Loader', $this->typo3LoaderMock);
     }
 
@@ -86,11 +74,8 @@ class FeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatAuthenticationWillFailWhenWrongControllerWasCalled()
+    public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
     {
-        $this->apiMethodInfoMock->className = 'Controller1';
-        $this->controller->calledController = 'Controller2';
-
         $this->typo3LoaderMock->expects($this->never())->method('initializeFrontEndUser');
         $this->assertFalse($this->controller->__isAllowed());
     }
@@ -100,8 +85,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillFailWhenFeUserIsNotLoggedIn()
     {
-        $this->apiMethodInfoMock->className = 'Controller1';
-        $this->controller->calledController = 'Controller1';
+        $this->controller->checkAuthentication = true;
 
         $GLOBALS['TSFE'] = $this->createMockedTsfe();
         $GLOBALS['TSFE']->fe_user->user = null;
@@ -115,8 +99,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillBeSuccessful()
     {
-        $this->apiMethodInfoMock->className = 'Controller1';
-        $this->controller->calledController = 'Controller1';
+        $this->controller->checkAuthentication = true;
 
         $GLOBALS['TSFE'] = $this->createMockedTsfe();
         $GLOBALS['TSFE']->fe_user->user = array('username' => 'max.mustermann');

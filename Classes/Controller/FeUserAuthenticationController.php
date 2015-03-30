@@ -2,8 +2,6 @@
 namespace Aoe\Restler\Controller;
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Luracast\Restler\iAuthenticate;
-use Luracast\Restler\Restler;
-use Luracast\Restler\Scope;
 
 /***************************************************************
  *  Copyright notice
@@ -36,7 +34,7 @@ use Luracast\Restler\Scope;
 class FeUserAuthenticationController implements iAuthenticate
 {
     /**
-     * This property is required and defines (when it's set) controller, which uses this authentication-controller
+     * This property defines (when it's set), that this controller should check authentication
      * This property will be automatically set by restler, when in the API-class/controller this is configured (in PHPdoc/annotations)
      *
      * Where do we set this property?
@@ -48,15 +46,11 @@ class FeUserAuthenticationController implements iAuthenticate
      *
      * Example:
      * When this controller should be used for authentication-checks, than the PHPdoc-comment must look like this:
-     * @class Aoe\Restler\Controller\FeUserAuthenticationController {@calledController [apiClassNameWithNamespaces]}
+     * @class Aoe\Restler\Controller\FeUserAuthenticationController {@checkAuthentication true}
      *
-     * @var string
+     * @var boolean
      */
-    public $calledController;
-    /**
-     * @var Restler
-     */
-    private $restler;
+    public $checkAuthentication = false;
     /**
      * @var TYPO3Loader
      */
@@ -67,7 +61,6 @@ class FeUserAuthenticationController implements iAuthenticate
      */
     public function __construct(TYPO3Loader $typo3Loader)
     {
-        $this->restler = Scope::get('Restler');
         $this->typo3Loader = $typo3Loader;
     }
 
@@ -78,7 +71,7 @@ class FeUserAuthenticationController implements iAuthenticate
      */
     public function __isAllowed()
     {
-        if ($this->restler->apiMethodInfo->className !== $this->calledController) {
+        if ($this->checkAuthentication !== true) {
             // this controller is not responsible for the authentication
             return false;
         }
