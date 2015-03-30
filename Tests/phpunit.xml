@@ -9,6 +9,9 @@
             <directory suffix="Test.php">./</directory>
         </testsuite>
     </testsuites>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+        <directory suffix=".php">../Classes</directory>
+    </whitelist>
     <php>
         <const name="RESTLER_PHPUNIT_CONTEXT" value="1" />
     </php>
