@@ -18,6 +18,14 @@ This is a TYPO3-Extension, which integrates the restler-Framework (PHP REST-fram
 # Write your own REST-API
 1. Create new PHP-class, which implements this Interface:
    >> Aoe\Restler\System\Restler\ConfigurationInterface
-   
-2. Add your PHP-class in your TYPO3-Extension (in ext_localconf.php-File):
-  >> 
+
+   You can use this PHP-class as example
+   >> Aoe\\RestlerExamples\\System\\Restler\\Configuration
+
+   Inside your PHP-class, you can configure restler:
+    - add API-classes to restler-object
+    - add Authentication-classes to restler-object
+    - configure all static properties of PHP-classes, which belong to the restler-framework
+
+2. Register your PHP-class in your TYPO3-Extension (in ext_localconf.php-File):
+  >> $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'][] = 'yourPhpClass';
