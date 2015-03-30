@@ -7,12 +7,12 @@ This is a TYPO3-Extension, which integrates the restler-Framework (PHP REST-fram
 3. Add Rewrite-Rule to your .htaccess-File, so your REST-API is callable:
    >> RewriteRule ^api/(.*)$ typo3conf/ext/restler/Scripts/dispatch.php [NC,QSA,L]
 
-   If this is done, than you can call your REST-API via this URL: www.yourDomain.com/api/pathToMyRestApiEndpoints/
+   If this is done, than you can call your REST-API via this URL: www.your-domain.com/api/path-to-my-rest-api-endpoints/
 
 4. Add Rewrite-Rule to your .htaccess-File, so the online documentation of your REST-API is callable:
    >> RewriteRule ^api_explorer/(.*)$ typo3conf/ext/restler/Scripts/dispatch.php [NC,QSA,L]
 
-   If this is done, than you can call the online-documentation of your REST-API via this URL: www.yourDomain.com/api_explorer/
+   If this is done, than you can call the online-documentation of your REST-API via this URL: www.your-domain.com/api_explorer/
 5. Install the TYPO3-Extension 'restler_examples' (https://github.com/AOEpeople/TYPO3_RestlerExamples), when you want to see/test some REST-API-Examples
 
 # Write your own REST-API
