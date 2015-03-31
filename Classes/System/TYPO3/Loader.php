@@ -57,32 +57,42 @@ class Loader implements SingletonInterface
 
     /**
      * enable the frontend-rendering
-     * This is used e.g. while rendering data of productCatalogue
+     *
+     * @param integer $pageId
      */
-    public function initializeFrontEndRendering()
+    public function initializeFrontEndRendering($pageId = 0)
     {
-        if ($this->isFrontEndRenderingInitialized === false) {
-            EidUtility::initTCA();
-
-            $tsfe = $this->getTsfe();
-            $tsfe->determineId();
-            $tsfe->initTemplate();
-            $tsfe->getConfigArray();
-            $this->isFrontEndRenderingInitialized = true;
+        if ($this->isFrontEndRenderingInitialized === true) {
+            return;
         }
+
+        if ($this->isFrontEndUserInitialized === false) {
+            $this->initializeFrontEndUser($pageId);
+        }
+
+        EidUtility::initTCA();
+
+        $tsfe = $this->getTsfe($pageId);
+        $tsfe->determineId();
+        $tsfe->initTemplate();
+        $tsfe->getConfigArray();
+        $this->isFrontEndRenderingInitialized = true;
     }
 
     /**
      * enable the usage of frontend-user
+     *
+     * @param integer $pageId
      */
-    public function initializeFrontEndUser()
+    public function initializeFrontEndUser($pageId = 0)
     {
-        if ($this->isFrontEndUserInitialized === false) {
-            // Initialize FE User
-            $tsfe = $this->getTsfe();
-            $tsfe->initFEUser();
-            $this->isFrontEndUserInitialized = true;
+        if ($this->isFrontEndUserInitialized === true) {
+            return;
         }
+
+        $tsfe = $this->getTsfe($pageId);
+        $tsfe->initFEUser();
+        $this->isFrontEndUserInitialized = true;
     }
 
     /**
@@ -109,7 +119,7 @@ class Loader implements SingletonInterface
      * @param integer $pageId
      * @return TypoScriptFrontendController
      */
-    private function getTsfe($pageId = 2)
+    private function getTsfe($pageId)
     {
         if (false === array_key_exists('TSFE', $GLOBALS)) {
             $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
