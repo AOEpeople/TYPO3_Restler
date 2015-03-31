@@ -2,6 +2,8 @@
 namespace Aoe\Restler\Controller;
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Luracast\Restler\iAuthenticate;
+use Luracast\Restler\Restler;
+use Luracast\Restler\Scope;
 
 /***************************************************************
  *  Copyright notice
@@ -34,6 +36,27 @@ use Luracast\Restler\iAuthenticate;
 class FeUserAuthenticationController implements iAuthenticate
 {
     /**
+     * This property defines (when it's set), the argument-name, which contains the pageId, which should be used to initialize TYPO3
+     * This property will be automatically set by restler, when in the API-class/controller this is configured (in PHPdoc/annotations)
+     *
+     * Where do we set this property?
+     * When the property should be used, than it must be set inside the PHPdoc-comment of the API-class-method, which handle the API-request
+     *
+     * Syntax:
+     * The PHPdoc-comment must look like this:
+     * @class [className] {@[propertyName] [propertyValue]}
+     *
+     * Example:
+     * When this controller should use a specific pageId while initializing TYPO3 (this is needed, when we want to
+     * render TYPO3-contentElements, after the user is authenticated), than the PHPdoc-comment must look like this:
+     * @class Aoe\Restler\Controller\FeUserAuthenticationController {@argumentNameOfPageId pageId}
+     *
+     * @see Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
+     *
+     * @var boolean
+     */
+    public $argumentNameOfPageId = '';
+    /**
      * This property defines (when it's set), that this controller should check authentication
      * This property will be automatically set by restler, when in the API-class/controller this is configured (in PHPdoc/annotations)
      *
@@ -47,6 +70,9 @@ class FeUserAuthenticationController implements iAuthenticate
      * Example:
      * When this controller should be used for authentication-checks, than the PHPdoc-comment must look like this:
      * @class Aoe\Restler\Controller\FeUserAuthenticationController {@checkAuthentication true}
+     *
+     * @see Aoe\RestlerExamples\Controller\FeUserController::getDataOfLoggedInFeUser
+     * @see Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
      *
      * @var boolean
      */
@@ -76,7 +102,7 @@ class FeUserAuthenticationController implements iAuthenticate
             return false;
         }
 
-        $this->typo3Loader->initializeFrontEndUser();
+        $this->typo3Loader->initializeFrontEndUser($this->determinePageIdFromArguments());
 
         if ($GLOBALS['TSFE']->fe_user->user === null) {
             return false;
@@ -93,5 +119,29 @@ class FeUserAuthenticationController implements iAuthenticate
     public function __getWWWAuthenticateString()
     {
         return '';
+    }
+
+    /**
+     * determine pageId from arguments, which restler has detected
+     * We need the pageId, when we want to render TYPO3-contentElements, after the user is authenticated
+     *
+     * @return integer
+     */
+    private function determinePageIdFromArguments()
+    {
+        if (empty($this->argumentNameOfPageId)) {
+            return 0;
+        }
+
+        /* @var $restler Restler */
+        $restler = Scope::get('Restler');
+
+        if (false === array_key_exists($this->argumentNameOfPageId, $restler->apiMethodInfo->arguments)) {
+            return 0;
+        }
+
+        $index = $restler->apiMethodInfo->arguments[$this->argumentNameOfPageId];
+        $pageId = (integer) $restler->apiMethodInfo->parameters[$index];
+        return $pageId;
     }
 }
