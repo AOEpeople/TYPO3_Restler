@@ -31,7 +31,7 @@ use Aoe\Restler\Tests\Unit\BaseTest;
  * @package Restler
  * @subpackage Tests
  *
- * @covers \Aoe\Restler\Configuration\ExtensionConfiguration
+ * @covers Aoe\Restler\Configuration\ExtensionConfiguration
  */
 class ExtensionConfigurationTest extends BaseTest
 {
