@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit;
+
 use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
@@ -42,8 +43,8 @@ abstract class BaseTest extends UnitTestCase
 
     /**
      * call unaccessible method of an object (to test it)
-     * @param  unknown_type $object
-     * @param  unknown_type $methodName
+     * @param  object $object
+     * @param  string $methodName
      * @param  array $methodParams
      * @return mixed
      */

@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Configuration;
+
 use TYPO3\CMS\Core\SingletonInterface;
 
 /***************************************************************
@@ -29,7 +30,8 @@ use TYPO3\CMS\Core\SingletonInterface;
 /**
  * @package Restler
  */
-class ExtensionConfiguration implements SingletonInterface {
+class ExtensionConfiguration implements SingletonInterface
+{
     /**
      * @var array
      */
@@ -77,7 +79,7 @@ class ExtensionConfiguration implements SingletonInterface {
     }
 
     /**
-     * returns configurationvalue for the given key
+     * returns configuration value for the given key
      *
      * @param string $key
      * @return string	depending on configuration key
