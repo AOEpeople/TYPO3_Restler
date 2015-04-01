@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Controller;
+
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Luracast\Restler\iAuthenticate;
 use Luracast\Restler\Restler;

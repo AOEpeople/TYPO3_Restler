@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\System\Restler;
+
 use Luracast\Restler\Restler;
 
 /***************************************************************

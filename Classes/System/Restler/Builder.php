@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\System\Restler;
+
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use InvalidArgumentException;
 use Luracast\Restler\Defaults;

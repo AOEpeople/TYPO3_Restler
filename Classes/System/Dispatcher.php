@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\System;
+
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 
 /***************************************************************

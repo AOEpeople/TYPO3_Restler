@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\System\TYPO3;
+
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;

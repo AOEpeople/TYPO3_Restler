@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Controller;
+
 use Luracast\Restler\iAuthenticate;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
