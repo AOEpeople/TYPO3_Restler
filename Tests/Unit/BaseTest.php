@@ -30,7 +30,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  ***************************************************************/
 
 /**
- * @package Checkout
+ * @package Restler
  * @subpackage Tests
  *
  */

@@ -107,7 +107,7 @@ class Builder implements SingletonInterface
             throw new InvalidArgumentException($message);
         }
 
-        foreach($restlerConfigurationClasses as $restlerConfigurationClass) {
+        foreach ($restlerConfigurationClasses as $restlerConfigurationClass) {
             $configurationObj = $this->objectManager->get($restlerConfigurationClass);
 
             /* @var $configurationObj ConfigurationInterface */
