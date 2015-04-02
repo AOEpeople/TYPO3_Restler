@@ -1,9 +1,7 @@
 {
     "name": "aoe/restler",
     "require": {
-        "luracast/restler": "dev-v3",
-        "justinrainbow/json-schema": "~1.3",
-        "guzzle/guzzle": "~3.9"
+        "luracast/restler": "dev-v3"
     },
     "repositories": [
         {
