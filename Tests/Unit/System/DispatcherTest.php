@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System;
+
 use Aoe\Restler\System\Dispatcher;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;

@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System\Restler;
+
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Configuration;
 use Aoe\Restler\Tests\Unit\BaseTest;

@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\Configuration;
+
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\Tests\Unit\BaseTest;
 
@@ -31,6 +32,7 @@ use Aoe\Restler\Tests\Unit\BaseTest;
  * @package Restler
  * @subpackage Tests
  *
+ * @covers \Aoe\Restler\Configuration\ExtensionConfiguration
  */
 class ExtensionConfigurationTest extends BaseTest
 {
@@ -64,7 +66,8 @@ class ExtensionConfigurationTest extends BaseTest
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown() {
+    protected function tearDown()
+    {
         $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['rester'] = $this->originalExtConfig;
         parent::tearDown();
     }

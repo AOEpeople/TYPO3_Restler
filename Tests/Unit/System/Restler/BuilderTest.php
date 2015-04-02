@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System\Restler;
+
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\Defaults;
@@ -89,7 +90,8 @@ class BuilderTest extends BaseTest
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown() {
+    protected function tearDown()
+    {
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = $this->originalRestlerConfigurationClasses;
         $_SERVER = $this->originalServerVars;
         parent::tearDown();
@@ -147,7 +149,7 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function willThrowExceptionWhenConfigurationOfRestlerClassesIsNoArray()
     {
@@ -158,7 +160,7 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function willThrowExceptionWhenConfigurationOfRestlerClassesIsEmptyArray()
     {
@@ -169,7 +171,7 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function willThrowExceptionWhenConfigurationOfRestlerClassDoesNotImplementRequiredInterface()
     {

@@ -38,7 +38,7 @@ class ExtensionConfiguration implements SingletonInterface
     private $configuration;
 
     /**
-     * constructor - loading the current localconf configuration for eft extension
+     * constructor - loading the current localconf configuration for restler extension
      *
      */
     public function __construct()

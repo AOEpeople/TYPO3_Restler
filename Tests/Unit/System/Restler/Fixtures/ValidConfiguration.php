@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System\Restler\Fixtures;
+
 use Aoe\Restler\System\Restler\ConfigurationInterface;
 use Luracast\Restler\Restler;
 

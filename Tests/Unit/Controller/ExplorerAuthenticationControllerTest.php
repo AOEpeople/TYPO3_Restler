@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\Controller;
+
 use Aoe\Restler\Controller\ExplorerAuthenticationController;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\Data\ApiMethodInfo;

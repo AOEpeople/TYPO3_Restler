@@ -1,5 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\Controller;
+
 use Aoe\Restler\Controller\FeUserAuthenticationController;
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Aoe\Restler\Tests\Unit\BaseTest;
@@ -66,7 +67,8 @@ class FeUserAuthenticationControllerTest extends BaseTest
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown() {
+    protected function tearDown()
+    {
         $GLOBALS = $this->originalGlobalVars;
         parent::tearDown();
     }
