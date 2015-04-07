@@ -82,7 +82,7 @@ class ExtensionConfiguration implements SingletonInterface
      * returns configuration value for the given key
      *
      * @param string $key
-     * @return string	depending on configuration key
+     * @return string depending on configuration key
      */
     private function get($key)
     {
