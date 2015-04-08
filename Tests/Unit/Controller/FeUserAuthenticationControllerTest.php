@@ -115,6 +115,13 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function shouldSetPageIdZeroIfArgumentDoesNotExist()
     {
+        /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
+        $apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
+        /* @var $restlerMock \Luracast\Restler\Restler */
+        $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerMock->apiMethodInfo = $apiMethodInfoMock;
+        $this->inject($this->controller, 'restler', $restlerMock);
+
         $this->controller->checkAuthentication = true;
         $this->controller->argumentNameOfPageId = 'pid';
 
