@@ -80,4 +80,13 @@ class ExplorerAuthenticationControllerTest extends BaseTest
         $this->apiMethodInfoMock->className = 'Luracast\Restler\Explorer';
         $this->assertTrue($this->controller->__isAllowed());
     }
+
+    /**
+     * @test
+     */
+    public function checkForCorrectAuthenticationString()
+    {
+        $this->apiMethodInfoMock->className = 'Luracast\Restler\Explorer';
+        $this->assertEquals('Query name="api_key"', $this->controller->__getWWWAuthenticateString());
+    }
 }

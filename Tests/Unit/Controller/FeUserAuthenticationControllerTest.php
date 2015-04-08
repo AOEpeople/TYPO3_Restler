@@ -124,4 +124,12 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $tsfe->fe_user = $feUser;
         return $tsfe;
     }
+
+    /**
+     * @test
+     */
+    public function checkForCorrectAuthenticationString()
+    {
+        $this->assertEquals('', $this->controller->__getWWWAuthenticateString());
+    }
 }
