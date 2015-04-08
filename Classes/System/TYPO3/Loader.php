@@ -8,9 +8,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
 
+// @codingStandardsIgnoreStart
 // we must load some PHP/TYPO3-classes manually, because at this point, TYPO3 (and it's auto-loading) is not initialized
 require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/Core/Bootstrap.php';
 require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonInterface.php';
+// @codingStandardsIgnoreEnd
 
 /***************************************************************
  *  Copyright notice
