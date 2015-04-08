@@ -84,11 +84,17 @@ class FeUserAuthenticationController implements iAuthenticate
     private $typo3Loader;
 
     /**
+     * @var Restler
+     */
+    private $restler;
+
+    /**
      * @param TYPO3Loader $typo3Loader
      */
     public function __construct(TYPO3Loader $typo3Loader)
     {
         $this->typo3Loader = $typo3Loader;
+        $this->restler = Scope::get('Restler');
     }
 
     /**
@@ -134,15 +140,12 @@ class FeUserAuthenticationController implements iAuthenticate
             return 0;
         }
 
-        /* @var $restler Restler */
-        $restler = Scope::get('Restler');
-
-        if (false === array_key_exists($this->argumentNameOfPageId, $restler->apiMethodInfo->arguments)) {
+        if (false === array_key_exists($this->argumentNameOfPageId, $this->restler->apiMethodInfo->arguments)) {
             return 0;
         }
 
-        $index = $restler->apiMethodInfo->arguments[$this->argumentNameOfPageId];
-        $pageId = (integer) $restler->apiMethodInfo->parameters[$index];
+        $index = $this->restler->apiMethodInfo->arguments[$this->argumentNameOfPageId];
+        $pageId = (integer) $this->restler->apiMethodInfo->parameters[$index];
         return $pageId;
     }
 }

@@ -111,6 +111,57 @@ class FeUserAuthenticationControllerTest extends BaseTest
     }
 
     /**
+     * @test
+     */
+    public function shouldSetPageIdZeroIfArgumentDoesNotExist()
+    {
+        $this->controller->checkAuthentication = true;
+        $this->controller->argumentNameOfPageId = 'pid';
+
+        $GLOBALS['TSFE'] = $this->createMockedTsfe();
+        $GLOBALS['TSFE']->fe_user->user = array('username' => 'max.mustermann');
+
+        $this->controller->__isAllowed();
+
+        $this->assertEquals(0, $GLOBALS['TSFE']->fe_user->checkPid_value);
+    }
+
+    /**
+     * @test
+     */
+    public function shouldSetPageIdIfArgumentDoesExist()
+    {
+        /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
+        $apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
+        /* @var $restlerMock \Luracast\Restler\Restler */
+        $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerMock->apiMethodInfo = $apiMethodInfoMock;
+        $this->inject($this->controller, 'restler', $restlerMock);
+        $apiMethodInfoMock->arguments = array_merge(
+            $apiMethodInfoMock->arguments,
+            array('pid' => 0)
+        );
+        $apiMethodInfoMock->parameters = array_merge(
+            $apiMethodInfoMock->parameters,
+            array(0 => 4711)
+        );
+
+        $this->controller->checkAuthentication = true;
+        $this->controller->argumentNameOfPageId = 'pid';
+
+        $GLOBALS['TSFE'] = $this->createMockedTsfe();
+        $GLOBALS['TSFE']->fe_user->user = array('username' => 'max.mustermann');
+
+        $this->controller->__isAllowed();
+
+        $reflection = new \ReflectionClass($this->controller);
+        $method = $reflection->getMethod('determinePageIdFromArguments');
+        $method->setAccessible(true);
+
+        $this->assertEquals(4711, $method->invoke($this->controller));
+    }
+
+    /**
      * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
      */
     private function createMockedTsfe()
