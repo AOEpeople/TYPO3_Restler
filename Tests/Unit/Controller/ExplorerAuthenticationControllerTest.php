@@ -53,7 +53,9 @@ class ExplorerAuthenticationControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
+        $this->apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /* @var $restlerMock \Luracast\Restler\Restler */
         $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();

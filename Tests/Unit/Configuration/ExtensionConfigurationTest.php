@@ -55,7 +55,7 @@ class ExtensionConfigurationTest extends BaseTest
         $this->originalExtConfig = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'];
         $modifiedExtConfig = unserialize($this->originalExtConfig);
         $modifiedExtConfig['refreshCache'] = '0';
-        $modifiedExtConfig['productionContext']  = '1';
+        $modifiedExtConfig['productionContext'] = '1';
         $modifiedExtConfig['enableOnlineDocumentation'] = '1';
         $modifiedExtConfig['pathToOnlineDocumentation'] = 'api_explorer';
         $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'] = serialize($modifiedExtConfig);

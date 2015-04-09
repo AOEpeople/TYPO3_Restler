@@ -93,7 +93,9 @@ class ConfigurationTest extends BaseTest
      */
     public function checkThatCorrectClassesWillAddedWhenOnlineDocumentationIsNotEnabled()
     {
-        $this->extensionConfigurationMock->expects($this->once())->method('isOnlineDocumentationEnabled')->will($this->returnValue(false));
+        $this->extensionConfigurationMock->expects($this->once())->method('isOnlineDocumentationEnabled')->will(
+            $this->returnValue(false)
+        );
         $this->extensionConfigurationMock->expects($this->never())->method('getPathOfOnlineDocumentation');
 
         $this->restlerMock

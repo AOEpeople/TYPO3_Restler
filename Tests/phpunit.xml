@@ -15,6 +15,6 @@
         </whitelist>
     </filter>
     <php>
-        <const name="RESTLER_PHPUNIT_CONTEXT" value="1" />
+        <const name="RESTLER_PHPUNIT_CONTEXT" value="1"/>
     </php>
 </phpunit>

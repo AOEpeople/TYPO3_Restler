@@ -84,7 +84,9 @@ class BuilderTest extends BaseTest
                 )
             )
             ->getMock();
-        $this->builder->expects($this->once())->method('createRestlerObject')->will($this->returnValue($this->restlerMock));
+        $this->builder->expects($this->once())->method('createRestlerObject')->will(
+            $this->returnValue($this->restlerMock)
+        );
     }
 
     /**

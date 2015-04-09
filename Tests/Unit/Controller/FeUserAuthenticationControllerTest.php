@@ -59,7 +59,9 @@ class FeUserAuthenticationControllerTest extends BaseTest
 
         $this->originalGlobalVars = $GLOBALS;
 
-        $this->typo3LoaderMock = $this->getMockBuilder('Aoe\\Restler\\System\\TYPO3\\Loader')->disableOriginalConstructor()->getMock();
+        $this->typo3LoaderMock = $this->getMockBuilder('Aoe\\Restler\\System\\TYPO3\\Loader')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->controller = $this->objectManager->get('Aoe\\Restler\\Controller\\FeUserAuthenticationController');
         $this->inject($this->controller, 'typo3Loader', $this->typo3LoaderMock);
     }
@@ -116,7 +118,9 @@ class FeUserAuthenticationControllerTest extends BaseTest
     public function shouldSetPageIdZeroIfArgumentDoesNotExist()
     {
         /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
-        $apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
+        $apiMethodInfoMock = $this->getMockBuilder(
+            'Luracast\\Restler\\Data\\ApiMethodInfo'
+        )->disableOriginalConstructor()->getMock();
         /* @var $restlerMock \Luracast\Restler\Restler */
         $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
@@ -139,7 +143,9 @@ class FeUserAuthenticationControllerTest extends BaseTest
     public function shouldSetPageIdIfArgumentDoesExist()
     {
         /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
-        $apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
+        $apiMethodInfoMock = $this->getMockBuilder(
+            'Luracast\\Restler\\Data\\ApiMethodInfo'
+        )->disableOriginalConstructor()->getMock();
         /* @var $restlerMock \Luracast\Restler\Restler */
         $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
