@@ -11,6 +11,10 @@
 Screenshots
 ============
 
-Extension configuration.
+Extension configuration:
 
-.. image:: /Images/UserManual/restler-configuration.png
+.. image:: /Images/restler-configuration.png
+
+API Explorer:
+
+.. image:: /Images/api_explorer.png
