@@ -9,13 +9,13 @@
 .. _start:
 
 =============================================================
-TYPO3 Restler
+EXT: Restler
 =============================================================
 
 .. only:: html
 
 	:Classification:
-		restler
+		Documentation
 
 	:Version:
 		|release|
@@ -59,8 +59,6 @@ TYPO3 Restler
 		but WITHOUT ANY WARRANTY; without even the implied warranty of
 		MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 		GNU General Public License for more details.
-
-		-----------------------------
 
 		Luracast Restler Version 3.0. is distributed under GNU LESSER GENERAL PUBLIC LICENSE Version 2.1 (see
 		/vendor/luracast/restler/LICENSE) and is included for your convenience in the vendor folder.
