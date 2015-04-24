@@ -29,7 +29,7 @@ $typo3Loader = new Aoe\Restler\System\TYPO3\Loader();
 $typo3Loader->initializeTypo3();
 
 // dispatch the API-call
-$objectManager = new TYPO3\CMS\Extbase\Object\ObjectManager();
+$objectManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
 /** @var Aoe\Restler\System\Dispatcher $dispatcher */
 $dispatcher = $objectManager->get('Aoe\\Restler\\System\\Dispatcher');
 $dispatcher->dispatch();
