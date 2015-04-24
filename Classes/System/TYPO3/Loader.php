@@ -105,17 +105,39 @@ class Loader implements SingletonInterface
     {
         // we must define this constant, otherwise some TYPO3-extensions will not work!
         define('TYPO3_MODE', 'FE');
+        // we define this constant, so that any TYPO3-Extension can check, if the REST-API is running
+        define('REST_API_IS_RUNNING', true);
 
-        Bootstrap::getInstance()
-            ->baseSetup('typo3conf/ext/restler/Scripts/') // web-server has called this PHP-script 'restler/Scripts/dispatch.php'
-            ->startOutputBuffering()
-            ->loadConfigurationAndInitialize()
-            ->loadTypo3LoadedExtAndExtLocalconf()
-            ->applyAdditionalConfigurationSettings()
-            ->initializeTypo3DbGlobal();
+        // configure TYPO3 (e.g. paths, variables and classLoader)
+        $bootstrapObj = Bootstrap::getInstance();
+        $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // web-server has called this PHP-script 'restler/Scripts/dispatch.php'
+        $bootstrapObj->startOutputBuffering();
+        $bootstrapObj->loadConfigurationAndInitialize();
+
+        // configure TYPO3 (load ext_localconf.php-files of TYPO3-extensions)
+        $this->getExtensionManagementUtility()->loadExtLocalconf();
+
+        // configure TYPO3 (Database and further settings)
+        $bootstrapObj->applyAdditionalConfigurationSettings();
+        $bootstrapObj->initializeTypo3DbGlobal();
 
         // create timeTracker-object (TYPO3 needs that)
         $GLOBALS['TT'] = new NullTimeTracker();
+    }
+
+    /**
+     * create instance of ExtensionManagementUtility
+     *
+     * Attention:
+     * Don't use the dependency-injection of TYPO3, because at this time (where we initialize TYPO3), the DI is not available!
+     *
+     * @return ExtensionManagementUtility
+     */
+    private function getExtensionManagementUtility()
+    {
+        $cacheManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager');
+        $extensionConfiguration = GeneralUtility::makeInstance('Aoe\\Restler\\Configuration\\ExtensionConfiguration');
+        return new ExtensionManagementUtility($cacheManager, $extensionConfiguration);
     }
 
     /**
