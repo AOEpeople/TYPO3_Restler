@@ -62,7 +62,8 @@ class ExtensionManagementUtility
      * @return void
      * @see \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::loadExtLocalconf
      */
-    public function loadExtLocalconf() {
+    public function loadExtLocalconf()
+    {
         $cacheIdentifier = $this->getExtLocalconfCacheIdentifier();
         /** @var $codeCache \TYPO3\CMS\Core\Cache\Frontend\PhpFrontend */
         $codeCache = $this->cacheManager->getCache('cache_core');
@@ -78,7 +79,8 @@ class ExtensionManagementUtility
      * @return string
      * @see \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::createExtLocalconfCacheEntry
      */
-    private function createExtLocalconfCacheEntry() {
+    private function createExtLocalconfCacheEntry()
+    {
         $phpCodeToCache = array();
         // Set same globals as in loadSingleExtLocalconfFiles()
         $phpCodeToCache[] = '/**';
