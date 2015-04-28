@@ -25,6 +25,7 @@ This is a TYPO3-Extension, which integrates the restler-Framework (PHP REST-fram
    Inside your PHP-class, you can configure the restler-framework:
     - add API-classes to restler-object
     - add Authentication-classes to restler-object
+    - add optional Error-class (PHP-Class, which can handle exceptions; those class should extend the abstract class Aoe\Restler\System\Restler\AbstractExceptionHandler - take a look at the example exception-handler-class Aoe\RestlerExamples\System\Restler\ExceptionHandler)
     - configure all static properties of PHP-classes, which belong to the restler-framework
 
 2. Register your PHP-class in your TYPO3-Extension (in ext_localconf.php-File):
