@@ -33,11 +33,11 @@ The ".htaccess" file needs to be changed in order to make the REST API available
 .. parsed-literal::
 
   # Allow access to example.com/api for normal REST calls
-  RewriteRule ^api/(.*)$ typo3conf/ext/restler/Scripts/dispatch.php [NC,QSA,L]
+  RewriteRule ^api/(.*)$ typo3conf/ext/restler/Scripts/restler_dispatch.php [NC,QSA,L]
 
   # Allow access to example.com/api_explorer for the online documentation of your API.
   # You may want to restrict access to this URL.
-  RewriteRule ^api_explorer/(.*)$ typo3conf/ext/restler/Scripts/dispatch.php [NC,QSA,L]
+  RewriteRule ^api_explorer/(.*)$ typo3conf/ext/restler/Scripts/restler_dispatch.php [NC,QSA,L]
 
 When this is done, than you can call the online documentation of your REST API via this URL:
 
