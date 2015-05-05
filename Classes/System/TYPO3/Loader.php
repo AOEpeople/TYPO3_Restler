@@ -110,7 +110,7 @@ class Loader implements SingletonInterface
 
         // configure TYPO3 (e.g. paths, variables and classLoader)
         $bootstrapObj = Bootstrap::getInstance();
-        $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // web-server has called this PHP-script 'restler/Scripts/dispatch.php'
+        $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called PHP-script 'restler/Scripts/restler_dispatch.php'
         $bootstrapObj->startOutputBuffering();
         $bootstrapObj->loadConfigurationAndInitialize();
 
