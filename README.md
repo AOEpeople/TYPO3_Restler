@@ -1,34 +1,19 @@
-# TYPO3_Restler
-This is a TYPO3-Extension, which integrates the restler-Framework (PHP REST-framework to create REST-API's, https://github.com/Luracast/Restler) in TYPO3.
+# Restler for TYPO3
 
-# Installation
-1. Install this TYPO3-Extension
-2. Configure this TYPO3-Extension (in TYPO3 Extension-Manager; e.g. enable the online documentation of your REST-API)
-3. Add Rewrite-Rule to your .htaccess-File, so your REST-API is callable:
-   >> RewriteRule ^api/(.*)$ typo3conf/ext/restler/Scripts/restler_dispatch.php [NC,QSA,L]
+This is a TYPO3-Extension, that integrates the popular [PHP REST-framework Restler](https://github.com/Luracast/Restler) in TYPO3.
 
-   If this is done, than you can call your REST-API via this URL: www.your-domain.com/api/path-to-my-rest-api-endpoints/
+## Download / Installation
 
-4. Add Rewrite-Rule to your .htaccess-File, so the online documentation of your REST-API is callable:
-   >> RewriteRule ^api_explorer/(.*)$ typo3conf/ext/restler/Scripts/restler_dispatch.php [NC,QSA,L]
+You can download and install this extension from the [TER (TYPO3 Extension Repository)][1] or use composer.
 
-   If this is done, than you can call the online-documentation of your REST-API via this URL: www.your-domain.com/api_explorer/
-5. Install the TYPO3-Extension 'restler_examples' (https://github.com/AOEpeople/TYPO3_RestlerExamples), when you want to see/test some REST-API-Examples
+## Documentation
 
-# Write your own REST-API
-1. Create new PHP-class, which implements this Interface:
-   >> Aoe\Restler\System\Restler\ConfigurationInterface
+The documentation is available online at [docs.typo3.org][2].
 
-   You can use this PHP-class as example
-   >> Aoe\\RestlerExamples\\System\\Restler\\Configuration
+## Copyright / License
 
-   Inside your PHP-class, you can configure the restler-framework:
-    - add API-classes to restler-object
-    - add Authentication-classes to restler-object
-    - add optional Error-class (PHP-Class, which can handle exceptions; those class should extend the abstract class Aoe\Restler\System\Restler\AbstractExceptionHandler - take a look at the example exception-handler-class Aoe\RestlerExamples\System\Restler\ExceptionHandler)
-    - configure all static properties of PHP-classes, which belong to the restler-framework
+Copyright: (c) 2015, AOE GmbH <dev@aoe.com>  
+License: GPLv3, <http://www.gnu.org/licenses/gpl-3.0.en.html>  
 
-2. Register your PHP-class in your TYPO3-Extension (in ext_localconf.php-File):
-  >> $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'][] = 'yourPhpClass';
-
-3. Flush the TYPO3-System-Cache
+[1]: http://typo3.org/extensions/repository/view/restler
+[2]: http://docs.typo3.org/typo3cms/extensions/restler/
