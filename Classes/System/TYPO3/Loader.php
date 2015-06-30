@@ -5,8 +5,10 @@ use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
+use LogicException;
 
 // @codingStandardsIgnoreStart
 // we must load some PHP/TYPO3-classes manually, because at this point, TYPO3 (and it's auto-loading) is not initialized
@@ -57,6 +59,18 @@ class Loader implements SingletonInterface
      * @var boolean
      */
     private $isFrontEndUserInitialized = false;
+
+    /**
+     * @return FrontendUserAuthentication
+     * @throws LogicException
+     */
+    public function getFrontEndUser()
+    {
+        if ($this->isFrontEndUserInitialized === false) {
+            throw new LogicException('fe-user is not initialized - initialize with FE-user with method \'initializeFrontEndUser\'');
+        }
+        return $GLOBALS['TSFE']->fe_user;
+    }
 
     /**
      * enable the frontend-rendering
