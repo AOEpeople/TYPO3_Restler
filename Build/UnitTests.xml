@@ -1,0 +1,30 @@
+<phpunit
+        backupGlobals="true"
+        backupStaticAttributes="false"
+        bootstrap="../../../../typo3/sysext/core/Build/UnitTestsBootstrap.php"
+        colors="false"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        forceCoversAnnotation="false"
+        processIsolation="false"
+        stopOnError="false"
+        stopOnFailure="false"
+        stopOnIncomplete="false"
+        stopOnSkipped="false"
+        verbose="false"
+        >
+    <testsuites>
+        <testsuite name="restler">
+            <directory suffix="Test.php">../Tests/Unit/</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../Classes</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <const name="RESTLER_PHPUNIT_CONTEXT" value="1" />
+    </php>
+</phpunit>

@@ -170,6 +170,8 @@ class ExtensionManagementUtilityTest extends BaseTest
      */
     public function canLoadExtLocalconfWhenCacheNotExists()
     {
+        $GLOBALS['TYPO3_LOADED_EXT'] = array();
+
         $cache = $this->getMockBuilder('TYPO3\\CMS\\Core\\Cache\\Frontend\\PhpFrontend')->disableOriginalConstructor()->getMock();
         $cache->expects($this->once())->method('has')->will($this->returnValue(false));
         $cache->expects($this->once())->method('set');

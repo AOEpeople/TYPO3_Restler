@@ -42,10 +42,6 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     protected $controller;
     /**
-     * @var array
-     */
-    protected $originalGlobalVars;
-    /**
      * @var TYPO3Loader
      */
     protected $typo3LoaderMock;
@@ -57,13 +53,10 @@ class FeUserAuthenticationControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->originalGlobalVars = $GLOBALS;
-
         $this->typo3LoaderMock = $this->getMockBuilder('Aoe\\Restler\\System\\TYPO3\\Loader')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->controller = $this->objectManager->get('Aoe\\Restler\\Controller\\FeUserAuthenticationController');
-        $this->inject($this->controller, 'typo3Loader', $this->typo3LoaderMock);
+        $this->controller = new FeUserAuthenticationController($this->typo3LoaderMock);
     }
 
     /**
@@ -71,7 +64,6 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     protected function tearDown()
     {
-        $GLOBALS = $this->originalGlobalVars;
         parent::tearDown();
     }
 

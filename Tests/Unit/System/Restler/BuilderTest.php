@@ -6,6 +6,7 @@ use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /***************************************************************
  *  Copyright notice
@@ -54,9 +55,13 @@ class BuilderTest extends BaseTest
      */
     protected $originalServerVars;
     /**
-     * @var Restler
+     * @var PHPUnit_Framework_MockObject_MockObject
      */
-    protected $restlerMock;
+    protected $extensionConfigurationMock;
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManagerMock;
 
     /**
      * setup
@@ -68,25 +73,12 @@ class BuilderTest extends BaseTest
         $this->originalRestlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
         $this->originalServerVars = $_SERVER;
 
-        // configure test-restler-configuration
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array(
-            'Aoe\\Restler\\Tests\\Unit\\System\\Restler\\Fixtures\\ValidConfiguration'
-        );
+        $this->extensionConfigurationMock = $this->getMockBuilder('Aoe\\Restler\\Configuration\\ExtensionConfiguration')
+            ->disableOriginalConstructor()->getMock();
+        $this->objectManagerMock = $this->getMockBuilder('TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface')
+            ->disableOriginalConstructor()->getMock();
 
-        $this->restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
-
-        $this->builder = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\Builder')
-            ->setMethods(array('createRestlerObject'))
-            ->setConstructorArgs(
-                array(
-                    $this->objectManager->get('Aoe\\Restler\\Configuration\\ExtensionConfiguration'),
-                    $this->objectManager->get('TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface')
-                )
-            )
-            ->getMock();
-        $this->builder->expects($this->once())->method('createRestlerObject')->will(
-            $this->returnValue($this->restlerMock)
-        );
+        $this->builder = new Builder($this->extensionConfigurationMock, $this->objectManagerMock);
     }
 
     /**
@@ -102,13 +94,84 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canBuildRestlerObject()
+    public function canCreateRestlerObject()
     {
-        $this->restlerMock->expects($this->once())->method('addAPIClass')->with('Test-API-Class', 'Test-ResourcePath');
-        $this->restlerMock->expects($this->once())->method('addAuthenticationClass')->with('Test-Authentication-Class');
+        $this->extensionConfigurationMock
+            ->expects($this->once())->method('isProductionContextSet')
+            ->will($this->returnValue(false));
+        $this->extensionConfigurationMock
+            ->expects($this->once())->method('isCacheRefreshingEnabled')
+            ->will($this->returnValue(true));
+        $createdObj = $this->callUnaccessibleMethodOfObject($this->builder, 'createRestlerObject');
+        $this->assertInstanceOf('Luracast\Restler\Restler', $createdObj);
+    }
 
-        $restlerObj = $this->builder->build();
-        $this->assertEquals($this->restlerMock, $restlerObj);
+    /**
+     * @test
+     */
+    public function canConfigureRestlerObject()
+    {
+        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+
+        $configurationClass = 'Aoe\\Restler\\Tests\\Unit\\System\\Restler\\Fixtures\\ValidConfiguration';
+        $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
+        $configurationMock->expects($this->once())->method('configureRestler')->with($restlerObj);
+
+        // override test-restler-configuration
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array($configurationClass);
+
+        $this->objectManagerMock
+            ->expects($this->once())->method('get')->with($configurationClass)
+            ->will($this->returnValue($configurationMock));
+
+        $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', array($restlerObj));
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsNoArray()
+    {
+        // override test-restler-configuration
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = '';
+
+        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', array($restlerObj));
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsEmptyArray()
+    {
+        // override test-restler-configuration
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array();
+
+        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', array($restlerObj));
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassDoesNotImplementRequiredInterface()
+    {
+        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+
+        $configurationClass = 'Aoe\\Restler\\Tests\\Unit\\System\\Restler\\Fixtures\\InvalidConfiguration';
+        $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
+
+        // override test-restler-configuration
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array($configurationClass);
+
+        $this->objectManagerMock
+            ->expects($this->once())->method('get')->with($configurationClass)
+            ->will($this->returnValue($configurationMock));
+
+        $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', array($restlerObj));
     }
 
     /**
@@ -116,14 +179,20 @@ class BuilderTest extends BaseTest
      */
     public function canSetAutoLoading()
     {
+        // set object-property (which the builder should update)
         Scope::$resolver = null;
 
-        $this->builder->build();
+        $requestedClass = 'Aoe\\Restler\\Configuration\\ExtensionConfiguration';
+        $this->objectManagerMock
+            ->expects($this->once())->method('get')->with($requestedClass)
+            ->will($this->returnValue($this->extensionConfigurationMock));
+
+        $this->callUnaccessibleMethodOfObject($this->builder, 'setAutoLoading');
 
         $closureToCreateObjectsViaObjectManager = Scope::$resolver;
         $this->assertTrue(is_callable($closureToCreateObjectsViaObjectManager));
-        $createdObj = $closureToCreateObjectsViaObjectManager('Aoe\\Restler\\Configuration\\ExtensionConfiguration');
-        $this->assertInstanceOf('Aoe\Restler\Configuration\ExtensionConfiguration', $createdObj);
+        $createdObj = $closureToCreateObjectsViaObjectManager($requestedClass);
+        $this->assertEquals($createdObj, $this->extensionConfigurationMock);
     }
 
     /**
@@ -131,9 +200,10 @@ class BuilderTest extends BaseTest
      */
     public function canSetCacheDirectory()
     {
+        // set object-property (which the builder should update)
         Defaults::$cacheDirectory = '';
 
-        $this->builder->build();
+        $this->callUnaccessibleMethodOfObject($this->builder, 'setCacheDirectory');
         $this->assertEquals(PATH_site . 'typo3temp/tx_restler', Defaults::$cacheDirectory);
     }
 
@@ -142,45 +212,11 @@ class BuilderTest extends BaseTest
      */
     public function canSetServerConfiguration()
     {
+        // set variables (which the builder should use/update)
         $_SERVER['HTTPS'] = 'on';
         $_SERVER['SERVER_PORT'] = '80';
 
-        $this->builder->build();
+        $this->callUnaccessibleMethodOfObject($this->builder, 'setServerConfiguration');
         $this->assertEquals('443', $_SERVER['SERVER_PORT']);
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function willThrowExceptionWhenConfigurationOfRestlerClassesIsNoArray()
-    {
-        // override test-restler-configuration
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = '';
-        $this->builder->build();
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function willThrowExceptionWhenConfigurationOfRestlerClassesIsEmptyArray()
-    {
-        // override test-restler-configuration
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array();
-        $this->builder->build();
-    }
-
-    /**
-     * @test
-     * @expectedException \InvalidArgumentException
-     */
-    public function willThrowExceptionWhenConfigurationOfRestlerClassDoesNotImplementRequiredInterface()
-    {
-        // override test-restler-configuration
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array(
-            'Aoe\\Restler\\Tests\\Unit\\System\\Restler\\Fixtures\\InvalidConfiguration'
-        );
-        $this->builder->build();
     }
 }

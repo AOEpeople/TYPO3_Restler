@@ -37,11 +37,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 abstract class BaseTest extends UnitTestCase
 {
     /**
-     * @var ObjectManagerInterface The object manager
-     */
-    protected $objectManager;
-
-    /**
      * call unaccessible method of an object (to test it)
      * @param  object $object
      * @param  string $methodName
@@ -63,9 +58,6 @@ abstract class BaseTest extends UnitTestCase
     protected function setUp()
     {
         parent::setUp();
-
-        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        $this->objectManager = clone $objectManager;
 
         $this->setAutoLoadingForRestler();
     }

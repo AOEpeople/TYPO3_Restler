@@ -61,7 +61,7 @@ class ExplorerAuthenticationControllerTest extends BaseTest
         $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $this->apiMethodInfoMock;
 
-        $this->controller = $this->objectManager->get('Aoe\\Restler\\Controller\\ExplorerAuthenticationController');
+        $this->controller = new ExplorerAuthenticationController();
         $this->inject($this->controller, 'restler', $restlerMock);
     }
 
