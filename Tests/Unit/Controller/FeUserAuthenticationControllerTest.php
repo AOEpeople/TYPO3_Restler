@@ -81,6 +81,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
     public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
     {
         $this->typo3LoaderMock->expects($this->never())->method('initializeFrontEndUser');
+        $this->typo3LoaderMock->expects($this->never())->method('getFrontEndUser');
         $this->assertFalse($this->controller->__isAllowed());
     }
 
@@ -91,10 +92,11 @@ class FeUserAuthenticationControllerTest extends BaseTest
     {
         $this->controller->checkAuthentication = true;
 
-        $GLOBALS['TSFE'] = $this->createMockedTsfe();
-        $GLOBALS['TSFE']->fe_user->user = null;
-
+        $feUser = $this->createMockedFrontEndUser();
+        $feUser->user = null;
         $this->typo3LoaderMock->expects($this->once())->method('initializeFrontEndUser');
+        $this->typo3LoaderMock->expects($this->once())->method('getFrontEndUser')->will($this->returnValue($feUser));
+
         $this->assertFalse($this->controller->__isAllowed());
     }
 
@@ -105,10 +107,11 @@ class FeUserAuthenticationControllerTest extends BaseTest
     {
         $this->controller->checkAuthentication = true;
 
-        $GLOBALS['TSFE'] = $this->createMockedTsfe();
-        $GLOBALS['TSFE']->fe_user->user = array('username' => 'max.mustermann');
-
+        $feUser = $this->createMockedFrontEndUser();
+        $feUser->user = array('username' => 'max.mustermann');
         $this->typo3LoaderMock->expects($this->once())->method('initializeFrontEndUser');
+        $this->typo3LoaderMock->expects($this->once())->method('getFrontEndUser')->will($this->returnValue($feUser));
+
         $this->assertTrue($this->controller->__isAllowed());
     }
 
@@ -118,9 +121,8 @@ class FeUserAuthenticationControllerTest extends BaseTest
     public function shouldSetPageIdZeroIfArgumentDoesNotExist()
     {
         /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
-        $apiMethodInfoMock = $this->getMockBuilder(
-            'Luracast\\Restler\\Data\\ApiMethodInfo'
-        )->disableOriginalConstructor()->getMock();
+        $apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
+
         /* @var $restlerMock \Luracast\Restler\Restler */
         $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
@@ -129,12 +131,11 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $this->controller->checkAuthentication = true;
         $this->controller->argumentNameOfPageId = 'pid';
 
-        $GLOBALS['TSFE'] = $this->createMockedTsfe();
-        $GLOBALS['TSFE']->fe_user->user = array('username' => 'max.mustermann');
+        $reflection = new \ReflectionClass($this->controller);
+        $method = $reflection->getMethod('determinePageIdFromArguments');
+        $method->setAccessible(true);
 
-        $this->controller->__isAllowed();
-
-        $this->assertEquals(0, $GLOBALS['TSFE']->fe_user->checkPid_value);
+        $this->assertEquals(0, $method->invoke($this->controller));
     }
 
     /**
@@ -143,13 +144,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
     public function shouldSetPageIdIfArgumentDoesExist()
     {
         /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
-        $apiMethodInfoMock = $this->getMockBuilder(
-            'Luracast\\Restler\\Data\\ApiMethodInfo'
-        )->disableOriginalConstructor()->getMock();
-        /* @var $restlerMock \Luracast\Restler\Restler */
-        $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
-        $restlerMock->apiMethodInfo = $apiMethodInfoMock;
-        $this->inject($this->controller, 'restler', $restlerMock);
+        $apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
         $apiMethodInfoMock->arguments = array_merge(
             $apiMethodInfoMock->arguments,
             array('pid' => 0)
@@ -159,13 +154,13 @@ class FeUserAuthenticationControllerTest extends BaseTest
             array(0 => 4711)
         );
 
+        /* @var $restlerMock \Luracast\Restler\Restler */
+        $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerMock->apiMethodInfo = $apiMethodInfoMock;
+        $this->inject($this->controller, 'restler', $restlerMock);
+
         $this->controller->checkAuthentication = true;
         $this->controller->argumentNameOfPageId = 'pid';
-
-        $GLOBALS['TSFE'] = $this->createMockedTsfe();
-        $GLOBALS['TSFE']->fe_user->user = array('username' => 'max.mustermann');
-
-        $this->controller->__isAllowed();
 
         $reflection = new \ReflectionClass($this->controller);
         $method = $reflection->getMethod('determinePageIdFromArguments');
@@ -175,18 +170,13 @@ class FeUserAuthenticationControllerTest extends BaseTest
     }
 
     /**
-     * @return \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController
+     * @return \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
      */
-    private function createMockedTsfe()
+    private function createMockedFrontEndUser()
     {
-        /* @var $tsfe \TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController */
-        $tsfe = $this->getMockBuilder('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController')
-            ->disableOriginalConstructor()->getMock();
-        /* @var $feUser \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication */
         $feUser = $this->getMockBuilder('TYPO3\\CMS\\Frontend\\Authentication\\FrontendUserAuthentication')
             ->disableOriginalConstructor()->getMock();
-        $tsfe->fe_user = $feUser;
-        return $tsfe;
+        return $feUser;
     }
 
     /**
