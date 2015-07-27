@@ -14,7 +14,7 @@
     "require": {
         "php": ">=5.3.4",
         "typo3/cms-core": ">=6.2.14",
-        "luracast/restler": "3.*"
+        "aoe/restler": "3.*"
     },
     "replace": {
         "restler": "*"
