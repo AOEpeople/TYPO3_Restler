@@ -26,6 +26,12 @@
     "replace": {
         "restler": "*"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/AOEpeople/Restler.git"
+        }
+    ],
     "keywords": [
         "TYPO3",
         "Restler",
