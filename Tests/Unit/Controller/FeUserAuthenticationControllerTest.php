@@ -1,10 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\Controller;
 
-use Aoe\Restler\Controller\FeUserAuthenticationController;
-use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
-use Aoe\Restler\Tests\Unit\BaseTest;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -28,6 +24,10 @@ use Aoe\Restler\Tests\Unit\BaseTest;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\Controller\FeUserAuthenticationController;
+use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
+use Aoe\Restler\Tests\Unit\BaseTest;
 
 /**
  * @package Restler

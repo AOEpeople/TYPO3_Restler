@@ -1,11 +1,6 @@
 <?php
 namespace Aoe\Restler\Controller;
 
-use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
-use Luracast\Restler\iAuthenticate;
-use Luracast\Restler\Restler;
-use Luracast\Restler\Scope;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -30,6 +25,11 @@ use Luracast\Restler\Scope;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
+use Luracast\Restler\iAuthenticate;
+use Luracast\Restler\Restler;
+use Luracast\Restler\Scope;
+
 /**
  * This class checks, if client is allowed to access the requested and protected API-class
  * This class checks, if FE-user is logged in
@@ -37,11 +37,14 @@ use Luracast\Restler\Scope;
 class FeUserAuthenticationController implements iAuthenticate
 {
     /**
-     * This property defines (when it's set), the argument-name, which contains the pageId, which should be used to initialize TYPO3
-     * This property will be automatically set by restler, when in the API-class/controller this is configured (in PHPdoc/annotations)
+     * This property defines (when it's set), the argument-name, which contains the pageId,
+     * which should be used to initialize TYPO3
+     * This property will be automatically set by restler, when in
+     * the API-class/controller this is configured (in PHPdoc/annotations)
      *
      * Where do we set this property?
-     * When the property should be used, than it must be set inside the PHPdoc-comment of the API-class-method, which handle the API-request
+     * When the property should be used, than it must be set inside the PHPdoc-comment of
+     * the API-class-method, which handle the API-request
      *
      * Syntax:
      * The PHPdoc-comment must look like this:
@@ -59,10 +62,12 @@ class FeUserAuthenticationController implements iAuthenticate
     public $argumentNameOfPageId = '';
     /**
      * This property defines (when it's set), that this controller should check authentication
-     * This property will be automatically set by restler, when in the API-class/controller this is configured (in PHPdoc/annotations)
+     * This property will be automatically set by restler, when in the API-class/controller this
+     * is configured (in PHPdoc/annotations)
      *
      * Where do we set this property?
-     * When the property should be used, than it must be set inside the PHPdoc-comment of the API-class-method, which handle the API-request
+     * When the property should be used, than it must be set inside the PHPdoc-comment of the API-class-method,
+     * which handle the API-request
      *
      * Syntax:
      * The PHPdoc-comment must look like this:

@@ -1,10 +1,6 @@
 <?php
 namespace Aoe\Restler\Controller;
 
-use Luracast\Restler\iAuthenticate;
-use Luracast\Restler\Restler;
-use Luracast\Restler\Scope;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -28,6 +24,10 @@ use Luracast\Restler\Scope;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Luracast\Restler\iAuthenticate;
+use Luracast\Restler\Restler;
+use Luracast\Restler\Scope;
 
 /**
  * This class checks, if client is allowed to access the API-online-documentation

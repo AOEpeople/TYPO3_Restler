@@ -1,8 +1,6 @@
 <?php
 namespace Aoe\Restler\Configuration;
 
-use TYPO3\CMS\Core\SingletonInterface;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -26,6 +24,8 @@ use TYPO3\CMS\Core\SingletonInterface;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * @package Restler

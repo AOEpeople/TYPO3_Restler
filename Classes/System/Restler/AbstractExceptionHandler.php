@@ -1,11 +1,6 @@
 <?php
 namespace Aoe\Restler\System\Restler;
 
-use Aoe\Restler\Configuration\ExtensionConfiguration;
-use Luracast\Restler\RestException;
-use Luracast\Restler\Restler;
-use Luracast\Restler\Scope;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -30,8 +25,14 @@ use Luracast\Restler\Scope;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\Configuration\ExtensionConfiguration;
+use Luracast\Restler\RestException;
+use Luracast\Restler\Restler;
+use Luracast\Restler\Scope;
+
 /**
- * This abstract class can be used to call ONE central method, which handles ALL exceptions (the current HTTP-Status-Code doesn't matter)!
+ * This abstract class can be used to call ONE central method,
+ * which handles ALL exceptions (the current HTTP-Status-Code doesn't matter)!
  *
  * @package Restler
  *

@@ -1,11 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System\Restler;
 
-use Aoe\Restler\Configuration\ExtensionConfiguration;
-use Aoe\Restler\System\Restler\Configuration;
-use Aoe\Restler\Tests\Unit\BaseTest;
-use Luracast\Restler\Restler;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -29,6 +24,11 @@ use Luracast\Restler\Restler;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\Configuration\ExtensionConfiguration;
+use Aoe\Restler\System\Restler\Configuration;
+use Aoe\Restler\Tests\Unit\BaseTest;
+use Luracast\Restler\Restler;
 
 /**
  * @package Restler

@@ -1,11 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System\TYPO3;
 
-use Aoe\Restler\Configuration\ExtensionConfiguration;
-use Aoe\Restler\System\TYPO3\ExtensionManagementUtility;
-use Aoe\Restler\Tests\Unit\BaseTest;
-use TYPO3\CMS\Core\Cache\CacheManager;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -29,6 +24,11 @@ use TYPO3\CMS\Core\Cache\CacheManager;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\Configuration\ExtensionConfiguration;
+use Aoe\Restler\System\TYPO3\ExtensionManagementUtility;
+use Aoe\Restler\Tests\Unit\BaseTest;
+use TYPO3\CMS\Core\Cache\CacheManager;
 
 /**
  * @package Restler
@@ -62,7 +62,8 @@ class ExtensionManagementUtilityTest extends BaseTest
     {
         parent::setUp();
 
-        $this->cacheManager = $this->getMockBuilder('TYPO3\\CMS\\Core\\Cache\\CacheManager')->disableOriginalConstructor()->getMock();
+        $this->cacheManager = $this->getMockBuilder('TYPO3\\CMS\\Core\\Cache\\CacheManager')
+            ->disableOriginalConstructor()->getMock();
         $this->extensionConfiguration = $this->getMockBuilder('Aoe\\Restler\\Configuration\\ExtensionConfiguration')
             ->disableOriginalConstructor()->getMock();
         $this->utility = new ExtensionManagementUtility($this->cacheManager, $this->extensionConfiguration);
@@ -87,7 +88,8 @@ class ExtensionManagementUtilityTest extends BaseTest
         $extKey = 'extensionA';
         $requiredExtensions = array();
         $this->extensionConfiguration
-            ->expects($this->once())->method('getExtensionsWithRequiredExtLocalConfFiles')->will($this->returnValue($requiredExtensions));
+            ->expects($this->once())->method('getExtensionsWithRequiredExtLocalConfFiles')
+            ->will($this->returnValue($requiredExtensions));
 
         $hasToLoadExtension = $this->callUnaccessibleMethodOfObject($this->utility, 'hasToLoadExtension', array($extKey));
         $this->assertTrue($hasToLoadExtension);
@@ -101,9 +103,14 @@ class ExtensionManagementUtilityTest extends BaseTest
         $extKey = 'extensionA';
         $requiredExtensions = array($extKey);
         $this->extensionConfiguration
-            ->expects($this->once())->method('getExtensionsWithRequiredExtLocalConfFiles')->will($this->returnValue($requiredExtensions));
+            ->expects($this->once())->method('getExtensionsWithRequiredExtLocalConfFiles')
+            ->will($this->returnValue($requiredExtensions));
 
-        $hasToLoadExtension = $this->callUnaccessibleMethodOfObject($this->utility, 'hasToLoadExtension', array($extKey));
+        $hasToLoadExtension = $this->callUnaccessibleMethodOfObject(
+            $this->utility,
+            'hasToLoadExtension',
+            array($extKey)
+        );
         $this->assertTrue($hasToLoadExtension);
     }
 
@@ -115,9 +122,14 @@ class ExtensionManagementUtilityTest extends BaseTest
         $extKey = 'extensionA';
         $requiredExtensions = array('extensionB');
         $this->extensionConfiguration
-            ->expects($this->once())->method('getExtensionsWithRequiredExtLocalConfFiles')->will($this->returnValue($requiredExtensions));
+            ->expects($this->once())->method('getExtensionsWithRequiredExtLocalConfFiles')
+            ->will($this->returnValue($requiredExtensions));
 
-        $hasToLoadExtension = $this->callUnaccessibleMethodOfObject($this->utility, 'hasToLoadExtension', array($extKey));
+        $hasToLoadExtension = $this->callUnaccessibleMethodOfObject(
+            $this->utility,
+            'hasToLoadExtension',
+            array($extKey)
+        );
         $this->assertFalse($hasToLoadExtension);
     }
 
@@ -137,7 +149,8 @@ class ExtensionManagementUtilityTest extends BaseTest
     {
         $requiredExtensions = array('extensionA', 'extensionC');
         $this->extensionConfiguration
-            ->expects($this->any())->method('getExtensionsWithRequiredExtLocalConfFiles')->will($this->returnValue($requiredExtensions));
+            ->expects($this->any())->method('getExtensionsWithRequiredExtLocalConfFiles')
+            ->will($this->returnValue($requiredExtensions));
 
         $GLOBALS['TYPO3_LOADED_EXT'] = array();
         $GLOBALS['TYPO3_LOADED_EXT']['extensionA'] = array('ext_localconf.php' => 'pathToLocalconfFileOfExtensionA');
@@ -157,7 +170,8 @@ class ExtensionManagementUtilityTest extends BaseTest
      */
     public function canLoadExtLocalconfWhenCacheExists()
     {
-        $cache = $this->getMockBuilder('TYPO3\\CMS\\Core\\Cache\\Frontend\\PhpFrontend')->disableOriginalConstructor()->getMock();
+        $cache = $this->getMockBuilder('TYPO3\\CMS\\Core\\Cache\\Frontend\\PhpFrontend')
+            ->disableOriginalConstructor()->getMock();
         $cache->expects($this->once())->method('has')->will($this->returnValue(true));
         $cache->expects($this->once())->method('requireOnce');
 
@@ -172,7 +186,8 @@ class ExtensionManagementUtilityTest extends BaseTest
     {
         $GLOBALS['TYPO3_LOADED_EXT'] = array();
 
-        $cache = $this->getMockBuilder('TYPO3\\CMS\\Core\\Cache\\Frontend\\PhpFrontend')->disableOriginalConstructor()->getMock();
+        $cache = $this->getMockBuilder('TYPO3\\CMS\\Core\\Cache\\Frontend\\PhpFrontend')
+            ->disableOriginalConstructor()->getMock();
         $cache->expects($this->once())->method('has')->will($this->returnValue(false));
         $cache->expects($this->once())->method('set');
         $cache->expects($this->once())->method('requireOnce');

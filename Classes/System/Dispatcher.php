@@ -1,8 +1,6 @@
 <?php
 namespace Aoe\Restler\System;
 
-use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -26,6 +24,8 @@ use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 
 /**
  * @package Restler

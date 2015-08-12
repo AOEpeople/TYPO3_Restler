@@ -1,8 +1,6 @@
 <?php
 namespace Aoe\Restler\System\Restler;
 
-use Luracast\Restler\Restler;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -26,6 +24,8 @@ use Luracast\Restler\Restler;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Luracast\Restler\Restler;
 
 /**
  * @package Restler

@@ -1,21 +1,6 @@
 <?php
 namespace Aoe\Restler\System\TYPO3;
 
-use TYPO3\CMS\Core\Core\Bootstrap;
-use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
-use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\Frontend\Utility\EidUtility;
-use LogicException;
-
-// @codingStandardsIgnoreStart
-// we must load some PHP/TYPO3-classes manually, because at this point, TYPO3 (and it's auto-loading) is not initialized
-require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/Core/Bootstrap.php';
-require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonInterface.php';
-// @codingStandardsIgnoreEnd
-
 /***************************************************************
  *  Copyright notice
  *
@@ -39,6 +24,21 @@ require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonIn
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use TYPO3\CMS\Core\Core\Bootstrap;
+use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Frontend\Utility\EidUtility;
+use LogicException;
+
+// @codingStandardsIgnoreStart
+// we must load some PHP/TYPO3-classes manually, because at this point, TYPO3 (and it's auto-loading) is not initialized
+require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/Core/Bootstrap.php';
+require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonInterface.php';
+// @codingStandardsIgnoreEnd
 
 /**
  * @package Restler

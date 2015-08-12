@@ -1,10 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\Controller;
 
-use Aoe\Restler\Controller\ExplorerAuthenticationController;
-use Aoe\Restler\Tests\Unit\BaseTest;
-use Luracast\Restler\Data\ApiMethodInfo;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -28,6 +24,10 @@ use Luracast\Restler\Data\ApiMethodInfo;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\Controller\ExplorerAuthenticationController;
+use Aoe\Restler\Tests\Unit\BaseTest;
+use Luracast\Restler\Data\ApiMethodInfo;
 
 /**
  * @package Restler

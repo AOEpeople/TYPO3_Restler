@@ -1,10 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System\Restler\Fixtures;
 
-use Aoe\Restler\System\Restler\AbstractExceptionHandler;
-use Luracast\Restler\RestException;
-use Luracast\Restler\Restler;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -28,6 +24,10 @@ use Luracast\Restler\Restler;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\System\Restler\AbstractExceptionHandler;
+use Luracast\Restler\RestException;
+use Luracast\Restler\Restler;
 
 /**
  * @package Restler

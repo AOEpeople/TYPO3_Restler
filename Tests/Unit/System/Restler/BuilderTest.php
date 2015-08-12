@@ -1,13 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System\Restler;
 
-use Aoe\Restler\System\Restler\Builder;
-use Aoe\Restler\Tests\Unit\BaseTest;
-use Luracast\Restler\Defaults;
-use Luracast\Restler\Restler;
-use Luracast\Restler\Scope;
-use PHPUnit_Framework_MockObject_MockObject;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -31,6 +24,13 @@ use PHPUnit_Framework_MockObject_MockObject;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\System\Restler\Builder;
+use Aoe\Restler\Tests\Unit\BaseTest;
+use Luracast\Restler\Defaults;
+use Luracast\Restler\Restler;
+use Luracast\Restler\Scope;
+use PHPUnit_Framework_MockObject_MockObject;
 
 /**
  * @package Restler

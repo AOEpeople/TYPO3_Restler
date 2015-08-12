@@ -1,11 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System;
 
-use Aoe\Restler\System\Dispatcher;
-use Aoe\Restler\System\Restler\Builder;
-use Aoe\Restler\Tests\Unit\BaseTest;
-use Luracast\Restler\Restler;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -29,6 +24,11 @@ use Luracast\Restler\Restler;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\System\Dispatcher;
+use Aoe\Restler\System\Restler\Builder;
+use Aoe\Restler\Tests\Unit\BaseTest;
+use Luracast\Restler\Restler;
 
 /**
  * @package Restler
@@ -54,7 +54,8 @@ class DispatcherTest extends BaseTest
     {
         parent::setUp();
 
-        $this->restlerBuilder = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\Builder')->disableOriginalConstructor()->getMock();
+        $this->restlerBuilder = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\Builder')
+            ->disableOriginalConstructor()->getMock();
         $this->dispatcher = new Dispatcher($this->restlerBuilder);
     }
 

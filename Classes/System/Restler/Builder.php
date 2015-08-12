@@ -1,14 +1,6 @@
 <?php
 namespace Aoe\Restler\System\Restler;
 
-use Aoe\Restler\Configuration\ExtensionConfiguration;
-use InvalidArgumentException;
-use Luracast\Restler\Defaults;
-use Luracast\Restler\Restler;
-use Luracast\Restler\Scope;
-use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -32,6 +24,14 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\Configuration\ExtensionConfiguration;
+use InvalidArgumentException;
+use Luracast\Restler\Defaults;
+use Luracast\Restler\Restler;
+use Luracast\Restler\Scope;
+use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * @package Restler

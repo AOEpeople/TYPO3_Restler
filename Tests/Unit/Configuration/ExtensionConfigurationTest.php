@@ -1,9 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\Configuration;
 
-use Aoe\Restler\Configuration\ExtensionConfiguration;
-use Aoe\Restler\Tests\Unit\BaseTest;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -27,6 +24,9 @@ use Aoe\Restler\Tests\Unit\BaseTest;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\Configuration\ExtensionConfiguration;
+use Aoe\Restler\Tests\Unit\BaseTest;
 
 /**
  * @package Restler

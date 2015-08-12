@@ -1,8 +1,6 @@
 <?php
 namespace Aoe\Restler\Tests\Unit\System\Restler\Fixtures;
 
-use Luracast\Restler\Restler;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -26,6 +24,8 @@ use Luracast\Restler\Restler;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Luracast\Restler\Restler;
 
 /**
  * This configuration is invalid, because class does not implement required interface 'Aoe\Restler\System\Restler\ConfigurationInterface'

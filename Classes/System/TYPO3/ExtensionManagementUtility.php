@@ -1,10 +1,6 @@
 <?php
 namespace Aoe\Restler\System\TYPO3;
 
-use Aoe\Restler\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Cache\CacheManager;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -28,6 +24,10 @@ use TYPO3\CMS\Core\Cache\CacheManager;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use Aoe\Restler\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Cache\CacheManager;
 
 /**
  * @package Restler

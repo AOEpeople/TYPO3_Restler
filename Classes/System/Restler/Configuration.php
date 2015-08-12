@@ -1,9 +1,6 @@
 <?php
 namespace Aoe\Restler\System\Restler;
 
-use Aoe\Restler\Configuration\ExtensionConfiguration;
-use Luracast\Restler\Restler;
-
 /***************************************************************
  *  Copyright notice
  *
@@ -28,9 +25,13 @@ use Luracast\Restler\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\Configuration\ExtensionConfiguration;
+use Luracast\Restler\Restler;
+
 /**
  * Configure restler:
- *  - add API- and authentication-class, when online-documentation is enabled (this can be configured via extension-manager)
+ *  - add API- and authentication-class, when online-documentation is enabled
+ *    (this can be configured via extension-manager)
  *  - add authentication-class, which can be used to check, if FE-user is logged in
  *
  * @package Restler
