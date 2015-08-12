@@ -51,7 +51,7 @@ class ExtensionConfiguration implements SingletonInterface
      */
     public function isCacheRefreshingEnabled()
     {
-        return (boolean) $this->get('refreshCache');
+        return (boolean)$this->get('refreshCache');
     }
 
     /**
@@ -59,7 +59,7 @@ class ExtensionConfiguration implements SingletonInterface
      */
     public function isProductionContextSet()
     {
-        return (boolean) $this->get('productionContext');
+        return (boolean)$this->get('productionContext');
     }
 
     /**
@@ -67,7 +67,7 @@ class ExtensionConfiguration implements SingletonInterface
      */
     public function isOnlineDocumentationEnabled()
     {
-        return (boolean) $this->get('enableOnlineDocumentation');
+        return (boolean)$this->get('enableOnlineDocumentation');
     }
 
     /**
@@ -85,12 +85,13 @@ class ExtensionConfiguration implements SingletonInterface
     {
         $requiredExtensions = array();
         $extensionList = explode(',', $this->get('extensionsWithRequiredExtLocalConfFiles'));
-        foreach($extensionList as $extensionName) {
+        foreach ($extensionList as $extensionName) {
             $extensionName = trim($extensionName);
             if (false === empty($extensionName)) {
                 $requiredExtensions[] = $extensionName;
             }
         }
+
         return $requiredExtensions;
     }
 
