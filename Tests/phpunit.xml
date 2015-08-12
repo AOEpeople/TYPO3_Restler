@@ -1,8 +1,18 @@
-<phpunit strict="false"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         bootstrap="bootstrap.php"
+<phpunit
+        backupGlobals="true"
+        backupStaticAttributes="false"
+        bootstrap="../../../../typo3/sysext/core/Build/UnitTestsBootstrap.php"
+        colors="false"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        forceCoversAnnotation="false"
+        processIsolation="false"
+        stopOnError="false"
+        stopOnFailure="false"
+        stopOnIncomplete="false"
+        stopOnSkipped="false"
+        verbose="false"
         >
     <testsuites>
         <testsuite name="restler">
@@ -16,5 +26,6 @@
     </filter>
     <php>
         <const name="RESTLER_PHPUNIT_CONTEXT" value="1"/>
+        <env name="TYPO3_PATH_WEB" value="../../../.."/>
     </php>
 </phpunit>
