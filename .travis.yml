@@ -34,7 +34,7 @@ before_script:
   - git clone --single-branch --branch $TYPO3_BRANCH --depth 1 https://github.com/TYPO3/TYPO3.CMS.git typo3_core
   - mv typo3_core/* .
   - mkdir -p typo3conf/ext
-  - mv restler typo3conf/ext/
+  - mv TYPO3_Restler typo3conf/ext/
   - composer install
 
 script:
@@ -42,19 +42,19 @@ script:
     if [[ "$COVERAGE" == "0" ]]; then
       echo;
       echo "Running unit tests";
-      ./bin/phpunit --colors -c typo3/sysext/core/Build/UnitTests.xml typo3conf/ext/restler/Tests/Unit/
+      ./bin/phpunit --colors -c typo3/sysext/core/Build/UnitTests.xml typo3conf/ext/TYPO3_Restler/Tests/Unit/
     fi
   - >
     if [[ "$COVERAGE" == "1" ]]; then
       echo;
       echo "Running unit tests";
-      ./bin/phpunit --coverage-clover=unittest-coverage.clover --colors -c typo3/sysext/core/Build/UnitTests.xml typo3conf/ext/restler/Tests/Unit/
+      ./bin/phpunit --coverage-clover=unittest-coverage.clover --colors -c typo3/sysext/core/Build/UnitTests.xml typo3conf/ext/TYPO3_Restler/Tests/Unit/
     fi
   - >
     if [[ "$COVERAGE" == "1" ]]; then
       echo;
       echo "Uploading code coverage results";
       wget https://scrutinizer-ci.com/ocular.phar
-      cp -R typo3conf/ext/restler/.git .
+      cp -R typo3conf/ext/TYPO3_Restler/.git .
       php ocular.phar code-coverage:upload --format=php-clover unittest-coverage.clover
     fi
