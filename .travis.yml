@@ -35,6 +35,7 @@ before_script:
   - mv typo3_core/* .
   - mkdir -p typo3conf/ext
   - mv TYPO3_Restler typo3conf/ext/
+  - git clone --single-branch --branch 3.0.0 --depth 1 https://github.com/Luracast/Restler.git typo3conf/ext/Restler
   - composer install
 
 script:
