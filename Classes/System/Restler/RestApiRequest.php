@@ -31,7 +31,7 @@ use Luracast\Restler\Defaults;
 use Exception;
 
 /**
- * This class represents a single REST-API-request, which we can be called from PHP.
+ * This class represents a single REST-API-request, which can be called from PHP.
  * For each REST-API request, we need a new object of this class, because restler stores some data in this object
  *
  * The logic/idea behind this class is:
@@ -91,6 +91,10 @@ class RestApiRequest extends Restler
      * @var string
      */
     private $restApiRequestMethod;
+    /**
+     * @var RestlerScope
+     */
+    private $restlerScope;
 
 
 
@@ -112,15 +116,28 @@ class RestApiRequest extends Restler
 
         $this->storeGlobalData();
         $this->overrideGlobalData();
+        $this->restlerScope->storeOriginalRestlerObj();
+        $this->restlerScope->overrideOriginalRestlerObj($this);
+
+        /**
+         * add all authentication-classes:
+         *  - we must add all authentication-classes, because the authentication-classes are stored in this object
+         *  - we don't must add all REST-API-classes, because the REST-API-classes are not stored in this object
+         */
+        $this->authClasses = $this->restlerScope->getOriginalRestlerObj()->_authClasses;
+
         try {
             $result = $this->handle();
             $this->resetGlobalData();
+            $this->restlerScope->resetOriginalRestlerObj();
             return $result;
         } catch(RestException $e) {
             $this->resetGlobalData();
+            $this->restlerScope->resetOriginalRestlerObj();
             throw $e;
         } catch(Exception $e) {
             $this->resetGlobalData();
+            $this->restlerScope->resetOriginalRestlerObj();
             throw new RestException(400, $e->getMessage());
         }
     }
@@ -174,11 +191,11 @@ class RestApiRequest extends Restler
      * Override parent method...because we don't want to call it!
      * The original method would set some properties (e.g. set this object into static properties of global classes)
      *
-     * @param boolean $productionMode    When set to false, it will run in debug mode and parse the class files every time to map it to the URL
-     * @param boolean $refreshCache      will update the cache when set to true
+     * @param RestlerScope $restlerScope
      */
-    public function __construct($productionMode = false, $refreshCache = false)
+    public function __construct(RestlerScope $restlerScope)
     {
+        $this->restlerScope = $restlerScope;
     }
 
     /**

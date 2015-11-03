@@ -25,8 +25,6 @@ namespace Aoe\Restler\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Luracast\Restler\Restler;
-use Luracast\Restler\Scope;
 use Luracast\Restler\RestException;
 use TYPO3\CMS\Core\SingletonInterface;
 
@@ -36,16 +34,28 @@ use TYPO3\CMS\Core\SingletonInterface;
 class RestApiClient implements SingletonInterface
 {
     /**
-     * @var Restler
+     * @var boolean
      */
-    private $restler;
+    private $isExecutingRequest = false;
+    /**
+     * @var RestlerScope
+     */
+    private $restlerScope;
 
     /**
-     * set private property $restler
+     * @param RestlerScope $restlerScope
      */
-    public function __construct()
+    public function __construct(RestlerScope $restlerScope)
     {
-        $this->restler = Scope::get('Restler');
+        $this->restlerScope = $restlerScope;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isExecutingRequest()
+    {
+        return $this->isExecutingRequest;
     }
 
     /**
@@ -59,11 +69,17 @@ class RestApiClient implements SingletonInterface
     public function executeRequest($requestMethod, $requestUri, array $getData = array(), array $postData = array())
     {
         try {
-            $restApiRequest = new RestApiRequest($this->restler->getProductionMode(), $this->restler->refreshCache);
-            return $restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
+            $this->isExecutingRequest = true;
+            $restApiRequest = new RestApiRequest($this->restlerScope);
+            $result = $restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
+            $this->isExecutingRequest = false;
+
+            return $result;
         } catch(RestException $e) {
+            $this->isExecutingRequest = false;
+
             $errorMessage = 'internal REST-API-request \''.$requestMethod.':'.$requestUri.'\' could not be processed';
-            if (false === $this->restler->getProductionMode()) {
+            if (false === $this->restlerScope->getOriginalRestlerObj()->getProductionMode()) {
                 $errorMessage .= ' (message: '.$e->getMessage().', details: '.json_encode($e->getDetails()).')';
             }
             throw new RestApiRequestException(
