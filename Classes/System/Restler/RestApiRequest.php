@@ -114,9 +114,34 @@ class RestApiRequest extends Restler
         $this->restApiGetData = $getData;
         $this->restApiPostData = $postData;
 
-        $this->storeGlobalData();
-        $this->overrideGlobalData();
-        $this->restApiRequestScope->storeOriginalRestApiRequestObj();
+        $this->storeOriginalRestApiRequest();
+        $this->overrideOriginalRestApiRequest();
+
+        try {
+            $result = $this->handle();
+            $this->restoreOriginalRestApiRequest();
+            return $result;
+        } catch(RestException $e) {
+            $this->restoreOriginalRestApiRequest();
+            throw $e;
+        } catch(Exception $e) {
+            $this->restoreOriginalRestApiRequest();
+            throw new RestException(400, $e->getMessage());
+        }
+    }
+
+    /**
+     * Override (the stored) data of $_GET, $_POST and $_SERVER (which are used in several restler-PHP-classes) and the original
+     * REST-API-Request-object, because this data/object 'defines' the REST-API-request, which we want to call
+     *
+     * @return void
+     */
+    private function overrideOriginalRestApiRequest()
+    {
+        $_GET = $this->restApiGetData;
+        $_POST = $this->restApiPostData;
+        $_SERVER['REQUEST_METHOD'] = $this->restApiRequestMethod;
+        $_SERVER['REQUEST_URI'] = $this->restApiRequestUri;
         $this->restApiRequestScope->overrideOriginalRestApiRequestObj($this);
 
         /**
@@ -125,58 +150,31 @@ class RestApiRequest extends Restler
          *  - we don't must add all REST-API-classes, because the REST-API-classes are not stored in this object
          */
         $this->authClasses = $this->restApiRequestScope->getOriginalRestApiRequestObj()->_authClasses;
-
-        try {
-            $result = $this->handle();
-            $this->resetGlobalData();
-            $this->restApiRequestScope->resetOriginalRestApiRequestObj();
-            return $result;
-        } catch(RestException $e) {
-            $this->resetGlobalData();
-            $this->restApiRequestScope->resetOriginalRestApiRequestObj();
-            throw $e;
-        } catch(Exception $e) {
-            $this->resetGlobalData();
-            $this->restApiRequestScope->resetOriginalRestApiRequestObj();
-            throw new RestException(400, $e->getMessage());
-        }
     }
 
     /**
-     * Override (the stored) data of $_GET, $_POST and $_SERVER (which are used in several restler-PHP-classes), because
-     * this data 'defines' the REST-API-request, which we want to call
-     *
+     * Restore (the overridden) data of $_GET, $_POST and $_SERVER and the original REST-API-Request-object
      * @return void
      */
-    private function overrideGlobalData()
-    {
-        $_GET = $this->restApiGetData;
-        $_POST = $this->restApiPostData;
-        $_SERVER['REQUEST_METHOD'] = $this->restApiRequestMethod;
-        $_SERVER['REQUEST_URI'] = $this->restApiRequestUri;
-    }
-
-    /**
-     * Reset (the overridden) data of $_GET, $_POST and $_SERVER
-     * @return void
-     */
-    private function resetGlobalData()
+    private function restoreOriginalRestApiRequest()
     {
         $_GET = self::$originalGetVars;
         $_POST = self::$originalPostVars;
         $_SERVER = self::$originalServerSettings;
+        $this->restApiRequestScope->restoreOriginalRestApiRequestObj();
     }
 
     /**
-     * Store (the original) data of $_GET, $_POST and $_SERVER
+     * Store (the original) data of $_GET, $_POST and $_SERVER and the original REST-API-Request-object
      * @return void
      */
-    private function storeGlobalData()
+    private function storeOriginalRestApiRequest()
     {
         if (false === isset(self::$originalServerSettings)) {
             self::$originalGetVars = $_GET;
             self::$originalPostVars = $_POST;
             self::$originalServerSettings = $_SERVER;
+            $this->restApiRequestScope->storeOriginalRestApiRequestObj();
         }
     }
 

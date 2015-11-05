@@ -27,12 +27,13 @@ namespace Aoe\Restler\System\Restler;
 
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
+use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * We must override the Scope-class from restler. Otherwise we can't override the 'original' Restler-object (which represents
  * the REST-API-Request) when we want to execute (multiple) REST-API-requests via the class Aoe\Restler\System\Restler\RestApiRequest
  */
-class RestApiRequestScope extends Scope
+class RestApiRequestScope extends Scope implements SingletonInterface
 {
     /**
      * @var Scope
@@ -61,9 +62,9 @@ class RestApiRequestScope extends Scope
     }
 
     /**
-     * Reset (the overridden) restler-object
+     * Restore (the overridden) restler-object
      */
-    public function resetOriginalRestApiRequestObj()
+    public function restoreOriginalRestApiRequestObj()
     {
         static::set('Restler', $this->originalRestApiRequestObj);
     }
