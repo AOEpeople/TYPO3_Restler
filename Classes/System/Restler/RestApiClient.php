@@ -25,8 +25,10 @@ namespace Aoe\Restler\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use Luracast\Restler\RestException;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * @package Restler
@@ -37,6 +39,10 @@ class RestApiClient implements SingletonInterface
      * @var boolean
      */
     private $isExecutingRequest = false;
+    /**
+     * @var boolean
+     */
+    private $isRequestPrepared = false;
     /**
      * @var RestApiRequestScope
      */
@@ -68,6 +74,10 @@ class RestApiClient implements SingletonInterface
      */
     public function executeRequest($requestMethod, $requestUri, array $getData = array(), array $postData = array())
     {
+        if ($this->isRequestPreparationRequired()) {
+            $this->prepareRestApiRequest();
+        }
+
         try {
             $this->isExecutingRequest = true;
             $restApiRequest = new RestApiRequest($this->restApiRequestScope);
@@ -79,7 +89,7 @@ class RestApiClient implements SingletonInterface
             $this->isExecutingRequest = false;
 
             $errorMessage = 'internal REST-API-request \''.$requestMethod.':'.$requestUri.'\' could not be processed';
-            if (false === $this->restApiRequestScope->getOriginalRestApiRequestObj()->getProductionMode()) {
+            if (false === $this->restApiRequestScope->getOriginalRestApiRequest()->getProductionMode()) {
                 $errorMessage .= ' (message: '.$e->getMessage().', details: '.json_encode($e->getDetails()).')';
             }
             throw new RestApiRequestException(
@@ -88,5 +98,40 @@ class RestApiClient implements SingletonInterface
                 $e
             );
         }
+    }
+
+    /**
+     * @return RestlerBuilder
+     */
+    protected function getRestlerBuilder()
+    {
+        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        return $objectManager->get('Aoe\\Restler\\System\\Restler\\Builder');
+    }
+
+    /**
+     * We must prepare the REST-API-request when we are in the 'normal' TYPO3-context (the client, which called this PHP-request, has
+     * NOT requested an REST-API-endpoint). In this case, we must build the 'original' REST-API-Request (aka Restler-object, which is
+     * always required), before we can execute any REST-API-request via this PHP-client.
+     *
+     * @return boolean
+     */
+    protected function isRequestPreparationRequired()
+    {
+        if (defined('REST_API_IS_RUNNING') || $this->isRequestPrepared === true) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * build the 'original' REST-API-Request (aka Restler-object, which is always
+     * required) and store it in the REST-API-Request-Scope (aka Scope-object)
+     */
+    private function prepareRestApiRequest()
+    {
+        $originalRestApiRequest = $this->getRestlerBuilder()->build();
+        $this->restApiRequestScope->storeOriginalRestApiRequest($originalRestApiRequest);
+        $this->isRequestPrepared = true;
     }
 }

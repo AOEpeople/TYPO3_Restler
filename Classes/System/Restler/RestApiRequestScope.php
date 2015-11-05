@@ -38,15 +38,15 @@ class RestApiRequestScope extends Scope implements SingletonInterface
     /**
      * @var Scope
      */
-    private $originalRestApiRequestObj;
+    private $originalRestApiRequest;
 
     /**
      * @return Restler
      */
-    public function getOriginalRestApiRequestObj()
+    public function getOriginalRestApiRequest()
     {
-        if (isset($this->originalRestApiRequestObj)) {
-            return $this->originalRestApiRequestObj;
+        if (isset($this->originalRestApiRequest)) {
+            return $this->originalRestApiRequest;
         }
         return static::get('Restler');
     }
@@ -56,7 +56,7 @@ class RestApiRequestScope extends Scope implements SingletonInterface
      *
      * @param RestApiRequest $restApiRequest
      */
-    public function overrideOriginalRestApiRequestObj(RestApiRequest $restApiRequest)
+    public function overrideOriginalRestApiRequest(RestApiRequest $restApiRequest)
     {
         static::set('Restler', $restApiRequest);
     }
@@ -64,16 +64,21 @@ class RestApiRequestScope extends Scope implements SingletonInterface
     /**
      * Restore (the overridden) restler-object
      */
-    public function restoreOriginalRestApiRequestObj()
+    public function restoreOriginalRestApiRequest()
     {
-        static::set('Restler', $this->originalRestApiRequestObj);
+        static::set('Restler', $this->originalRestApiRequest);
     }
 
     /**
      * store (the original) restler-object
+     *
+     * @param Restler $originalRestApiRequest optional, default is null (normally, the object already exists in the 'Scope-Repository')
      */
-    public function storeOriginalRestApiRequestObj()
+    public function storeOriginalRestApiRequest(Restler $originalRestApiRequest = null)
     {
-        $this->originalRestApiRequestObj = static::get('Restler');
+        if ($originalRestApiRequest instanceof Restler) {
+            static::set('Restler', $originalRestApiRequest);
+        }
+        $this->originalRestApiRequest = static::get('Restler');
     }
 }
