@@ -1,5 +1,5 @@
 <?php
-namespace Aoe\Restler\System\Restler;
+namespace Aoe\Restler\System\RestApi;
 
 /***************************************************************
  *  Copyright notice
@@ -29,10 +29,6 @@ use Exception;
 
 class RestApiRequestException extends Exception
 {
-    /**
-     * @var integer
-     */
-    const EXCEPTION_CODE_REQUEST_IS_NOT_VALID = 1446475600;
     /**
      * @var integer
      */

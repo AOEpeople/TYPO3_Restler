@@ -1,5 +1,5 @@
 <?php
-namespace Aoe\Restler\System\Restler;
+namespace Aoe\Restler\System\RestApi;
 
 /***************************************************************
  *  Copyright notice
