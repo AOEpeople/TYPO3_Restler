@@ -197,6 +197,13 @@ class RestApiRequest extends Restler
     }
 
     /**
+     * Override parent method...because we don't want to call it (the original method would cache the determined routes)!
+     */
+    public function __destruct()
+    {
+    }
+
+    /**
      * Override parent method...because we don't want to call it (the original method would send some headers to the client)!
      */
     public function composeHeaders(RestException $e = null)
@@ -204,10 +211,24 @@ class RestApiRequest extends Restler
     }
 
     /**
-     * Override parent method...because we don't want to call it (the original method would cache the determined routes)!
+     * Override parent method...because we must return the request-data of THIS REST-API request!
+     * The original method would return the request-data of the ORIGINAL called REST-API request
+     *
+     * @param boolean $includeQueryParameters
+     *
+     * @return array
      */
-    public function __destruct()
+    public function getRequestData($includeQueryParameters = true)
     {
+        $requestData = array();
+        if ($this->restApiRequestMethod == 'PUT' || $this->restApiRequestMethod == 'PATCH' || $this->restApiRequestMethod == 'POST') {
+            $requestData = array_merge($this->restApiPostData, array(Defaults::$fullRequestDataName => $this->restApiPostData));
+        }
+
+        if ($includeQueryParameters === true) {
+            return $requestData + $this->restApiGetData;
+        }
+        return $requestData;
     }
 
     /**
@@ -233,26 +254,5 @@ class RestApiRequest extends Restler
         $this->postCall();
 
         return $this->responseFormat->decode($this->responseData);
-    }
-
-    /**
-     * Override parent method...because we must return the request-data of THIS REST-API request!
-     * The original method would return the request-data of the ORIGINAL called REST-API request
-     *
-     * @param boolean $includeQueryParameters
-     *
-     * @return array
-     */
-    public function getRequestData($includeQueryParameters = true)
-    {
-        $requestData = array();
-        if ($this->restApiRequestMethod == 'PUT' || $this->restApiRequestMethod == 'PATCH' || $this->restApiRequestMethod == 'POST') {
-            $requestData = array_merge($this->restApiPostData, array(Defaults::$fullRequestDataName => $this->restApiPostData));
-        }
-
-        if ($includeQueryParameters === true) {
-            return $requestData + $this->restApiGetData;
-        }
-        return $requestData;
     }
 }
