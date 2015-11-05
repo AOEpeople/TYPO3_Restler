@@ -35,7 +35,8 @@ use Exception;
  * For each REST-API request, we need a new object of this class, because restler stores some data in this object
  *
  * The logic/idea behind this class is:
- * 1. We override the data of $_GET, $_POST and $_SERVER - because this data 'defines' the REST-API-request, which we want to call
+ * 1. We override the data of $_GET, $_POST and $_SERVER and we override the REST-API-request-object (aka Restler-object)
+ *    ...because this data/object 'defines' the REST-API-request, which we want to call
  * 2. We call/start restler to handle the REST-API-request
  * 3. We return the result of the 'called' REST-API-request - instead of sending the result to the client
  */
@@ -153,7 +154,7 @@ class RestApiRequest extends Restler
     }
 
     /**
-     * Restore (the overridden) data of $_GET, $_POST and $_SERVER and the original REST-API-Request-object
+     * Restore (the overridden) data of $_GET, $_POST and $_SERVER and the original REST-API-request-object
      * @return void
      */
     private function restoreOriginalRestApiRequest()
@@ -165,7 +166,7 @@ class RestApiRequest extends Restler
     }
 
     /**
-     * Store (the original) data of $_GET, $_POST and $_SERVER and the original REST-API-Request-object
+     * Store (the original) data of $_GET, $_POST and $_SERVER and the original REST-API-request-object
      * @return void
      */
     private function storeOriginalRestApiRequest()
