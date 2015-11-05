@@ -29,23 +29,23 @@ use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
 
 /**
- * We must override the Scope-class from restler. Otherwise we can't override the 'original' Restler-object
- * when we want to execute REST-API-requests via the class Aoe\Restler\System\Restler\RestApiRequest
+ * We must override the Scope-class from restler. Otherwise we can't override the 'original' Restler-object (which represents
+ * the REST-API-Request) when we want to execute (multiple) REST-API-requests via the class Aoe\Restler\System\Restler\RestApiRequest
  */
-class RestlerScope extends Scope
+class RestApiRequestScope extends Scope
 {
     /**
      * @var Scope
      */
-    private $originalRestlerObj;
+    private $originalRestApiRequestObj;
 
     /**
      * @return Restler
      */
-    public function getOriginalRestlerObj()
+    public function getOriginalRestApiRequestObj()
     {
-        if (isset($this->originalRestlerObj)) {
-            return $this->originalRestlerObj;
+        if (isset($this->originalRestApiRequestObj)) {
+            return $this->originalRestApiRequestObj;
         }
         return static::get('Restler');
     }
@@ -55,7 +55,7 @@ class RestlerScope extends Scope
      *
      * @param RestApiRequest $restApiRequest
      */
-    public function overrideOriginalRestlerObj(RestApiRequest $restApiRequest)
+    public function overrideOriginalRestApiRequestObj(RestApiRequest $restApiRequest)
     {
         static::set('Restler', $restApiRequest);
     }
@@ -63,16 +63,16 @@ class RestlerScope extends Scope
     /**
      * Reset (the overridden) restler-object
      */
-    public function resetOriginalRestlerObj()
+    public function resetOriginalRestApiRequestObj()
     {
-        static::set('Restler', $this->originalRestlerObj);
+        static::set('Restler', $this->originalRestApiRequestObj);
     }
 
     /**
      * store (the original) restler-object
      */
-    public function storeOriginalRestlerObj()
+    public function storeOriginalRestApiRequestObj()
     {
-        $this->originalRestlerObj = static::get('Restler');
+        $this->originalRestApiRequestObj = static::get('Restler');
     }
 }

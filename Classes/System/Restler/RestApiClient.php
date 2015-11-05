@@ -38,16 +38,16 @@ class RestApiClient implements SingletonInterface
      */
     private $isExecutingRequest = false;
     /**
-     * @var RestlerScope
+     * @var RestApiRequestScope
      */
-    private $restlerScope;
+    private $restApiRequestScope;
 
     /**
-     * @param RestlerScope $restlerScope
+     * @param RestApiRequestScope $restApiRequestScope
      */
-    public function __construct(RestlerScope $restlerScope)
+    public function __construct(RestApiRequestScope $restApiRequestScope)
     {
-        $this->restlerScope = $restlerScope;
+        $this->restApiRequestScope = $restApiRequestScope;
     }
 
     /**
@@ -70,7 +70,7 @@ class RestApiClient implements SingletonInterface
     {
         try {
             $this->isExecutingRequest = true;
-            $restApiRequest = new RestApiRequest($this->restlerScope);
+            $restApiRequest = new RestApiRequest($this->restApiRequestScope);
             $result = $restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
             $this->isExecutingRequest = false;
 
@@ -79,7 +79,7 @@ class RestApiClient implements SingletonInterface
             $this->isExecutingRequest = false;
 
             $errorMessage = 'internal REST-API-request \''.$requestMethod.':'.$requestUri.'\' could not be processed';
-            if (false === $this->restlerScope->getOriginalRestlerObj()->getProductionMode()) {
+            if (false === $this->restApiRequestScope->getOriginalRestApiRequestObj()->getProductionMode()) {
                 $errorMessage .= ' (message: '.$e->getMessage().', details: '.json_encode($e->getDetails()).')';
             }
             throw new RestApiRequestException(

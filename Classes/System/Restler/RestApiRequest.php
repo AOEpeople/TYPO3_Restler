@@ -92,9 +92,9 @@ class RestApiRequest extends Restler
      */
     private $restApiRequestMethod;
     /**
-     * @var RestlerScope
+     * @var RestApiRequestScope
      */
-    private $restlerScope;
+    private $restApiRequestScope;
 
 
 
@@ -116,28 +116,28 @@ class RestApiRequest extends Restler
 
         $this->storeGlobalData();
         $this->overrideGlobalData();
-        $this->restlerScope->storeOriginalRestlerObj();
-        $this->restlerScope->overrideOriginalRestlerObj($this);
+        $this->restApiRequestScope->storeOriginalRestApiRequestObj();
+        $this->restApiRequestScope->overrideOriginalRestApiRequestObj($this);
 
         /**
          * add all authentication-classes:
          *  - we must add all authentication-classes, because the authentication-classes are stored in this object
          *  - we don't must add all REST-API-classes, because the REST-API-classes are not stored in this object
          */
-        $this->authClasses = $this->restlerScope->getOriginalRestlerObj()->_authClasses;
+        $this->authClasses = $this->restApiRequestScope->getOriginalRestApiRequestObj()->_authClasses;
 
         try {
             $result = $this->handle();
             $this->resetGlobalData();
-            $this->restlerScope->resetOriginalRestlerObj();
+            $this->restApiRequestScope->resetOriginalRestApiRequestObj();
             return $result;
         } catch(RestException $e) {
             $this->resetGlobalData();
-            $this->restlerScope->resetOriginalRestlerObj();
+            $this->restApiRequestScope->resetOriginalRestApiRequestObj();
             throw $e;
         } catch(Exception $e) {
             $this->resetGlobalData();
-            $this->restlerScope->resetOriginalRestlerObj();
+            $this->restApiRequestScope->resetOriginalRestApiRequestObj();
             throw new RestException(400, $e->getMessage());
         }
     }
@@ -191,11 +191,11 @@ class RestApiRequest extends Restler
      * Override parent method...because we don't want to call it!
      * The original method would set some properties (e.g. set this object into static properties of global classes)
      *
-     * @param RestlerScope $restlerScope
+     * @param RestApiRequestScope $restApiRequestScope
      */
-    public function __construct(RestlerScope $restlerScope)
+    public function __construct(RestApiRequestScope $restApiRequestScope)
     {
-        $this->restlerScope = $restlerScope;
+        $this->restApiRequestScope = $restApiRequestScope;
     }
 
     /**
