@@ -15,7 +15,11 @@ currently running and was called by using the PHP-client:
 $objectManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
 $restApiClient = $objectManager->get('Aoe\\Restler\\System\\RestApi\\RestApiClient');
 if ($restApiClient->isExecutingRequest()) {
-    // REST-API-Endpoint is currently running and was called by using the PHP-client
+    if ($restApiClient->isProductionContextSet()) {
+        // REST-API-Endpoint is currently running and was called by using the PHP-client (in production-mode)
+    } else {
+        // REST-API-Endpoint is currently running and was called by using the PHP-client (in none production-mode)
+    }
 } else {
     // REST-API-Endpoint is currently NOT running
 }
@@ -45,7 +49,7 @@ $result = $restApiClient->executeRequest('GET', '/api/products/320', $getData);
 # Example to do POST-request #
 ##############################
 $getData  = array();
-$postData = array(,
+$postData = array(
     'id' => 1,
     'name' => 'Test-Product'
 );

@@ -25,6 +25,7 @@ namespace Aoe\Restler\System\RestApi;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use Luracast\Restler\RestException;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -35,6 +36,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class RestApiClient implements SingletonInterface
 {
+    /**
+     * @var ExtensionConfiguration
+     */
+    private $extensionConfiguration;
     /**
      * @var boolean
      */
@@ -49,10 +54,12 @@ class RestApiClient implements SingletonInterface
     private $restApiRequestScope;
 
     /**
+     * @param ExtensionConfiguration $extensionConfiguration
      * @param RestApiRequestScope $restApiRequestScope
      */
-    public function __construct(RestApiRequestScope $restApiRequestScope)
+    public function __construct(ExtensionConfiguration $extensionConfiguration, RestApiRequestScope $restApiRequestScope)
     {
+        $this->extensionConfiguration = $extensionConfiguration;
         $this->restApiRequestScope = $restApiRequestScope;
     }
 
@@ -62,6 +69,14 @@ class RestApiClient implements SingletonInterface
     public function isExecutingRequest()
     {
         return $this->isExecutingRequest;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isProductionContextSet()
+    {
+        return $this->extensionConfiguration->isProductionContextSet();
     }
 
     /**
@@ -109,7 +124,7 @@ class RestApiClient implements SingletonInterface
     protected function createRequestException(RestException $e, $requestMethod, $requestUri)
     {
         $errorMessage = 'internal REST-API-request \''.$requestMethod.':'.$requestUri.'\' could not be processed';
-        if (false === $this->restApiRequestScope->getOriginalRestApiRequest()->getProductionMode()) {
+        if (false === $this->isProductionContextSet()) {
             $errorMessage .= ' (message: '.$e->getMessage().', details: '.json_encode($e->getDetails()).')';
         }
         return new RestApiRequestException(
