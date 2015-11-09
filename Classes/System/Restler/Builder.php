@@ -66,7 +66,6 @@ class Builder implements SingletonInterface
     {
         $this->setAutoLoading();
         $this->setCacheDirectory();
-        $this->setServerConfiguration();
 
         $restlerObj = $this->createRestlerObject();
         $this->configureRestler($restlerObj);
@@ -146,19 +145,5 @@ class Builder implements SingletonInterface
     private function setCacheDirectory()
     {
         Defaults::$cacheDirectory = PATH_site . 'typo3temp/tx_restler';
-    }
-
-    /**
-     * fix server-port (if not correct set)
-     *
-     * @return Restler
-     */
-    private function setServerConfiguration()
-    {
-        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' && $_SERVER['SERVER_PORT'] === '80') {
-            // Fix port for HTTPS
-            // Otherwise restler will create those urls for online-documentation, when HTTPS is used: https://www.myDomain.de:80
-            $_SERVER['SERVER_PORT'] = '443';
-        }
     }
 }
