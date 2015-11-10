@@ -98,7 +98,7 @@ class RestApiClient implements SingletonInterface
             $result = $this->createRequest()->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
             $this->isExecutingRequest = false;
             return $result;
-        } catch(RestException $e) {
+        } catch (RestException $e) {
             $this->isExecutingRequest = false;
             $e = $this->createRequestException($e, $requestMethod, $requestUri);
             throw $e;

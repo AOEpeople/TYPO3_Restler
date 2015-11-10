@@ -122,10 +122,10 @@ class RestApiRequest extends Restler
             $result = $this->handle();
             $this->restoreOriginalRestApiRequest();
             return $result;
-        } catch(RestException $e) {
+        } catch (RestException $e) {
             $this->restoreOriginalRestApiRequest();
             throw $e;
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->restoreOriginalRestApiRequest();
             throw new RestException(400, $e->getMessage());
         }
