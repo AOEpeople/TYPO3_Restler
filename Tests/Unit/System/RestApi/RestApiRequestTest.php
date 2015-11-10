@@ -160,7 +160,7 @@ class RestApiRequestTest extends BaseTest
 
         try {
             $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
         }
 
         $this->assertEquals($this->originalGetVars, $_GET);
@@ -189,7 +189,7 @@ class RestApiRequestTest extends BaseTest
 
         try {
             $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
         }
 
         $this->assertEquals($this->originalGetVars, $_GET);
@@ -213,7 +213,7 @@ class RestApiRequestTest extends BaseTest
         $thrownException = null;
         try {
             $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $thrownException = $e;
         }
         $this->assertInstanceOf('Luracast\Restler\RestException', $thrownException);
@@ -235,7 +235,7 @@ class RestApiRequestTest extends BaseTest
         $thrownException = null;
         try {
             $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $thrownException = $e;
         }
         $this->assertInstanceOf('Luracast\Restler\RestException', $thrownException);
