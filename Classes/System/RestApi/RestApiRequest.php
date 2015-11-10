@@ -47,7 +47,7 @@ class RestApiRequest extends Restler
      *
      * Attention:
      * This property must be static, because it can happen, that some REST-API-calls
-     * will be called recursive, so we MUST store the 'realy original' data
+     * will be called recursive, so we MUST store the 'really original' data
      *
      * @var array
      */
@@ -57,7 +57,7 @@ class RestApiRequest extends Restler
      *
      * Attention:
      * This property must be static, because it can happen, that some REST-API-calls
-     * will be called recursive, so we MUST store the 'realy original' data
+     * will be called recursive, so we MUST store the 'really original' data
      *
      * @var array
      */
@@ -67,7 +67,7 @@ class RestApiRequest extends Restler
      *
      * Attention:
      * This property must be static, because it can happen, that some REST-API-calls
-     * will be called recursive, so we MUST store the 'realy original' data
+     * will be called recursive, so we MUST store the 'really original' data
      *
      * @var array
      */
@@ -105,6 +105,10 @@ class RestApiRequest extends Restler
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
     /**
+     * @param string $requestMethod
+     * @param string $requestUri
+     * @param array $getData
+     * @param array $postData
      * @return mixed can be a primitive or array or object
      * @throws RestException
      */
