@@ -32,8 +32,6 @@ use TYPO3\CMS\Core\SingletonInterface;
 /**
  * We must override the Scope-class from restler. Otherwise we can't override the 'original' Restler-object (which represents
  * the REST-API-Request) when we want to execute (multiple) REST-API-requests via the class Aoe\Restler\System\Restler\RestApiRequest
- *
- * @codeCoverageIgnore
  */
 class RestApiRequestScope extends Scope implements SingletonInterface
 {

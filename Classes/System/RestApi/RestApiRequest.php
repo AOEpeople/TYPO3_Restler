@@ -210,7 +210,6 @@ class RestApiRequest extends Restler
 
     /**
      * Override parent method...because we don't want to call it (the original method would send some headers to the client)!
-     * @codeCoverageIgnore
      */
     public function composeHeaders(RestException $e = null)
     {
@@ -222,7 +221,6 @@ class RestApiRequest extends Restler
      *
      * @param boolean $includeQueryParameters
      * @return array
-     * @codeCoverageIgnore
      */
     public function getRequestData($includeQueryParameters = true)
     {
@@ -241,7 +239,6 @@ class RestApiRequest extends Restler
      * Override parent method...because we must return the data of the REST-API request and we need NO exception-handling!
      *
      * @return mixed can be a primitive or array or object
-     * @codeCoverageIgnore
      */
     public function handle()
     {

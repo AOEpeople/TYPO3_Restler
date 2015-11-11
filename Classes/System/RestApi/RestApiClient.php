@@ -109,7 +109,6 @@ class RestApiClient implements SingletonInterface
      * We must create for every REST-API-request a new object, because the object will contain data, which is related to the request
      *
      * @return RestApiRequest
-     * @codeCoverageIgnore
      */
     protected function createRequest()
     {
@@ -137,7 +136,6 @@ class RestApiClient implements SingletonInterface
 
     /**
      * @return RestlerBuilder
-     * @codeCoverageIgnore
      */
     protected function getRestlerBuilder()
     {
@@ -151,7 +149,6 @@ class RestApiClient implements SingletonInterface
      * always required), before we can execute any REST-API-request via this PHP-client.
      *
      * @return boolean
-     * @codeCoverageIgnore
      */
     protected function isRequestPreparationRequired()
     {
