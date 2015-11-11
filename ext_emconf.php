@@ -12,8 +12,8 @@
 
 $EM_CONF[$_EXTKEY] = array (
 	'title' => 'restler',
-	'description' => 'restler for TYPO3',
-	'category' => 'be',
+	'description' => 'This extension integrates the REST-API-framework "restler" in TYPO3',
+	'category' => 'fe',
 	'author' => 'AOE GmbH',
 	'author_company' => 'AOE GmbH',
 	'author_email' => 'dev@aoe.com',
@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = array (
 	'uploadfolder' => 0,
 	'createDirs' => 'typo3temp/tx_restler',
 	'clearCacheOnLoad' => 0,
-	'version' => '0.10.0',
+	'version' => '1.0.0',
 	'constraints' => 
 	array (
 		'depends' => 
