@@ -17,11 +17,11 @@ $EM_CONF[$_EXTKEY] = array (
 	'author' => 'AOE GmbH',
 	'author_company' => 'AOE GmbH',
 	'author_email' => 'dev@aoe.com',
-	'state' => 'beta',
+	'state' => 'stable',
 	'uploadfolder' => 0,
 	'createDirs' => 'typo3temp/tx_restler',
 	'clearCacheOnLoad' => 0,
-	'version' => '1.0.0',
+	'version' => '1.1.0',
 	'constraints' => 
 	array (
 		'depends' => 
@@ -38,4 +38,3 @@ $EM_CONF[$_EXTKEY] = array (
 	),
 	'_md5_values_when_last_written' => '',
 );
-

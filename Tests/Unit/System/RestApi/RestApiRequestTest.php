@@ -107,9 +107,12 @@ class RestApiRequestTest extends BaseTest
 
         $originalRestApiRequest = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
         $this->restApiRequestScopeMock->expects($this->once())->method('storeOriginalRestApiRequest');
+        $this->restApiRequestScopeMock->expects($this->once())->method('storeOriginalRestApiAuthenticationObjects');
         $this->restApiRequestScopeMock->expects($this->once())->method('overrideOriginalRestApiRequest')->with($this->restApiRequest);
+        $this->restApiRequestScopeMock->expects($this->once())->method('removeRestApiAuthenticationObjects');
         $this->restApiRequestScopeMock->expects($this->once())->method('getOriginalRestApiRequest')->willReturn($originalRestApiRequest);
         $this->restApiRequestScopeMock->expects($this->once())->method('restoreOriginalRestApiRequest');
+        $this->restApiRequestScopeMock->expects($this->once())->method('restoreOriginalRestApiAuthenticationObjects');
         $this->restApiRequest->expects($this->once())->method('handle')->willReturn($result);
         $this->assertEquals($result, $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData));
     }
@@ -129,8 +132,10 @@ class RestApiRequestTest extends BaseTest
         // DO NOT check, if method 'storeOriginalRestApiRequest' of object 'restApiRequestScopeMock' was called:
         // This method is ONLY called ONCE A TIME (to be sure, that REALY only the 'original' data will be stored)!
         $this->restApiRequestScopeMock->expects($this->once())->method('overrideOriginalRestApiRequest')->with($this->restApiRequest);
+        $this->restApiRequestScopeMock->expects($this->once())->method('removeRestApiAuthenticationObjects');
         $this->restApiRequestScopeMock->expects($this->once())->method('getOriginalRestApiRequest')->willReturn($originalRestApiRequest);
         $this->restApiRequestScopeMock->expects($this->once())->method('restoreOriginalRestApiRequest');
+        $this->restApiRequestScopeMock->expects($this->once())->method('restoreOriginalRestApiAuthenticationObjects');
         $this->restApiRequest->expects($this->once())->method('handle')->willReturn($result);
         $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri);
 
@@ -154,8 +159,10 @@ class RestApiRequestTest extends BaseTest
         // DO NOT check, if method 'storeOriginalRestApiRequest' of object 'restApiRequestScopeMock' was called:
         // This method is ONLY called ONCE A TIME (to be sure, that REALY only the 'original' data will be stored)!
         $this->restApiRequestScopeMock->expects($this->once())->method('overrideOriginalRestApiRequest')->with($this->restApiRequest);
+        $this->restApiRequestScopeMock->expects($this->once())->method('removeRestApiAuthenticationObjects');
         $this->restApiRequestScopeMock->expects($this->once())->method('getOriginalRestApiRequest')->willReturn($originalRestApiRequest);
         $this->restApiRequestScopeMock->expects($this->once())->method('restoreOriginalRestApiRequest');
+        $this->restApiRequestScopeMock->expects($this->once())->method('restoreOriginalRestApiAuthenticationObjects');
         $this->restApiRequest->expects($this->once())->method('handle')->will($this->throwException($exception));
 
         try {
@@ -183,8 +190,10 @@ class RestApiRequestTest extends BaseTest
         // DO NOT check, if method 'storeOriginalRestApiRequest' of object 'restApiRequestScopeMock' was called:
         // This method is ONLY called ONCE A TIME (to be sure, that REALY only the 'original' data will be stored)!
         $this->restApiRequestScopeMock->expects($this->once())->method('overrideOriginalRestApiRequest')->with($this->restApiRequest);
+        $this->restApiRequestScopeMock->expects($this->once())->method('removeRestApiAuthenticationObjects');
         $this->restApiRequestScopeMock->expects($this->once())->method('getOriginalRestApiRequest')->willReturn($originalRestApiRequest);
         $this->restApiRequestScopeMock->expects($this->once())->method('restoreOriginalRestApiRequest');
+        $this->restApiRequestScopeMock->expects($this->once())->method('restoreOriginalRestApiAuthenticationObjects');
         $this->restApiRequest->expects($this->once())->method('handle')->will($this->throwException($exception));
 
         try {

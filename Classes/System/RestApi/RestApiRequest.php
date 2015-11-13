@@ -148,6 +148,7 @@ class RestApiRequest extends Restler
         $_SERVER['REQUEST_METHOD'] = $this->restApiRequestMethod;
         $_SERVER['REQUEST_URI'] = $this->restApiRequestUri;
         $this->restApiRequestScope->overrideOriginalRestApiRequest($this);
+        $this->restApiRequestScope->removeRestApiAuthenticationObjects();
 
         /**
          * add all authentication-classes:
@@ -167,6 +168,7 @@ class RestApiRequest extends Restler
         $_POST = self::$originalPostVars;
         $_SERVER = self::$originalServerSettings;
         $this->restApiRequestScope->restoreOriginalRestApiRequest();
+        $this->restApiRequestScope->restoreOriginalRestApiAuthenticationObjects();
     }
 
     /**
@@ -180,6 +182,7 @@ class RestApiRequest extends Restler
             self::$originalPostVars = $_POST;
             self::$originalServerSettings = $_SERVER;
             $this->restApiRequestScope->storeOriginalRestApiRequest();
+            $this->restApiRequestScope->storeOriginalRestApiAuthenticationObjects();
         }
     }
 
