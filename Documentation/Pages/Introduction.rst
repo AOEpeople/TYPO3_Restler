@@ -9,10 +9,12 @@
 What does it do?
 ================
 
-The target audience is developers looking to expose an REST API from their respective extensions.
+The target audience is developers looking to expose a REST API from their respective extensions.
 
 This extension gives the possibility of using `Luracast Restler <https://github.com/Luracast/Restler/tree/v3>`_ in TYPO3.
 It provides the basis for using REST in your own extensions acting like a wrapper.
+
+You can configure endpoints to be available via normal HTTP methods or using internal REST-like PHP calls.
 
 Contribute back!
 ----------------

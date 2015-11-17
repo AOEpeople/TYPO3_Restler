@@ -79,5 +79,6 @@ EXT: Restler
 
 	Pages/Introduction
 	Pages/DeveloperManual
+	Pages/InstallationGuide
 	Pages/Screenshots
 	Pages/Aoe
