@@ -8,11 +8,10 @@
 
 .. _developer-manual:
 
-Developer Manual
+Installation Guide
 ====================
 
-Describes how to manage the extension from a developer’s point of
-view.
+Describes how to manage the extension from a developer’s point of view.
 
 Target group: **Developers**
 
