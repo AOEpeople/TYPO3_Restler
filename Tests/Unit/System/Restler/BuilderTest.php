@@ -206,4 +206,17 @@ class BuilderTest extends BaseTest
         $this->callUnaccessibleMethodOfObject($this->builder, 'setCacheDirectory');
         $this->assertEquals(PATH_site . 'typo3temp/tx_restler', Defaults::$cacheDirectory);
     }
+
+    /**
+     * @test
+     */
+    public function canSetServerConfiguration()
+    {
+        // set variables (which the builder should use/update)
+        $_SERVER['HTTPS'] = 'on';
+        $_SERVER['SERVER_PORT'] = '80';
+
+        $this->callUnaccessibleMethodOfObject($this->builder, 'setServerConfiguration');
+        $this->assertEquals('443', $_SERVER['SERVER_PORT']);
+    }
 }
