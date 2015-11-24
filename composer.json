@@ -13,11 +13,11 @@
     "require": {
         "php": ">=5.3.4",
         "typo3/cms-core": ">=6.2.14",
-        "luracast/restler": "dev-v3_aoe@dev"
+        "luracast/restler": "dev-v3_aoe_20151109#96c68b4539524910c71ba81e085883e9de03a1b0@dev"
     },
     "require-dev": {
         "typo3/cms": "6.2.*",
-        "phpunit/phpunit": "4.6.*",
+        "phpunit/phpunit": "4.8.*",
         "phpunit/phpcov": "2.0.*",
         "squizlabs/php_codesniffer": "2.3.*",
         "sebastian/phpcpd": "2.0.*",
