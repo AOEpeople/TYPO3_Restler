@@ -31,8 +31,6 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 
 /**
  * @package Restler
- *
- * @codeCoverageIgnore
  */
 class ExtensionManagementUtility
 {

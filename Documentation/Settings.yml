@@ -7,7 +7,7 @@ conf.py:
   copyright: 2015
   project: TYPO3 Restler
   version: 0.3
-  release: 0.3.0
+  release: 1.1.7
   latex_documents:
   - - Index
     - TYPO3_Restler.tex

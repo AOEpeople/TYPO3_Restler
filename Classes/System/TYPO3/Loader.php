@@ -42,8 +42,6 @@ require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonIn
 
 /**
  * @package Restler
- *
- * @codeCoverageIgnore
  */
 class Loader implements SingletonInterface
 {

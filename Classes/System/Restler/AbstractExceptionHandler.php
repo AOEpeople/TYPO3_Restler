@@ -35,8 +35,6 @@ use Luracast\Restler\Scope;
  * which handles ALL exceptions (the current HTTP-Status-Code doesn't matter)!
  *
  * @package Restler
- *
- * @codeCoverageIgnore
  */
 abstract class AbstractExceptionHandler
 {
