@@ -1,7 +1,7 @@
 {
     "name": "aoe/restler",
     "type": "typo3-cms-extension",
-    "version": "1.1.10",
+    "version": "1.1.12",
     "description": "A TYPO3-Extension, that integrates the popular PHP REST-framework Restler in TYPO3.",
     "homepage": "https://typo3.org/extensions/repository/view/restler",
     "license": "GPL-3.0",
