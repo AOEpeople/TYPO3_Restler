@@ -28,7 +28,10 @@ namespace Aoe\Restler\System\RestApi;
 use Luracast\Restler\Restler;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Defaults;
+use Luracast\Restler\Format\JsonFormat;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Exception;
+use stdClass;
 
 /**
  * This class represents a single REST-API-request, which can be called from PHP.
@@ -107,17 +110,17 @@ class RestApiRequest extends Restler
     /**
      * @param string $requestMethod
      * @param string $requestUri
-     * @param array $getData
-     * @param array $postData
+     * @param array|stdClass $getData
+     * @param array|stdClass $postData
      * @return mixed can be a primitive or array or object
      * @throws RestException
      */
-    public function executeRestApiRequest($requestMethod, $requestUri, array $getData = array(), array $postData = array())
+    public function executeRestApiRequest($requestMethod, $requestUri, $getData = null, $postData = null)
     {
         $this->restApiRequestMethod = $requestMethod;
         $this->restApiRequestUri = $requestUri;
-        $this->restApiGetData = $getData;
-        $this->restApiPostData = $postData;
+        $this->restApiGetData = $this->convertDataToArray($getData);
+        $this->restApiPostData = $this->convertDataToArray($postData);
 
         $this->storeOriginalRestApiRequest();
         $this->overrideOriginalRestApiRequest();
@@ -133,6 +136,36 @@ class RestApiRequest extends Restler
             $this->restoreOriginalRestApiRequest();
             throw new RestException(400, $e->getMessage());
         }
+    }
+
+    /**
+     * Return class, which can decode a JSON-string into a stdClass-object (instead of an array)
+     *
+     * @return RestApiJsonFormat
+     */
+    protected function getRestApiJsonFormat()
+    {
+        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
+        return $objectManager->get('Aoe\\Restler\\System\\RestApi\\RestApiJsonFormat');
+    }
+
+    /**
+     * @param array|stdClass $data
+     * @return array
+     * @throws RestException
+     */
+    private function convertDataToArray($data)
+    {
+        if ($data === null) {
+            return array();
+        }
+        if (is_array($data)) {
+            return $data;
+        }
+        if ($data instanceof stdClass) {
+           return json_decode(json_encode($data), true); // convert stdClass to array
+        }
+        throw new RestException(500, 'data must be type of null, array or stdClass');
     }
 
     /**
@@ -260,6 +293,10 @@ class RestApiRequest extends Restler
         $this->compose();
         $this->postCall();
 
+        if ($this->responseFormat instanceof JsonFormat) {
+            // return stdClass-object (instead of an array)
+            return $this->getRestApiJsonFormat()->decode($this->responseData);
+        }
         return $this->responseFormat->decode($this->responseData);
     }
 }

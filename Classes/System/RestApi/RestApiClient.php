@@ -30,6 +30,7 @@ use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use Luracast\Restler\RestException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use stdClass;
 
 /**
  * @package Restler
@@ -82,12 +83,12 @@ class RestApiClient implements SingletonInterface
     /**
      * @param string $requestMethod e.g. 'GET', 'POST', 'PUT' or 'DELETE'
      * @param string $requestUri   e.g. '/api/products/320' (without GET-params)
-     * @param array $getData
-     * @param array $postData
+     * @param array|stdClass $getData
+     * @param array|stdClass $postData
      * @return mixed can be a primitive or array or object
      * @throws RestApiRequestException
      */
-    public function executeRequest($requestMethod, $requestUri, array $getData = array(), array $postData = array())
+    public function executeRequest($requestMethod, $requestUri, $getData = null, $postData = null)
     {
         if ($this->isRequestPreparationRequired()) {
             $this->prepareRequest();
