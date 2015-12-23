@@ -36,6 +36,7 @@ use LogicException;
 
 // @codingStandardsIgnoreStart
 // we must load some PHP/TYPO3-classes manually, because at this point, TYPO3 (and it's auto-loading) is not initialized
+require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/Core/ApplicationContext.php';
 require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/Core/Bootstrap.php';
 require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonInterface.php';
 // @codingStandardsIgnoreEnd
@@ -122,16 +123,35 @@ class Loader implements SingletonInterface
 
         // configure TYPO3 (e.g. paths, variables and classLoader)
         $bootstrapObj = Bootstrap::getInstance();
-        $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called PHP-script 'restler/Scripts/restler_dispatch.php'
-        $bootstrapObj->startOutputBuffering();
-        $bootstrapObj->loadConfigurationAndInitialize();
+        if (true === method_exists($bootstrapObj,'applyAdditionalConfigurationSettings')) {
+            // it seams to be TYPO3 6.2 (LTS)
+            $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called PHP-script 'restler/Scripts/restler_dispatch.php'
+            $bootstrapObj->startOutputBuffering();
+            $bootstrapObj->loadConfigurationAndInitialize();
 
-        // configure TYPO3 (load ext_localconf.php-files of TYPO3-extensions)
-        $this->getExtensionManagementUtility()->loadExtLocalconf();
+            // configure TYPO3 (load ext_localconf.php-files of TYPO3-extensions)
+            $this->getExtensionManagementUtility()->loadExtLocalconf();
 
-        // configure TYPO3 (Database and further settings)
-        $bootstrapObj->applyAdditionalConfigurationSettings();
-        $bootstrapObj->initializeTypo3DbGlobal();
+            // configure TYPO3 (Database and further settings)
+            $bootstrapObj->applyAdditionalConfigurationSettings();
+            $bootstrapObj->initializeTypo3DbGlobal();
+        } else {
+            // it seams to be TYPO3 7.6 (LTS)
+            $classLoader = require __DIR__ . '/../../../../../../../typo3_src/vendor/autoload.php';
+            $bootstrapObj->initializeClassLoader($classLoader);
+            $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called PHP-script 'restler/Scripts/restler_dispatch.php'
+            $bootstrapObj->startOutputBuffering();
+            $bootstrapObj->loadConfigurationAndInitialize();
+
+            // configure TYPO3 (load ext_localconf.php-files of TYPO3-extensions)
+            $this->getExtensionManagementUtility()->loadExtLocalconf();
+
+            // configure TYPO3 (Database and further settings)
+            $bootstrapObj->setFinalCachingFrameworkCacheConfiguration();
+            $bootstrapObj->defineLoggingAndExceptionConstants();
+            $bootstrapObj->unsetReservedGlobalVariables();
+            $bootstrapObj->initializeTypo3DbGlobal();
+        }
 
         // create timeTracker-object (TYPO3 needs that)
         $GLOBALS['TT'] = new NullTimeTracker();
