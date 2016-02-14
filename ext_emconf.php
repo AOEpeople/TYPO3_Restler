@@ -21,7 +21,7 @@ $EM_CONF[$_EXTKEY] = array (
 	'uploadfolder' => 0,
 	'createDirs' => 'typo3temp/tx_restler',
 	'clearCacheOnLoad' => 0,
-	'version' => '1.2.11',
+	'version' => '1.2.12',
 	'constraints' => 
 	array (
 		'depends' => 
