@@ -37,5 +37,11 @@
         "Restler",
         "REST",
         "API"
-    ]
+    ],
+    "autoload-dev": {
+        "psr-4": {
+            "Aoe\\Restler\\Tests\\": "Tests",
+            "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/"
+        }
+    }
 }
