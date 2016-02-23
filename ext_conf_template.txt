@@ -7,7 +7,7 @@ productionContext = 0
 # cat=basic; type=boolean; label=Enable online documentation: Defines whether to enable the online documentation of the REST-API
 enableOnlineDocumentation = 1
 
-# cat=basic; type=string; label=Path to online documentation: Defines the path to the online documentation of the REST-API (e.g. www.myDomain.com/[pathToOnlineDocumentation]/)
+# cat=basic; type=string; label=Path to online documentation: Defines the path to the online documentation of the REST-API (e.g. www.example.com/[pathToOnlineDocumentation]/)
 pathToOnlineDocumentation = api_explorer
 
 # cat=basic; type=string; label=TYPO3-Extensions with required ext_localconf.php-files: Define TYPO3-Extensions, where the ext_localconf.php-file must be loaded (comma separated list of TYPO3-Extensions - if all ext_localconf.php-files of Extensions should be loaded (which can cost a lot of performance), leave this field empty)

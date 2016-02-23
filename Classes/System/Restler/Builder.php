@@ -157,7 +157,7 @@ class Builder implements SingletonInterface
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' && $_SERVER['SERVER_PORT'] === '80') {
             // Fix port for HTTPS
-            // Otherwise restler will create those urls for online-documentation, when HTTPS is used: https://www.myDomain.de:80
+            // Otherwise restler will create those urls for online-documentation, when HTTPS is used: https://www.example.com:80
             $_SERVER['SERVER_PORT'] = '443';
         }
     }

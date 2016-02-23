@@ -42,7 +42,7 @@ EXT: Restler
 		dev@aoe.com
 
 	:License:
-		Copyright 2015 AOE GmbH
+		Copyright 2015 - 2016 AOE GmbH
 
 		All rights reserved
 
@@ -79,6 +79,7 @@ EXT: Restler
 
 	Pages/Introduction
 	Pages/DeveloperManual
+	Pages/ConfigurationOptions
 	Pages/InstallationGuide
 	Pages/Screenshots
 	Pages/Aoe

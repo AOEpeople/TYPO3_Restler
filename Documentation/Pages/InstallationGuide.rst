@@ -19,7 +19,7 @@ Target group: **Developers**
 Installation
 ------------
 
-1. Install the extension from TER or from `our GitHub repository <https://github.com/AOEpeople/TYPO3_Restler>`_.
+1. Install the extension from TER (sources are available on `our GitHub repository <https://github.com/AOEpeople/TYPO3_Restler>`_.
 
 2. Configure this TYPO3-Extension (in TYPO3 Extension-Manager; e.g. enable the online documentation of your REST-API). See the "Screenshots" section as well.
 
