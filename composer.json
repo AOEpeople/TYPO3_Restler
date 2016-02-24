@@ -38,6 +38,11 @@
         "REST",
         "API"
     ],
+    "autoload": {
+        "psr-4": {
+            "Aoe\\Restler\\": "Classes"
+        }
+    },
     "autoload-dev": {
         "psr-4": {
             "Aoe\\Restler\\Tests\\": "Tests",
