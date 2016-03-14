@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.3.4",
         "typo3/cms-core": ">=6.2.14",
-        "luracast/restler": "v3.x-dev#35d36e3c1fc4e1d87ced2535fb14b030ed6a9272@dev"
+        "luracast/restler": "3.0.0.20160213"
     },
     "require-dev": {
         "typo3/cms": "6.2.*",
@@ -26,7 +26,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/Luracast/Restler.git"
+            "url": "https://github.com/AOEpeople/Restler.git"
         }
     ],
     "replace": {
