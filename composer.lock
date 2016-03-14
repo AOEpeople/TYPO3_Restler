@@ -115,8 +115,8 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/AOEpeople/Restler.git",
-                "reference": "f5f79cf696d9826948a459a17913f0abde2d3c3a"
+                "url": "https://github.com/Luracast/Restler.git",
+                "reference": "35d36e3c1fc4e1d87ced2535fb14b030ed6a9272"
             },
             "require": {
                 "php": ">=5.3.0"
