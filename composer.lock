@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "82b466906f59a568d6fdc42049a324e2",
-    "content-hash": "1a25cea4be79806b12250b3842b7a295",
+    "hash": "7f6b79706c6dcd0e2c554535aed92752",
+    "content-hash": "ed89b3da56f25515633767d3172c1e0f",
     "packages": [
         {
             "name": "doctrine/instantiator",
@@ -112,7 +112,7 @@
         },
         {
             "name": "luracast/restler",
-            "version": "dev-master",
+            "version": "v3.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Luracast/Restler.git",
@@ -120,7 +120,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Luracast/Restler/zipball/0593effdcc72654294671bf831515f2df7ebebcc",
+                "url": "https://api.github.com/repos/Luracast/Restler/zipball/35d36e3c1fc4e1d87ced2535fb14b030ed6a9272",
                 "reference": "35d36e3c1fc4e1d87ced2535fb14b030ed6a9272",
                 "shasum": ""
             },
@@ -133,26 +133,18 @@
             "require-dev": {
                 "behat/behat": "2.5.*@stable",
                 "bshaffer/oauth2-server-php": "v1.0",
-                "guzzle/guzzle": "~3.1.1",
-                "illuminate/view": "4.2.*",
-                "luracast/explorer": "*",
-                "mustache/mustache": "dev-master",
-                "rodneyrehm/plist": "dev-master",
-                "symfony/yaml": "*",
-                "twig/twig": "v1.13.0",
-                "zendframework/zendamf": "dev-master"
+                "guzzle/guzzle": "3.8.1"
             },
             "suggest": {
                 "behat/behat": "Behaviour driven development testing framework (see require-dev for details)",
-                "bshaffer/oauth2-server-php": "Restler can provide OAuth2 authentication using this library (see require-dev for details)",
+                "bshaffer/oauth2-server-php": "If you want to use OAuth2 for authentication",
                 "guzzle/guzzle": "RESTful api HTTP client framework (see require-dev for details)",
-                "illuminate/view": "Restler can render HtmlView using laravel blade templates (see require-dev for details)",
-                "luracast/explorer": "Restler's very own api explorer (see require-dev for details)",
-                "mustache/mustache": "Restler can render HtmlView using mustache/handlebar templates (see require-dev for details)",
-                "rodneyrehm/plist": "Restler supports tho Apple plist xml format (see require-dev for details)",
-                "symfony/yaml": "Restler can produce content in yaml format as well (see require-dev for details)",
-                "twig/twig": "Restler can render HtmlView using twig templates (see require-dev for details)",
-                "zendframework/zendamf": "Support for the amf document format  (see require-dev for details)"
+                "illuminate/view": "If you want to use laravel blade templates with Html format",
+                "mustache/mustache": "If you want to use mustache/handlebar templates with Html format",
+                "rodneyrehm/plist": "If you need Apple plist binary/xml format",
+                "symfony/yaml": "If you need YAML format",
+                "twig/twig": "If you want to use twig templates with Html format",
+                "zendframework/zendamf": "If you need AMF format"
             },
             "type": "library",
             "extra": {
@@ -172,10 +164,6 @@
                 {
                     "name": "Luracast",
                     "email": "arul@luracast.com"
-                },
-                {
-                    "name": "Nick nickl- Lombard",
-                    "email": "github@jigsoft.co.za"
                 }
             ],
             "description": "Restler is a simple and effective multi-format Web API Server framework written in PHP. Just deal with your business logic in php, Restler will take care of the REST!",
@@ -187,7 +175,7 @@
                 "server"
             ],
             "support": {
-                "source": "https://github.com/Luracast/Restler/tree/master",
+                "source": "https://github.com/Luracast/Restler/tree/v3",
                 "issues": "https://github.com/Luracast/Restler/issues"
             },
             "time": "2016-02-28 15:57:37"
