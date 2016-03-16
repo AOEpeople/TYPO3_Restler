@@ -137,7 +137,7 @@ class Loader implements SingletonInterface
             $bootstrapObj->initializeTypo3DbGlobal();
         } else {
             // it seams to be TYPO3 7.6 (LTS)
-            $classLoader = require __DIR__ . '/../../../../../../../typo3_src/vendor/autoload.php';
+            $classLoader = require __DIR__ . '/../../../../../../typo3_src/vendor/autoload.php';
             $bootstrapObj->initializeClassLoader($classLoader);
             $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called script 'restler/Scripts/restler_dispatch.php'
             $bootstrapObj->startOutputBuffering();
