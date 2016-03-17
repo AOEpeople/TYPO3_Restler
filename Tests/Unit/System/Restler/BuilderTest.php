@@ -119,9 +119,32 @@ class BuilderTest extends BaseTest
 
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array($configurationClass);
+        unset($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']);
 
         $this->objectManagerMock
             ->expects($this->once())->method('get')->with($configurationClass)
+            ->will($this->returnValue($configurationMock));
+
+        $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', array($restlerObj));
+    }
+
+    /**
+     * @test
+     */
+    public function canConfigureRestlerWithExternalConfigurationClassObject()
+    {
+        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+
+        $configurationClass = 'Aoe\\Restler\\Tests\\Unit\\System\\Restler\\Fixtures\\ValidConfiguration';
+        $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
+        $configurationMock->expects($this->exactly(2))->method('configureRestler')->with($restlerObj);
+
+        // override test-restler-configuration
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array($configurationClass);
+        $GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'] = array($configurationClass);
+
+        $this->objectManagerMock
+            ->expects($this->exactly(2))->method('get')->with($configurationClass)
             ->will($this->returnValue($configurationMock));
 
         $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', array($restlerObj));

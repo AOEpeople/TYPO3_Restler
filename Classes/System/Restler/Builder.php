@@ -108,6 +108,15 @@ class Builder implements SingletonInterface
             throw new InvalidArgumentException($message, 1428562059);
         }
 
+        // append configuration classes from external GLOBAL registration
+        if (is_array($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'])) {
+            $externalRestlerConfigurationClasses = array_unique($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']);
+            $restlerConfigurationClasses = array_merge(
+                $restlerConfigurationClasses,
+                $externalRestlerConfigurationClasses
+            );
+        }
+
         foreach ($restlerConfigurationClasses as $restlerConfigurationClass) {
             $configurationObj = $this->objectManager->get($restlerConfigurationClass);
 
