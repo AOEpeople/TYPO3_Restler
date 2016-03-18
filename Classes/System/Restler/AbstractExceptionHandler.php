@@ -154,7 +154,7 @@ abstract class AbstractExceptionHandler
     }
     public function handle308()
     {
-        $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(), $this->getRestler());
     }
 
 
