@@ -19,7 +19,7 @@ Target group: **Developers**
 Using TYPO3 Restler in our own extension (aka Exposing your own REST API)
 -------------------------------------------------------------------------
 
-In order to offer a seamless integration of Restler in TYPO3, this extension offers the interface
+In order to offer a seamless integration of Restler [#f1]_ in TYPO3, this extension offers the interface
 "Aoe\Restler\System\Restler\ConfigurationInterface".
 
 
@@ -72,13 +72,36 @@ This way the following will be achieved:
 
 4. Flush the TYPO3 System Cache
 
+Using TYPO3 Restler for External APIs
+-------------------------------------
+
+If you like to register API classes to the Restler object that are located outside of TYPO3 use the alternative GLOBAL array
+to set your configuration class which implements the "Aoe\Restler\System\Restler\ConfigurationInterface" interface:
+
+.. code:: php
+
+    // register API-Controller to TYPO3_Restler
+    $GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'][] =
+        yourNamespace\Configuration::class;
+
+You just have to make sure that this setting is loaded by auto-loading.
+For example (via composer);
+
+.. code:: json
+
+    "autoload": {
+        "files": [
+            "fileWithGlobalConfigurationRegistration.php"
+        ]
+    }
+
 Examples
 --------
 
-To reduce the quantity of documentation required to use Restler, we provide also an example extension called restler_examples
+To reduce the quantity of documentation required to use Restler, we provide also an example extension called Restler_examples
 available on TER. You can check first there how the endpoints work.
 
-Also please refer to existing documentation regarding [Restler][RestlerHomepage].
+Also please refer to existing documentation regarding the Restler homepage [#f1]_.
 
 Exposing Internal APIs
 ----------------------
@@ -96,6 +119,6 @@ Example:
 
 For details examples please refer to the restler_examples extension.
 
-[RestlerHomepage]: http://www.luracast.com/products/restler
+.. rubric:: Footnotes
 
-
+.. [#f1] [RestlerHomepage]: http://www.luracast.com/products/restler
