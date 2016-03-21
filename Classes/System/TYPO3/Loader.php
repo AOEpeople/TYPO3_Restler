@@ -25,6 +25,7 @@ namespace Aoe\Restler\System\TYPO3;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use RuntimeException;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
@@ -120,7 +121,6 @@ class Loader implements SingletonInterface
         define('TYPO3_MODE', 'FE');
         // we define this constant, so that any TYPO3-Extension can check, if the REST-API is running
         define('REST_API_IS_RUNNING', true);
-
         // configure TYPO3 (e.g. paths, variables and classLoader)
         $bootstrapObj = Bootstrap::getInstance();
         if (true === method_exists($bootstrapObj, 'applyAdditionalConfigurationSettings')) {
@@ -137,7 +137,8 @@ class Loader implements SingletonInterface
             $bootstrapObj->initializeTypo3DbGlobal();
         } else {
             // it seams to be TYPO3 7.6 (LTS)
-            $classLoader = require __DIR__ . '/../../../../../../typo3_src/vendor/autoload.php';
+            $classLoader = require $this->getClassLoader();
+
             $bootstrapObj->initializeClassLoader($classLoader);
             $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called script 'restler/Scripts/restler_dispatch.php'
             $bootstrapObj->startOutputBuffering();
@@ -155,6 +156,28 @@ class Loader implements SingletonInterface
 
         // create timeTracker-object (TYPO3 needs that)
         $GLOBALS['TT'] = new NullTimeTracker();
+    }
+
+    /**
+     * Resolve the class loader file.
+     *
+     * @return string
+     * @throws \TYPO3\CMS\Core\Exception
+     */
+    private function getClassLoader()
+    {
+        $possibleClassLoader1 = __DIR__ . '/../../../../../../typo3_src/vendor/autoload.php';
+        $possibleClassLoader2 = __DIR__ . '/../../../../../../../vendor/typo3/cms/vendor/autoload.php';
+
+        if (is_file($possibleClassLoader1)) {
+            $classLoaderFile = $possibleClassLoader1;
+        } elseif (is_file($possibleClassLoader2)) {
+            $classLoaderFile = $possibleClassLoader2;
+        } else {
+            throw new RuntimeException('I could not find a valid autoload file.', 1458829787);
+        }
+
+        return $classLoaderFile;
     }
 
     /**
