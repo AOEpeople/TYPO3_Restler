@@ -242,4 +242,24 @@ class BuilderTest extends BaseTest
         $this->callUnaccessibleMethodOfObject($this->builder, 'setServerConfiguration');
         $this->assertEquals('443', $_SERVER['SERVER_PORT']);
     }
+
+    /**
+     * @test
+     */
+    public function addApiControllerClassesFromLocalConf()
+    {
+        // setup
+        $backupGlobals = $GLOBALS['TYPO3_Restler']['addApiClass'];
+        unset($GLOBALS['TYPO3_Restler']['addApiClass']);
+        $GLOBALS['TYPO3_Restler']['addApiClass']['foopath'][] = 'BarController';
+
+        $restlerObj = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $restlerObj->expects($this->once())->method('addAPIClass')->with('BarController', 'foopath');
+
+        //verifiy
+        $this->callUnaccessibleMethodOfObject($this->builder, 'addApiClassesByGlobalArray', array($restlerObj));
+
+        //tear down
+        $GLOBALS['TYPO3_Restler']['addApiClass'] = $backupGlobals;
+    }
 }

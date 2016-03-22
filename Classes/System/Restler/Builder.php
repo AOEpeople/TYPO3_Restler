@@ -70,6 +70,7 @@ class Builder implements SingletonInterface
 
         $restlerObj = $this->createRestlerObject();
         $this->configureRestler($restlerObj);
+        $this->addApiClassesByGlobalArray($restlerObj);
         return $restlerObj;
     }
 
@@ -128,6 +129,24 @@ class Builder implements SingletonInterface
             }
 
             $configurationObj->configureRestler($restler);
+        }
+    }
+
+    /**
+     * Add API-Controller-Classes that are registered by global array
+     *
+     * @param Restler $restler
+     */
+    private function addApiClassesByGlobalArray(Restler $restler)
+    {
+        $addApiController = $GLOBALS['TYPO3_Restler']['addApiClass'];
+        if (is_array($addApiController)) {
+            foreach ($addApiController as $apiEndpoint => $apiControllers) {
+                $uniqueApiControllers = array_unique($apiControllers);
+                foreach ($uniqueApiControllers as $apiController) {
+                    $restler->addAPIClass($apiController, $apiEndpoint);
+                }
+            }
         }
     }
 

@@ -84,6 +84,15 @@ to set your configuration class which implements the "Aoe\Restler\System\Restler
     $GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'][] =
         yourNamespace\Configuration::class;
 
+or you can directly register your REST-controller to an endpoint by using the GLOBAL array:
+
+.. code:: php
+
+    // register API-Controller to Restler
+    $GLOBALS['TYPO3_Restler']['addApiClass']['<YOUR_ENDPOINT_PATH>'][] =
+        yourNamespace\yourRestController::class;
+
+
 You just have to make sure that this setting is loaded by auto-loading.
 For example (via composer);
 
