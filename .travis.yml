@@ -1,8 +1,6 @@
 language: php
 
 php:
-  - 5.3
-  - 5.4
   - 5.5
   - 5.6
   - hhvm
@@ -14,10 +12,6 @@ env:
 matrix:
   exclude:
     - env: TYPO3_BRANCH=master COVERAGE=0
-      php: 5.3
-    - env: TYPO3_BRANCH=master COVERAGE=0
-      php: 5.4
-    - env: TYPO3_BRANCH=master COVERAGE=0
       php: 5.5
     - env: TYPO3_BRANCH=master COVERAGE=0
       php: 5.6
@@ -26,7 +20,6 @@ matrix:
   include:
     - php: 5.5
       env: TYPO3_BRANCH=TYPO3_6-2 COVERAGE=1
-
 addons:
   apt:
     packages:
@@ -39,27 +32,29 @@ before_script:
   - mv typo3_core/* .
   - mkdir -p typo3conf/ext
   - mv TYPO3_Restler typo3conf/ext/
-  - git clone --single-branch --branch 3.0.0 --depth 1 https://github.com/Luracast/Restler.git typo3conf/ext/Restler
   - composer install
+  - cd typo3conf/ext/TYPO3_Restler
+  - composer install
+  - cd ../../../
 
 script:
   - >
     if [[ "$COVERAGE" == "0" ]]; then
       echo;
       echo "Running unit tests";
-      ./bin/phpunit --colors -c typo3/sysext/core/Build/UnitTests.xml typo3conf/ext/TYPO3_Restler/Tests/Unit/
+      ./typo3conf/ext/TYPO3_Restler/vendor/bin/phpunit --colors -c typo3/sysext/core/Build/UnitTests.xml typo3conf/ext/TYPO3_Restler/Tests/Unit/
     fi
   - >
     if [[ "$COVERAGE" == "1" ]]; then
       echo;
       echo "Running unit tests";
-      ./bin/phpunit --coverage-clover=unittest-coverage.clover --colors -c typo3/sysext/core/Build/UnitTests.xml typo3conf/ext/TYPO3_Restler/Tests/Unit/
+      ./typo3conf/ext/TYPO3_Restler/vendor/bin/phpunit --coverage-clover=./typo3conf/ext/TYPO3_Restler/unittest-coverage.clover --colors -c typo3/sysext/core/Build/UnitTests.xml typo3conf/ext/TYPO3_Restler/Tests/Unit/
     fi
   - >
     if [[ "$COVERAGE" == "1" ]]; then
       echo;
       echo "Uploading code coverage results";
+      cd typo3conf/ext/TYPO3_Restler
       wget https://scrutinizer-ci.com/ocular.phar
-      cp -R typo3conf/ext/TYPO3_Restler/.git .
       php ocular.phar code-coverage:upload --format=php-clover unittest-coverage.clover
     fi

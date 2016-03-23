@@ -1,8 +1,8 @@
 filter:
     excluded_paths:
-        - 'Configuration/*'
+        - 'Documentation/*'
+        - 'Scripts/*'
         - 'Tests/*'
-        - 'Resources/*'
     paths:
         - 'Classes/*'
 

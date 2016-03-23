@@ -1,6 +1,8 @@
 # Restler for TYPO3
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AOEpeople/Restler/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AOEpeople/Restler/?branch=master)
+[![Build Status](https://travis-ci.org/AOEpeople/TYPO3_Restler.svg?branch=master)](https://travis-ci.org/AOEpeople/TYPO3_Restler)
+[![Code Coverage](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=master)
 
 This is a TYPO3-Extension, that integrates the popular [PHP REST-framework Restler](https://github.com/Luracast/Restler) in TYPO3.
 
