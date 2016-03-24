@@ -13,7 +13,7 @@
     "require": {
         "php": ">=5.3.4",
         "typo3/cms-core": ">=6.2.14",
-        "luracast/restler": "3.0.0.20160315"
+        "luracast/restler": "3.0.0-RC6"
     },
     "require-dev": {
         "typo3/cms": "6.2.*",
