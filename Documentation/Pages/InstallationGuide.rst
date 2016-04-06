@@ -19,7 +19,20 @@ Target group: **Developers**
 Installation
 ------------
 
-1. Install the extension from TER (sources are available on `our GitHub repository <https://github.com/AOEpeople/TYPO3_Restler>`_.
+1. Install the extension from TER (sources are available on `our GitHub repository <https://github.com/AOEpeople/TYPO3_Restler>`_. In the context of a fully Composer setup, add in your root composer.json the following lines before a ```composer update```.
+
+::
+
+	"require": {
+		...
+		"aoe/restler": "dev-master",
+		"luracast/restler": "3.0.0-RC6",
+	}
+	"autoload": {
+		"psr-0": {
+			"Luracast\\Restler\\": "vendor/luracast/restler/vendor"
+		}
+	},
 
 In the context of a fully Composer setup, add in your root composer.json the following lines before doing a ```composer update```.
 
