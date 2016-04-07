@@ -25,7 +25,6 @@ namespace Aoe\Restler\System\TYPO3;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use RuntimeException;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
@@ -35,6 +34,7 @@ use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
 use LogicException;
+use RuntimeException;
 
 // @codingStandardsIgnoreStart
 // we must load some PHP/TYPO3-classes manually, because at this point, TYPO3 (and it's auto-loading) is not initialized
@@ -200,7 +200,7 @@ class Loader implements SingletonInterface
      * Resolve the class loader file.
      *
      * @return string
-     * @throws \TYPO3\CMS\Core\Exception
+     * @throws RuntimeException
      */
     private function getClassLoader()
     {
@@ -208,14 +208,12 @@ class Loader implements SingletonInterface
         $possibleClassLoader2 = __DIR__ . '/../../../../../../../vendor/typo3/cms/vendor/autoload.php';
 
         if (is_file($possibleClassLoader1)) {
-            $classLoaderFile = $possibleClassLoader1;
-        } elseif (is_file($possibleClassLoader2)) {
-            $classLoaderFile = $possibleClassLoader2;
-        } else {
-            throw new RuntimeException('I could not find a valid autoload file.', 1458829787);
+            return $possibleClassLoader1;
         }
-
-        return $classLoaderFile;
+        if (is_file($possibleClassLoader2)) {
+            return $possibleClassLoader2;
+        }
+        throw new RuntimeException('I could not find a valid autoload file.', 1458829787);
     }
 
     /**
