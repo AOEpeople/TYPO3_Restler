@@ -33,7 +33,7 @@ EXT: Restler
 		restler,REST,API,RESTful
 
 	:Copyright:
-		2015
+		2015 - 2016
 
 	:Author:
 		AOE GmbH
@@ -78,8 +78,8 @@ EXT: Restler
 	:glob:
 
 	Pages/Introduction
+	Pages/InstallationGuide
 	Pages/DeveloperManual
 	Pages/ConfigurationOptions
-	Pages/InstallationGuide
 	Pages/Screenshots
 	Pages/Aoe

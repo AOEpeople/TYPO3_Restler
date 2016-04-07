@@ -16,7 +16,7 @@ The documentation is available online at [docs.typo3.org][2].
 
 ## Copyright / License
 
-Copyright: (c) 2015, AOE GmbH <dev@aoe.com>  
+Copyright: (c) 2015 - 2016, AOE GmbH
 License: GPLv3, <http://www.gnu.org/licenses/gpl-3.0.en.html>  
 
 [1]: http://typo3.org/extensions/repository/view/restler

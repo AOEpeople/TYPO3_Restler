@@ -72,7 +72,7 @@ This way the following will be achieved:
 
 4. Flush the TYPO3 System Cache
 
-Using TYPO3 Restler for External APIs
+Using TYPO3 Restler from PHP libraries
 -------------------------------------
 
 If you like to register API classes to the Restler object that are located outside of TYPO3 use the alternative GLOBAL array
@@ -104,16 +104,11 @@ For example (via composer);
         ]
     }
 
-Examples
---------
+Exposing Internal APIs (experimental)
+-------------------------------------
 
-To reduce the quantity of documentation required to use Restler, we provide also an example extension called Restler_examples
-available on TER. You can check first there how the endpoints work.
-
-Also please refer to existing documentation regarding the Restler homepage [#f1]_.
-
-Exposing Internal APIs
-----------------------
+**Notice**: Please note that this feature is experimental and could be removed in further releases. You can anytime make
+internal calls by using an HTTP client (for example Guzzle).
 
 Just as you make HTTP calls to your public endpoints, it is possible to declare internal endpoints which you can
 use in a similar way, but using PHP.
@@ -127,6 +122,14 @@ Example:
     $this->restApiClient->executeRequest('GET', '/api/rest-api-client/internal_endpoint/cars/1')
 
 For details examples please refer to the restler_examples extension.
+
+Examples
+--------
+
+To reduce the quantity of documentation required to use Restler, we provide also an example extension called Restler_examples
+available on TER. You can check first there how the endpoints work.
+
+Also please refer to existing documentation regarding the Restler homepage [#f1]_.
 
 .. rubric:: Footnotes
 

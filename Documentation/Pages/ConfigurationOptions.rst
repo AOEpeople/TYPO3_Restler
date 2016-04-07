@@ -9,12 +9,11 @@
 .. _developer-manual:
 
 Configuration Options
-====================
-
-Describes how to configure the extension.
+=====================
 
 Target group: **Developers**
 
+You can make various configurations directly from the Extension Manager in TYPO3.
 
 ProductionContext [basic.productionContext]
 -------------------------------------------
