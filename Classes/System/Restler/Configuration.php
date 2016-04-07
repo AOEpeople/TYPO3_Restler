@@ -66,6 +66,9 @@ class Configuration implements ConfigurationInterface
             $restler->addAuthenticationClass('Aoe\\Restler\\Controller\\ExplorerAuthenticationController');
         }
 
+        // add authentication-class, which can be used to check, if BE-user is logged in
+        $restler->addAuthenticationClass('Aoe\\Restler\\Controller\\BeUserAuthenticationController');
+
         // add authentication-class, which can be used to check, if FE-user is logged in
         $restler->addAuthenticationClass('Aoe\\Restler\\Controller\\FeUserAuthenticationController');
     }

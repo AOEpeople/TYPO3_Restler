@@ -30,6 +30,7 @@ use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
@@ -48,17 +49,35 @@ require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonIn
 class Loader implements SingletonInterface
 {
     /**
-     * defines, if frontend-rendering is enabled (this is needed, if the eID-script must render some content-elements or RTE-fields)
+     * defines, if usage of backend-user is enabled
      *
      * @var boolean
      */
-    private $isFrontEndRenderingInitialized = false;
+    private $isBackEndUserInitialized = false;
     /**
      * defines, if usage of frontend-user is enabled (this is needed, if the eID-script must determine the frontend-user)
      *
      * @var boolean
      */
     private $isFrontEndUserInitialized = false;
+    /**
+     * defines, if frontend-rendering is enabled (this is needed, if the eID-script must render some content-elements or RTE-fields)
+     *
+     * @var boolean
+     */
+    private $isFrontEndRenderingInitialized = false;
+
+    /**
+     * @return BackendUserAuthentication
+     * @throws LogicException
+     */
+    public function getBackEndUser()
+    {
+        if ($this->isBackEndUserInitialized === false) {
+            throw new LogicException('be-user is not initialized - initialize with BE-user with method \'initializeBackendEndUser\'');
+        }
+        return $GLOBALS['BE_USER'];
+    }
 
     /**
      * @return FrontendUserAuthentication
@@ -70,6 +89,41 @@ class Loader implements SingletonInterface
             throw new LogicException('fe-user is not initialized - initialize with FE-user with method \'initializeFrontEndUser\'');
         }
         return $GLOBALS['TSFE']->fe_user;
+    }
+
+    /**
+     * enable the usage of backend-user
+     */
+    public function initializeBackendEndUser()
+    {
+        if ($this->isBackEndUserInitialized === true) {
+            return;
+        }
+
+        $bootstrapObj = Bootstrap::getInstance();
+        $bootstrapObj->loadExtensionTables(true);
+        $bootstrapObj->initializeBackendUser();
+        $bootstrapObj->initializeBackendAuthentication();
+        $bootstrapObj->initializeBackendUserMounts();
+        $bootstrapObj->initializeLanguageObject();
+
+        $this->isBackEndUserInitialized = true;
+    }
+
+    /**
+     * enable the usage of frontend-user
+     *
+     * @param integer $pageId
+     */
+    public function initializeFrontEndUser($pageId = 0)
+    {
+        if ($this->isFrontEndUserInitialized === true) {
+            return;
+        }
+
+        $tsfe = $this->getTsfe($pageId);
+        $tsfe->initFEUser();
+        $this->isFrontEndUserInitialized = true;
     }
 
     /**
@@ -94,22 +148,6 @@ class Loader implements SingletonInterface
         $tsfe->initTemplate();
         $tsfe->getConfigArray();
         $this->isFrontEndRenderingInitialized = true;
-    }
-
-    /**
-     * enable the usage of frontend-user
-     *
-     * @param integer $pageId
-     */
-    public function initializeFrontEndUser($pageId = 0)
-    {
-        if ($this->isFrontEndUserInitialized === true) {
-            return;
-        }
-
-        $tsfe = $this->getTsfe($pageId);
-        $tsfe->initFEUser();
-        $this->isFrontEndUserInitialized = true;
     }
 
     /**

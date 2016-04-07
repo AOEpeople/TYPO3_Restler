@@ -83,6 +83,10 @@ class ConfigurationTest extends BaseTest
         $this->restlerMock
             ->expects($this->at(2))
             ->method('addAuthenticationClass')
+            ->with('Aoe\\Restler\\Controller\\BeUserAuthenticationController');
+        $this->restlerMock
+            ->expects($this->at(3))
+            ->method('addAuthenticationClass')
             ->with('Aoe\\Restler\\Controller\\FeUserAuthenticationController');
 
         $this->configuration->configureRestler($this->restlerMock);
@@ -102,7 +106,11 @@ class ConfigurationTest extends BaseTest
             ->expects($this->never())
             ->method('addAPIClass');
         $this->restlerMock
-            ->expects($this->once())
+            ->expects($this->at(0))
+            ->method('addAuthenticationClass')
+            ->with('Aoe\\Restler\\Controller\\BeUserAuthenticationController');
+        $this->restlerMock
+            ->expects($this->at(1))
             ->method('addAuthenticationClass')
             ->with('Aoe\\Restler\\Controller\\FeUserAuthenticationController');
 
