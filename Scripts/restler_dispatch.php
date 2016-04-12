@@ -23,6 +23,21 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+/**
+ * fix GET-params:
+ * It can happen, that the apache (through apache-redirect-config to redirect to this script) set this variables:
+ *  - $_SERVER['SCRIPT_URL'] is:            '/api/products/4711'
+ *  - GET-params are:                       array('products/4711' => '')
+ *
+ * In this case, we modify the GET-params so that the SCRIPT_URL (without '/api/' is NOT configured as GET-param).
+ * The result is that the GET-params are:   array()
+ */
+if (array_key_exists('SCRIPT_URL', $_SERVER) &&
+    array_key_exists(substr($_SERVER['SCRIPT_URL'], strlen('/api/')), $_GET) &&
+    $_GET[substr($_SERVER['SCRIPT_URL'], strlen('/api/'))] === '') {
+    unset($_GET[substr($_SERVER['SCRIPT_URL'], strlen('/api/'))]);
+}
+
 // initialize TYPO3 (after that, we can use the autoLoading of TYPO3)
 require_once __DIR__ . '/../../../../typo3conf/ext/restler/Classes/System/TYPO3/Loader.php';
 $typo3Loader = new Aoe\Restler\System\TYPO3\Loader();

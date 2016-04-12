@@ -28,7 +28,6 @@ namespace Aoe\Restler\System\Restler;
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use InvalidArgumentException;
 use Luracast\Restler\Defaults;
-use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
@@ -60,7 +59,7 @@ class Builder implements SingletonInterface
     /**
      * initialize and configure restler-framework and return restler-object
      *
-     * @return Restler
+     * @return RestlerExtended
      */
     public function build()
     {
@@ -75,11 +74,12 @@ class Builder implements SingletonInterface
     }
 
     /**
-     * @return Restler
+     * @return RestlerExtended
      */
     protected function createRestlerObject()
     {
-        return new Restler(
+        return new RestlerExtended(
+            $this->objectManager->get('Aoe\\Restler\\System\\TYPO3\\Cache'),
             $this->extensionConfiguration->isProductionContextSet(),
             $this->extensionConfiguration->isCacheRefreshingEnabled()
         );
@@ -93,10 +93,10 @@ class Builder implements SingletonInterface
      *  - configure/set properties of several classes inside the restler-framework
      *  - configure overwriting of several classes inside the restler-framework
      *
-     * @param Restler $restler
+     * @param RestlerExtended $restler
      * @throws InvalidArgumentException
      */
-    private function configureRestler(Restler $restler)
+    private function configureRestler(RestlerExtended $restler)
     {
         $restlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
 
@@ -135,9 +135,9 @@ class Builder implements SingletonInterface
     /**
      * Add API-Controller-Classes that are registered by global array
      *
-     * @param Restler $restler
+     * @param RestlerExtended $restler
      */
-    private function addApiClassesByGlobalArray(Restler $restler)
+    private function addApiClassesByGlobalArray(RestlerExtended $restler)
     {
         $addApiController = $GLOBALS['TYPO3_Restler']['addApiClass'];
         if (is_array($addApiController)) {
@@ -178,8 +178,6 @@ class Builder implements SingletonInterface
 
     /**
      * fix server-port (if not correct set)
-     *
-     * @return Restler
      */
     private function setServerConfiguration()
     {

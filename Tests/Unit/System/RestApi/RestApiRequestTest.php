@@ -27,6 +27,7 @@ namespace Aoe\Restler\Tests\Unit\System\RestApi;
 
 use Aoe\Restler\System\RestApi\RestApiRequest;
 use Aoe\Restler\System\RestApi\RestApiRequestScope;
+use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\RestException;
 use Exception;
@@ -59,6 +60,10 @@ class RestApiRequestTest extends BaseTest
      * @var RestApiRequestScope
      */
     protected $restApiRequestScopeMock;
+    /**
+     * @var Typo3Cache
+     */
+    protected $typo3CacheMock;
 
     /**
      * setup
@@ -74,9 +79,11 @@ class RestApiRequestTest extends BaseTest
 
         $this->restApiRequestScopeMock = $this->getMockBuilder('Aoe\\Restler\\System\\RestApi\\RestApiRequestScope')
             ->disableOriginalConstructor()->getMock();
+        $this->typo3CacheMock = $this->getMockBuilder('Aoe\\Restler\\System\\TYPO3\\Cache')
+            ->disableOriginalConstructor()->getMock();
 
         $this->restApiRequest = $this->getMockBuilder('Aoe\\Restler\\System\\RestApi\\RestApiRequest')
-            ->setConstructorArgs(array($this->restApiRequestScopeMock))
+            ->setConstructorArgs(array($this->restApiRequestScopeMock, $this->typo3CacheMock))
             ->setMethods(array('handle'))
             ->getMock();
     }

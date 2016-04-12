@@ -25,6 +25,7 @@ namespace Aoe\Restler\System\RestApi;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Luracast\Restler\Restler;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Defaults;
@@ -75,6 +76,7 @@ class RestApiRequest extends Restler
      * @var array
      */
     private static $originalServerSettings;
+
     /**
      * @var array
      */
@@ -99,6 +101,10 @@ class RestApiRequest extends Restler
      * @var RestApiRequestScope
      */
     private $restApiRequestScope;
+    /**
+     * @var Typo3Cache
+     */
+    private $typo3Cache;
 
 
 
@@ -163,9 +169,26 @@ class RestApiRequest extends Restler
             return $data;
         }
         if ($data instanceof stdClass) {
-           return json_decode(json_encode($data), true); // convert stdClass to array
+            return json_decode(json_encode($data), true); // convert stdClass to array
         }
         throw new RestException(500, 'data must be type of null, array or stdClass');
+    }
+
+    /**
+     * @return string
+     */
+    private function handleRequestByTypo3Cache()
+    {
+        $cacheEntry = $this->typo3Cache->getCacheEntry($this->url, $_GET);
+        $this->responseData = $cacheEntry['responseData'];
+        $this->responseFormat = new $cacheEntry['responseFormatClass']();
+
+        // send data to client
+        if ($this->responseFormat instanceof JsonFormat) {
+            // return stdClass-object (instead of an array)
+            return $this->getRestApiJsonFormat()->decode($this->responseData);
+        }
+        return $this->responseFormat->decode($this->responseData);
     }
 
     /**
@@ -231,10 +254,12 @@ class RestApiRequest extends Restler
      * The original method would set some properties (e.g. set this object into static properties of global classes)
      *
      * @param RestApiRequestScope $restApiRequestScope
+     * @param Typo3Cache $typo3Cache
      */
-    public function __construct(RestApiRequestScope $restApiRequestScope)
+    public function __construct(RestApiRequestScope $restApiRequestScope, Typo3Cache $typo3Cache)
     {
         $this->restApiRequestScope = $restApiRequestScope;
+        $this->typo3Cache = $typo3Cache;
     }
 
     /**
@@ -278,7 +303,14 @@ class RestApiRequest extends Restler
      */
     public function handle()
     {
+        // get information about the REST-request
         $this->get();
+
+        if ($this->requestMethod === 'GET' && $this->typo3Cache->hasCacheEntry($this->url, $_GET)) {
+            return $this->handleRequestByTypo3Cache();
+        }
+
+        // if no cache exist: restler should handle the request
         if (Defaults::$useVendorMIMEVersioning) {
             $this->responseFormat = $this->negotiateResponseFormat();
         }
@@ -298,5 +330,24 @@ class RestApiRequest extends Restler
             return $this->getRestApiJsonFormat()->decode($this->responseData);
         }
         return $this->responseFormat->decode($this->responseData);
+    }
+
+    /**
+     * override postCall so that we can cache response via TYPO3-caching-framework - if it's possible
+     */
+    protected function postCall()
+    {
+        parent::postCall();
+
+        if ($this->typo3Cache->isResponseCacheableByTypo3Cache($this->requestMethod, $this->apiMethodInfo->metadata)) {
+            $this->typo3Cache->cacheResponseByTypo3Cache(
+                $this->url,
+                $_GET,
+                $this->apiMethodInfo->metadata,
+                $this->responseData,
+                get_class($this->responseFormat),
+                array() // we don't know which headers would be 'normally' send - because this is an internal REST-API-call
+            );
+        }
     }
 }

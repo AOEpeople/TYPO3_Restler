@@ -102,8 +102,14 @@ class BuilderTest extends BaseTest
         $this->extensionConfigurationMock
             ->expects($this->once())->method('isCacheRefreshingEnabled')
             ->will($this->returnValue(true));
+
+        $typo3CacheMock = $this->getMockBuilder('Aoe\\Restler\\System\\TYPO3\\Cache')->disableOriginalConstructor()->getMock();
+        $this->objectManagerMock
+            ->expects($this->once())->method('get')->with('Aoe\\Restler\\System\\TYPO3\\Cache')
+            ->will($this->returnValue($typo3CacheMock));
+
         $createdObj = $this->callUnaccessibleMethodOfObject($this->builder, 'createRestlerObject');
-        $this->assertInstanceOf('Luracast\Restler\Restler', $createdObj);
+        $this->assertInstanceOf('Aoe\Restler\System\Restler\RestlerExtended', $createdObj);
     }
 
     /**
@@ -111,7 +117,7 @@ class BuilderTest extends BaseTest
      */
     public function canConfigureRestlerObject()
     {
-        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\RestlerExtended')->disableOriginalConstructor()->getMock();
 
         $configurationClass = 'Aoe\\Restler\\Tests\\Unit\\System\\Restler\\Fixtures\\ValidConfiguration';
         $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
@@ -133,7 +139,7 @@ class BuilderTest extends BaseTest
      */
     public function canConfigureRestlerWithExternalConfigurationClassObject()
     {
-        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\RestlerExtended')->disableOriginalConstructor()->getMock();
 
         $configurationClass = 'Aoe\\Restler\\Tests\\Unit\\System\\Restler\\Fixtures\\ValidConfiguration';
         $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
@@ -159,7 +165,7 @@ class BuilderTest extends BaseTest
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = '';
 
-        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\RestlerExtended')->disableOriginalConstructor()->getMock();
         $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', array($restlerObj));
     }
 
@@ -172,7 +178,7 @@ class BuilderTest extends BaseTest
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = array();
 
-        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\RestlerExtended')->disableOriginalConstructor()->getMock();
         $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', array($restlerObj));
     }
 
@@ -182,7 +188,7 @@ class BuilderTest extends BaseTest
      */
     public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassDoesNotImplementRequiredInterface()
     {
-        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\RestlerExtended')->disableOriginalConstructor()->getMock();
 
         $configurationClass = 'Aoe\\Restler\\Tests\\Unit\\System\\Restler\\Fixtures\\InvalidConfiguration';
         $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
@@ -253,7 +259,7 @@ class BuilderTest extends BaseTest
         unset($GLOBALS['TYPO3_Restler']['addApiClass']);
         $GLOBALS['TYPO3_Restler']['addApiClass']['foopath'][] = 'BarController';
 
-        $restlerObj = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\RestlerExtended')->disableOriginalConstructor()->getMock();
         $restlerObj->expects($this->once())->method('addAPIClass')->with('BarController', 'foopath');
 
         //verifiy

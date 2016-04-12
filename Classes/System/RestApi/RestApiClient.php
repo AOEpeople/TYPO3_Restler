@@ -27,6 +27,7 @@ namespace Aoe\Restler\System\RestApi;
 
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
+use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Luracast\Restler\RestException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -37,6 +38,10 @@ use stdClass;
  */
 class RestApiClient implements SingletonInterface
 {
+    /**
+     * @var Typo3Cache
+     */
+    private $typo3Cache;
     /**
      * @var ExtensionConfiguration
      */
@@ -57,11 +62,16 @@ class RestApiClient implements SingletonInterface
     /**
      * @param ExtensionConfiguration $extensionConfiguration
      * @param RestApiRequestScope $restApiRequestScope
+     * @param Typo3Cache $typo3Cache
      */
-    public function __construct(ExtensionConfiguration $extensionConfiguration, RestApiRequestScope $restApiRequestScope)
+    public function __construct(
+        ExtensionConfiguration $extensionConfiguration,
+        RestApiRequestScope $restApiRequestScope,
+        Typo3Cache $typo3Cache)
     {
         $this->extensionConfiguration = $extensionConfiguration;
         $this->restApiRequestScope = $restApiRequestScope;
+        $this->typo3Cache = $typo3Cache;
     }
 
     /**
@@ -113,7 +123,7 @@ class RestApiClient implements SingletonInterface
      */
     protected function createRequest()
     {
-        return new RestApiRequest($this->restApiRequestScope);
+        return new RestApiRequest($this->restApiRequestScope, $this->typo3Cache);
     }
 
     /**
