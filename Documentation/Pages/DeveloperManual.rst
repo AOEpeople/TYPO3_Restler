@@ -115,6 +115,7 @@ this two phpdoc-annotations in your REST-endpoint:
 Example:
 
 .. code:: php
+
     /**
      * The response of this REST-endpoint will be cached by TYPO3-caching-framework, because:
      *  - it's a GET-request/method
