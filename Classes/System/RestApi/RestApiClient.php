@@ -67,8 +67,8 @@ class RestApiClient implements SingletonInterface
     public function __construct(
         ExtensionConfiguration $extensionConfiguration,
         RestApiRequestScope $restApiRequestScope,
-        Typo3Cache $typo3Cache)
-    {
+        Typo3Cache $typo3Cache
+    ) {
         $this->extensionConfiguration = $extensionConfiguration;
         $this->restApiRequestScope = $restApiRequestScope;
         $this->typo3Cache = $typo3Cache;
