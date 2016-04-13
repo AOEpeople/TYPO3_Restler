@@ -203,6 +203,21 @@ class RestApiRequest extends Restler
         $_POST = $this->restApiPostData;
         $_SERVER['REQUEST_METHOD'] = $this->restApiRequestMethod;
         $_SERVER['REQUEST_URI'] = $this->restApiRequestUri;
+
+        if ($this->restApiRequestMethod !== 'POST' && $this->restApiRequestMethod !== 'PUT') {
+            // content-type and content-length should only exist when request-method is
+            // POST or PUT (because in this case there can be the request-data in the body)
+            if (array_key_exists('CONTENT_TYPE', $_SERVER)) {
+                unset($_SERVER['CONTENT_TYPE']);
+            }
+            if (array_key_exists('HTTP_CONTENT_TYPE', $_SERVER)) {
+                unset($_SERVER['HTTP_CONTENT_TYPE']);
+            }
+            if (array_key_exists('CONTENT_LENGTH', $_SERVER)) {
+                unset($_SERVER['CONTENT_LENGTH']);
+            }
+        }
+
         $this->restApiRequestScope->overrideOriginalRestApiRequest($this);
         $this->restApiRequestScope->removeRestApiAuthenticationObjects();
 
