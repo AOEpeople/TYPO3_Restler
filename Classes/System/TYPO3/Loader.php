@@ -117,6 +117,10 @@ class Loader implements SingletonInterface
      */
     public function initializeFrontEndUser($pageId = 0)
     {
+        if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->fe_user)) {
+            // FE-user is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+            $this->isFrontEndUserInitialized = true;
+        }
         if ($this->isFrontEndUserInitialized === true) {
             return;
         }
@@ -133,6 +137,10 @@ class Loader implements SingletonInterface
      */
     public function initializeFrontEndRendering($pageId = 0)
     {
+        if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->tmpl)) {
+            // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+            $this->isFrontEndRenderingInitialized = true;
+        }
         if ($this->isFrontEndRenderingInitialized === true) {
             return;
         }
