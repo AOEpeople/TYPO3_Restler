@@ -34,6 +34,16 @@ In the context of a fully Composer setup, add in your root composer.json the fol
 			"Luracast\\Restler\\": "vendor/luracast/restler/vendor"
 		}
 	},
+	
+Because we are using a forked version of Restler (in order to be able to tag a stable version), you also need to add the following to your composer.json file.
+
+::
+	    "repositories": [
+	        {
+	            "type": "vcs",
+	            "url": "https://github.com/AOEpeople/Restler.git"
+	        }
+	    ],
 
 2. Configure this TYPO3-Extension (in TYPO3 Extension-Manager; e.g. enable the online documentation of your REST-API). See the "Screenshots" section as well.
 
