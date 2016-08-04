@@ -155,6 +155,7 @@ class Loader implements SingletonInterface
         $tsfe->determineId();
         $tsfe->initTemplate();
         $tsfe->getConfigArray();
+        $tsfe->newCObj();
         $this->isFrontEndRenderingInitialized = true;
     }
 
