@@ -26,9 +26,13 @@ namespace Aoe\Restler\System\Restler;
  ***************************************************************/
 
 use Aoe\Restler\Configuration\ExtensionConfiguration;
+use Aoe\Restler\System\TYPO3\Cache;
 use InvalidArgumentException;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Scope;
+use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
@@ -41,19 +45,30 @@ class Builder implements SingletonInterface
      * @var ExtensionConfiguration
      */
     private $extensionConfiguration;
+
     /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
+     * @var CacheManager
+     */
+    private $cacheManager;
+
+    /**
      * @param ExtensionConfiguration $extensionConfiguration
      * @param ObjectManagerInterface $objectManager
+     * @param CacheManager $cacheManager
      */
-    public function __construct(ExtensionConfiguration $extensionConfiguration, ObjectManagerInterface $objectManager)
-    {
+    public function __construct(
+        ExtensionConfiguration $extensionConfiguration,
+        ObjectManagerInterface $objectManager,
+        CacheManager $cacheManager
+    ) {
         $this->extensionConfiguration = $extensionConfiguration;
         $this->objectManager = $objectManager;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -79,7 +94,7 @@ class Builder implements SingletonInterface
     protected function createRestlerObject()
     {
         return new RestlerExtended(
-            $this->objectManager->get('Aoe\\Restler\\System\\TYPO3\\Cache'),
+            $this->objectManager->get(Cache::class),
             $this->extensionConfiguration->isProductionContextSet(),
             $this->extensionConfiguration->isCacheRefreshingEnabled()
         );
@@ -173,7 +188,7 @@ class Builder implements SingletonInterface
      */
     private function setCacheDirectory()
     {
-        Defaults::$cacheDirectory = PATH_site . 'typo3temp/tx_restler';
+        Defaults::$cacheDirectory = $this->getCache()->getCacheDirectory();
     }
 
     /**
@@ -186,5 +201,14 @@ class Builder implements SingletonInterface
             // Otherwise restler will create those urls for online-documentation, when HTTPS is used: https://www.example.com:80
             $_SERVER['SERVER_PORT'] = '443';
         }
+    }
+
+    /**
+     * @return SimpleFileBackend
+     * @throws NoSuchCacheException
+     */
+    private function getCache()
+    {
+        return $this->cacheManager->getCache('tx_restler_cache')->getBackend();
     }
 }

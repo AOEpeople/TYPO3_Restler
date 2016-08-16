@@ -25,12 +25,17 @@ namespace Aoe\Restler\Tests\Unit\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
 use PHPUnit_Framework_MockObject_MockObject;
+use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
  * @package Restler
@@ -55,13 +60,17 @@ class BuilderTest extends BaseTest
      */
     protected $originalServerVars;
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var ExtensionConfiguration|PHPUnit_Framework_MockObject_MockObject
      */
     protected $extensionConfigurationMock;
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManagerMock;
+    /**
+     * @var CacheManager|PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheManagerMock;
 
     /**
      * setup
@@ -73,12 +82,20 @@ class BuilderTest extends BaseTest
         $this->originalRestlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
         $this->originalServerVars = $_SERVER;
 
-        $this->extensionConfigurationMock = $this->getMockBuilder('Aoe\\Restler\\Configuration\\ExtensionConfiguration')
+        $this->extensionConfigurationMock = $this->getMockBuilder(ExtensionConfiguration::class)
             ->disableOriginalConstructor()->getMock();
-        $this->objectManagerMock = $this->getMockBuilder('TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface')
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()->getMock();
+        $this->cacheManagerMock = $this->getMockBuilder(CacheManager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(array('getCache'))
+            ->getMock();
 
-        $this->builder = new Builder($this->extensionConfigurationMock, $this->objectManagerMock);
+        $this->builder = new Builder(
+            $this->extensionConfigurationMock,
+            $this->objectManagerMock,
+            $this->cacheManagerMock
+        );
     }
 
     /**
@@ -232,8 +249,28 @@ class BuilderTest extends BaseTest
         // set object-property (which the builder should update)
         Defaults::$cacheDirectory = '';
 
+        /** @var SimpleFileBackend|PHPUnit_Framework_MockObject_MockObject $simpleFileBackend */
+        $simpleFileBackend = $this->getMockBuilder(SimpleFileBackend::class)
+            ->disableOriginalConstructor()
+            ->setMethods(array('getCacheDirectory'))
+            ->getMock();
+        $simpleFileBackend->expects($this->once())->method('getCacheDirectory')->will($this->returnValue(
+            'typo3temp/Cache/Data/tx_restler_cache'
+        ));
+
+        /** @var PhpFrontend|PHPUnit_Framework_MockObject_MockObject $simpleFileBackend */
+        $cacheFrontend = $this->getMockBuilder(PhpFrontend::class)
+            ->disableOriginalConstructor()
+            ->setMethods(array('getBackend'))
+            ->getMock();
+        $cacheFrontend->expects($this->once())->method('getBackend')->will($this->returnValue($simpleFileBackend));
+
+        $this->cacheManagerMock->expects($this->once())->method('getCache')->will($this->returnValue(
+            $cacheFrontend
+        ));
+
         $this->callUnaccessibleMethodOfObject($this->builder, 'setCacheDirectory');
-        $this->assertEquals(PATH_site . 'typo3temp/tx_restler', Defaults::$cacheDirectory);
+        $this->assertEquals('typo3temp/Cache/Data/tx_restler_cache', Defaults::$cacheDirectory);
     }
 
     /**

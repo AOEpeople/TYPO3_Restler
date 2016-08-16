@@ -12,7 +12,6 @@ $EM_CONF[$_EXTKEY] = array(
     'author_email' => 'dev@aoe.com',
     'state' => 'stable',
     'uploadfolder' => 0,
-    'createDirs' => 'typo3temp/tx_restler',
     'clearCacheOnLoad' => 0,
     'version' => '1.5.7',
     'constraints' => array(

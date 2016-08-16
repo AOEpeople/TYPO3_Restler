@@ -1,6 +1,6 @@
 <?php
 if (!defined('TYPO3_MODE')) {
-    die ('Access denied.');
+    die('Access denied.');
 }
 
 // add restler-configuration-class
@@ -16,3 +16,7 @@ if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigur
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler']['backend'] = '\\TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend';
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler']['options'] = array('defaultLifetime' => 0);
 }
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_restler_cache'] = array(
+    'backend' => \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class
+);
