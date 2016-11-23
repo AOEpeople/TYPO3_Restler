@@ -13,11 +13,11 @@ $EM_CONF[$_EXTKEY] = array(
     'state' => 'stable',
     'uploadfolder' => 0,
     'clearCacheOnLoad' => 0,
-    'version' => '1.6.3',
+    'version' => '1.6.4',
     'constraints' => array(
         'depends' => array(
             'typo3' => '6.2.0-7.6.99',
-            'php' => '5.3.4',
+            'php' => '5.5.0',
         ),
         'conflicts' => array(),
         'suggests' => array(),

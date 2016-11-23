@@ -7,16 +7,24 @@ if (!defined('TYPO3_MODE')) {
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'][] = 'Aoe\\Restler\\System\\Restler\\Configuration';
 
 /**
- * register cache
+ * register cache which can cache response of REST-endpoints
  */
 if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler'])) {
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler'] = array();
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler']['frontend'] =
-        '\\TYPO3\\CMS\\Core\\Cache\\Frontend\\VariableFrontend';
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler']['backend'] = '\\TYPO3\\CMS\\Core\\Cache\\Backend\\Typo3DatabaseBackend';
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler']['options'] = array('defaultLifetime' => 0);
+    // only configure cache, when cache is not already configured (e.g. by any other extension which base on this extension)
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler'] = [
+        'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
+        'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
+        'options' => ['defaultLifetime' => 0]
+    ];
 }
 
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_restler_cache'] = array(
-    'backend' => \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class
-);
+/**
+ * register cache which will be used from restler (to e.g. cache the routes.php)
+ */
+if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_restler_cache'])) {
+    // only configure cache, when cache is not already configured (e.g. by any other extension which base on this extension)
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_restler_cache'] = [
+        'backend' => \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class,
+        'groups' => ['system']
+    ];
+}
