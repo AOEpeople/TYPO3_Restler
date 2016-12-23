@@ -59,6 +59,9 @@ class RestlerExtended extends Restler
      */
     public function __construct(Typo3Cache $typo3Cache, $productionMode = false, $refreshCache = false)
     {
+        // adds format support for application/hal+json during format negotiation
+        $this->formatMap["application/hal+json"] = "JsonFormat";
+
         parent::__construct($productionMode, $refreshCache);
         $this->typo3Cache = $typo3Cache;
     }
