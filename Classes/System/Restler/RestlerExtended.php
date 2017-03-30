@@ -25,10 +25,13 @@ namespace Aoe\Restler\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\System\Restler\Format\HalJsonFormat;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Luracast\Restler\Restler;
 use Luracast\Restler\RestException;
 use Exception;
+use Luracast\Restler\Scope;
+use Symfony\Component\DependencyInjection\Tests\Compiler\H;
 
 /**
  * @package Restler
@@ -59,10 +62,12 @@ class RestlerExtended extends Restler
      */
     public function __construct(Typo3Cache $typo3Cache, $productionMode = false, $refreshCache = false)
     {
-        // adds format support for application/hal+json during format negotiation
-        $this->formatMap["application/hal+json"] = "JsonFormat";
-
         parent::__construct($productionMode, $refreshCache);
+
+        // adds format support for application/hal+json
+        Scope::$classAliases['HalJsonFormat'] = 'Aoe\Restler\System\Restler\Format\HalJsonFormat';
+        $this->setSupportedFormats('HalJsonFormat');
+
         $this->typo3Cache = $typo3Cache;
     }
 

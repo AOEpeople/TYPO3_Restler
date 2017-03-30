@@ -5,6 +5,18 @@ use Luracast\Restler\Data\Object;
 use Luracast\Restler\Format\Format;
 use Luracast\Restler\RestException;
 
+/**
+ * Javascript Object Notation Format
+ *
+ * @category   Framework
+ * @package    Restler
+ * @subpackage format
+ * @author     R.Arul Kumaran <arul@luracast.com>
+ * @copyright  2010 Luracast
+ * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
+ * @link       http://luracast.com/products/restler/
+ * @version    3.0.0rc6
+ */
 class HalJsonFormat extends Format
 {
     /**
@@ -17,7 +29,7 @@ class HalJsonFormat extends Format
      * @var boolean|null  shim for json_encode option JSON_UNESCAPED_SLASHES
      * set it to null to use smart defaults
      */
-    public static $unEscapedSlashes = null;
+    public static $unEscapedSlashes = false;
 
     /**
      * @var boolean|null  shim for json_encode JSON_UNESCAPED_UNICODE set it
@@ -59,6 +71,7 @@ class HalJsonFormat extends Format
         if ((PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4) // PHP >= 5.4
             || PHP_MAJOR_VERSION > 5 // PHP >= 6.0
         ) {
+
             if ($humanReadable) {
                 $options |= JSON_PRETTY_PRINT;
             }
@@ -165,8 +178,8 @@ class HalJsonFormat extends Format
         for ($c = 0; $c < $len; $c++) {
             $char = $json [$c];
             switch ($char) {
-                case '{':
-                case '[':
+                case '{' :
+                case '[' :
                     if (!$inString) {
                         $newJson .= $char . "\n" .
                             str_repeat($tab, $indentLevel + 1);
@@ -175,8 +188,8 @@ class HalJsonFormat extends Format
                         $newJson .= $char;
                     }
                     break;
-                case '}':
-                case ']':
+                case '}' :
+                case ']' :
                     if (!$inString) {
                         $indentLevel--;
                         $newJson .= "\n" .
@@ -185,7 +198,7 @@ class HalJsonFormat extends Format
                         $newJson .= $char;
                     }
                     break;
-                case ',':
+                case ',' :
                     if (!$inString) {
                         $newJson .= ",\n" .
                             str_repeat($tab, $indentLevel);
@@ -193,21 +206,20 @@ class HalJsonFormat extends Format
                         $newJson .= $char;
                     }
                     break;
-                case ':':
+                case ':' :
                     if (!$inString) {
                         $newJson .= ': ';
                     } else {
                         $newJson .= $char;
                     }
                     break;
-                case '"':
+                case '"' :
                     if ($c == 0) {
                         $inString = true;
                     } elseif ($c > 0 && $json [$c - 1] != '\\') {
                         $inString = !$inString;
                     }
-                    break;
-                default:
+                default :
                     $newJson .= $char;
                     break;
             }
@@ -225,9 +237,13 @@ class HalJsonFormat extends Format
     protected function handleJsonError()
     {
         if (function_exists('json_last_error_msg') && json_last_error() !== JSON_ERROR_NONE) {
+
             // PHP >= 5.5.0
+
             $message = json_last_error_msg();
+
         } elseif (function_exists('json_last_error')) {
+
             // PHP >= 5.3.0
 
             switch (json_last_error()) {
@@ -256,7 +272,7 @@ class HalJsonFormat extends Format
         }
 
         if (isset($message)) {
-            throw new \RuntimeException('Error encoding/decoding JSON: '. $message);
+            throw new \RuntimeException('Error encoding/decoding JSON: ' . $message);
         }
     }
 }
