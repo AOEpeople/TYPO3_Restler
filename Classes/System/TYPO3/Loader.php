@@ -183,6 +183,7 @@ class Loader implements SingletonInterface
             // configure TYPO3 (Database and further settings)
             $bootstrapObj->applyAdditionalConfigurationSettings();
             $bootstrapObj->initializeTypo3DbGlobal();
+            $bootstrapObj->loadExtensionTables();
         } else {
             // it seams to be TYPO3 7.6 (LTS)
             $classLoader = require $this->getClassLoader();
@@ -200,6 +201,8 @@ class Loader implements SingletonInterface
             $bootstrapObj->defineLoggingAndExceptionConstants();
             $bootstrapObj->unsetReservedGlobalVariables();
             $bootstrapObj->initializeTypo3DbGlobal();
+            $bootstrapObj->loadExtensionTables();
+
         }
 
         // create timeTracker-object (TYPO3 needs that)
