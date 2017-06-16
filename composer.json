@@ -10,6 +10,9 @@
             "email": "dev@aoe.com"
         }
     ],
+    "config": {
+        "secure-http": false
+    },
     "require": {
         "php": ">=5.5.0",
         "typo3/cms-core": ">=6.2.14",
