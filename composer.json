@@ -3,6 +3,9 @@
     "type": "typo3-cms-extension",
     "description": "A TYPO3-Extension, that integrates the popular PHP REST-framework Restler in TYPO3.",
     "homepage": "https://typo3.org/extensions/repository/view/restler",
+    "support": {
+        "issues": "https://github.com/AOEpeople/TYPO3_Restler/issues"
+    },
     "license": "GPL-3.0",
     "authors": [
         {
