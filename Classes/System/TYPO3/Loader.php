@@ -216,6 +216,7 @@ class Loader implements SingletonInterface
     {
         $possibleClassLoader1 = __DIR__ . '/../../../../../../typo3_src/vendor/autoload.php';
         $possibleClassLoader2 = __DIR__ . '/../../../../../../../vendor/typo3/cms/vendor/autoload.php';
+        $possibleClassLoader3 = __DIR__ . '/../../../../../../Packages/Libraries/typo3/cms/vendor/autoload.php';
 
         if (is_file($possibleClassLoader1)) {
             return $possibleClassLoader1;
@@ -223,7 +224,10 @@ class Loader implements SingletonInterface
         if (is_file($possibleClassLoader2)) {
             return $possibleClassLoader2;
         }
-        throw new RuntimeException('I could not find a valid autoload file.', 1458829787);
+        if (is_file($possibleClassLoader3)) {
+            return $possibleClassLoader3;
+        }
+        throw new RuntimeException('TNM: I could not find a valid autoload file.', 1458829787);
     }
 
     /**
