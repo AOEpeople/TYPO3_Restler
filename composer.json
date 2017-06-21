@@ -6,7 +6,7 @@
     "support": {
         "issues": "https://github.com/AOEpeople/TYPO3_Restler/issues"
     },
-    "version": "1.6.14",
+    "version": "1.6.15",
     "license": "GPL-3.0",
     "authors": [
         {
@@ -20,7 +20,7 @@
     "require": {
         "php": ">=5.5.0",
         "typo3/cms-core": ">=6.2.14",
-        "luracast/restler": "3.0.0.20170515"
+        "luracast/restler": "3.0.0.20170425"
     },
     "require-dev": {
         "typo3/cms": "6.2.*",
