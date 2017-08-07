@@ -184,22 +184,28 @@ class Loader implements SingletonInterface
             $bootstrapObj->applyAdditionalConfigurationSettings();
             $bootstrapObj->initializeTypo3DbGlobal();
         } else {
-            // it seams to be TYPO3 7.6 (LTS)
-            $classLoader = require $this->getClassLoader();
+                // it seams to be TYPO3 >= 7.6 (LTS)
+                $classLoader = require $this->getClassLoader();
+                $bootstrapObj->initializeClassLoader($classLoader);
 
-            $bootstrapObj->initializeClassLoader($classLoader);
-            $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called script 'restler/Scripts/restler_dispatch.php'
-            $bootstrapObj->startOutputBuffering();
-            $bootstrapObj->loadConfigurationAndInitialize();
+            if (!method_exists($bootstrapObj, 'loadCachedTca')) {
+                // it seams to be TYPO3 > 8.7 (LTS)
+                $bootstrapObj->setRequestType(TYPO3_REQUESTTYPE_FE);
+                $bootstrapObj->baseSetup(4);
+            } else {
+                $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called script 'restler/Scripts/restler_dispatch.php'
+            }
+                $bootstrapObj->startOutputBuffering();
+                $bootstrapObj->loadConfigurationAndInitialize();
 
-            // configure TYPO3 (load ext_localconf.php-files of TYPO3-extensions)
-            $this->getExtensionManagementUtility()->loadExtLocalconf();
+                // configure TYPO3 (load ext_localconf.php-files of TYPO3-extensions)
+                $this->getExtensionManagementUtility()->loadExtLocalconf();
 
-            // configure TYPO3 (Database and further settings)
-            $bootstrapObj->setFinalCachingFrameworkCacheConfiguration();
-            $bootstrapObj->defineLoggingAndExceptionConstants();
-            $bootstrapObj->unsetReservedGlobalVariables();
-            $bootstrapObj->initializeTypo3DbGlobal();
+                // configure TYPO3 (Database and further settings)
+                $bootstrapObj->setFinalCachingFrameworkCacheConfiguration();
+                $bootstrapObj->defineLoggingAndExceptionConstants();
+                $bootstrapObj->unsetReservedGlobalVariables();
+                $bootstrapObj->initializeTypo3DbGlobal();
         }
 
         // create timeTracker-object (TYPO3 needs that)
