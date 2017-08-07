@@ -34,10 +34,11 @@ In the context of a fully Composer setup, add in your root composer.json the fol
 			"Luracast\\Restler\\": "vendor/luracast/restler/vendor"
 		}
 	},
-	
+
 Because we are using a forked version of Restler (in order to be able to tag a stable version), you also need to add the following to your composer.json file.
 
 ::
+
 	    "repositories": [
 	        {
 	            "type": "vcs",
@@ -61,6 +62,20 @@ The ".htaccess" file needs to be changed in order to make the REST API available
   # Allow access to example.com/api_explorer for the online documentation of your API.
   # You may want to restrict access to this URL.
   RewriteRule ^api_explorer/(.*)$ typo3conf/ext/restler/Scripts/restler_dispatch.php [NC,QSA,L]
+
+
+For Nginx use following rule
+
+.. parsed-literal::
+
+    location ~^/api_explorer/ {
+            rewrite ^/api_explorer/(.*)$ /typo3conf/ext/restler/Scripts/restler_dispatch.php last;
+    }
+
+    location ~^/api/ {
+            rewrite ^/api/(.*)$ /typo3conf/ext/restler/Scripts/restler_dispatch.php last;
+    }
+
 
 When this is done, than you can call the online documentation of your REST API via this URL:
 
