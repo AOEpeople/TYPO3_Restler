@@ -48,6 +48,10 @@ require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonIn
  */
 class Loader implements SingletonInterface
 {
+    const TYPO3_VERSION_6LTS = 'TYPO3_VERSION_6LTS';
+    const TYPO3_VERSION_7LTS = 'TYPO3_VERSION_7LTS';
+    const TYPO3_VERSION_8LTS = 'TYPO3_VERSION_8LTS';
+
     /**
      * defines, if usage of backend-user is enabled
      *
@@ -169,10 +173,12 @@ class Loader implements SingletonInterface
         define('TYPO3_MODE', 'FE');
         // we define this constant, so that any TYPO3-Extension can check, if the REST-API is running
         define('REST_API_IS_RUNNING', true);
+
         // configure TYPO3 (e.g. paths, variables and classLoader)
         $bootstrapObj = Bootstrap::getInstance();
-        if (true === method_exists($bootstrapObj, 'applyAdditionalConfigurationSettings')) {
-            // it seams to be TYPO3 6.2 (LTS)
+        $typo3Version = $this->determineTypo3Version($bootstrapObj);
+
+        if ($typo3Version === self::TYPO3_VERSION_6LTS) {
             $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called script 'restler/Scripts/restler_dispatch.php'
             $bootstrapObj->startOutputBuffering();
             $bootstrapObj->loadConfigurationAndInitialize();
@@ -183,33 +189,55 @@ class Loader implements SingletonInterface
             // configure TYPO3 (Database and further settings)
             $bootstrapObj->applyAdditionalConfigurationSettings();
             $bootstrapObj->initializeTypo3DbGlobal();
-        } else {
-                // it seams to be TYPO3 >= 7.6 (LTS)
-                $classLoader = require $this->getClassLoader();
-                $bootstrapObj->initializeClassLoader($classLoader);
+        }
 
-            if (!method_exists($bootstrapObj, 'loadCachedTca')) {
-                // it seams to be TYPO3 > 8.7 (LTS)
+        if ($typo3Version === self::TYPO3_VERSION_7LTS || $typo3Version === self::TYPO3_VERSION_8LTS) {
+            $classLoader = require $this->getClassLoader();
+            $bootstrapObj->initializeClassLoader($classLoader);
+
+            if ($typo3Version === self::TYPO3_VERSION_7LTS) {
+                // server has called script 'restler/Scripts/restler_dispatch.php'
+                $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/');
+            }
+            if ($typo3Version === self::TYPO3_VERSION_8LTS) {
                 $bootstrapObj->setRequestType(TYPO3_REQUESTTYPE_FE);
                 $bootstrapObj->baseSetup(4);
-            } else {
-                $bootstrapObj->baseSetup('typo3conf/ext/restler/Scripts/'); // server has called script 'restler/Scripts/restler_dispatch.php'
             }
-                $bootstrapObj->startOutputBuffering();
-                $bootstrapObj->loadConfigurationAndInitialize();
 
-                // configure TYPO3 (load ext_localconf.php-files of TYPO3-extensions)
-                $this->getExtensionManagementUtility()->loadExtLocalconf();
+            $bootstrapObj->startOutputBuffering();
+            $bootstrapObj->loadConfigurationAndInitialize();
 
-                // configure TYPO3 (Database and further settings)
-                $bootstrapObj->setFinalCachingFrameworkCacheConfiguration();
-                $bootstrapObj->defineLoggingAndExceptionConstants();
-                $bootstrapObj->unsetReservedGlobalVariables();
-                $bootstrapObj->initializeTypo3DbGlobal();
+            // configure TYPO3 (load ext_localconf.php-files of TYPO3-extensions)
+            $this->getExtensionManagementUtility()->loadExtLocalconf();
+
+            // configure TYPO3 (Database and further settings)
+            $bootstrapObj->setFinalCachingFrameworkCacheConfiguration();
+            $bootstrapObj->defineLoggingAndExceptionConstants();
+            $bootstrapObj->unsetReservedGlobalVariables();
+            $bootstrapObj->initializeTypo3DbGlobal();
         }
 
         // create timeTracker-object (TYPO3 needs that)
         $GLOBALS['TT'] = new NullTimeTracker();
+    }
+
+    /**
+     * @param Bootstrap $bootstrapObj
+     * @return boolean
+     */
+    private function determineTypo3Version(Bootstrap $bootstrapObj)
+    {
+        if (true === method_exists($bootstrapObj, 'applyAdditionalConfigurationSettings')) {
+            // it seams to be TYPO3 6.2 (LTS)
+            return self::TYPO3_VERSION_6LTS;
+        }
+        if (false === method_exists($bootstrapObj, 'loadCachedTca')) {
+            // it seams to be TYPO3 > 8.7 (LTS)
+            return self::TYPO3_VERSION_8LTS;
+        }
+
+        // it seams to be TYPO3 7.6 (LTS)
+        return self::TYPO3_VERSION_7LTS;
     }
 
     /**
