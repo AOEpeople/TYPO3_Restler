@@ -261,7 +261,7 @@ class Loader implements SingletonInterface
         if (is_file($possibleClassLoader3)) {
             return $possibleClassLoader3;
         }
-        throw new RuntimeException('TNM: I could not find a valid autoload file.', 1458829787);
+        throw new RuntimeException('I could not find a valid autoload file.', 1458829787);
     }
 
     /**
