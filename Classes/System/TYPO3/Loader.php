@@ -118,8 +118,9 @@ class Loader implements SingletonInterface
      * enable the usage of frontend-user
      *
      * @param integer $pageId
+     * @param integer $type
      */
-    public function initializeFrontEndUser($pageId = 0)
+    public function initializeFrontEndUser($pageId = 0, $type = 0)
     {
         if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->fe_user)) {
             // FE-user is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
@@ -129,7 +130,7 @@ class Loader implements SingletonInterface
             return;
         }
 
-        $tsfe = $this->getTsfe($pageId);
+        $tsfe = $this->getTsfe($pageId, $type);
         $tsfe->initFEUser();
         $this->isFrontEndUserInitialized = true;
     }
@@ -138,8 +139,9 @@ class Loader implements SingletonInterface
      * enable the frontend-rendering
      *
      * @param integer $pageId
+     * @param integer $type
      */
-    public function initializeFrontEndRendering($pageId = 0)
+    public function initializeFrontEndRendering($pageId = 0, $type = 0)
     {
         if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->tmpl)) {
             // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
@@ -150,12 +152,12 @@ class Loader implements SingletonInterface
         }
 
         if ($this->isFrontEndUserInitialized === false) {
-            $this->initializeFrontEndUser($pageId);
+            $this->initializeFrontEndUser($pageId, $type);
         }
 
         EidUtility::initTCA();
 
-        $tsfe = $this->getTsfe($pageId);
+        $tsfe = $this->getTsfe($pageId, $type);
         $tsfe->determineId();
         $tsfe->initTemplate();
         $tsfe->getConfigArray();
@@ -281,16 +283,20 @@ class Loader implements SingletonInterface
 
     /**
      * @param integer $pageId
+     * @param integer $type
      * @return TypoScriptFrontendController
      */
-    private function getTsfe($pageId)
+    private function getTsfe($pageId, $type = 0)
     {
+        if ($type > 0) {
+            $_GET['type'] = $type;
+        }
         if (false === array_key_exists('TSFE', $GLOBALS)) {
             $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
                 'TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController',
                 $GLOBALS['TYPO3_CONF_VARS'],
                 $pageId,
-                0
+                $type
             );
         }
         return $GLOBALS['TSFE'];
