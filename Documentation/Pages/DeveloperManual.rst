@@ -68,9 +68,7 @@ This way the following will be achieved:
 - each extension can define any number of Restler configuration classes.
 - the Restler configuration classes will only be called when an API endpoint is called (has no side-effects on normal calls of TYPO3).
 
-3. Check the Restler extension configuration if you need / want to add the extension to the list (basic.extensionsWithRequiredExtLocalConfFiles).
-
-4. Flush the TYPO3 System Cache
+3. Flush the TYPO3 System Cache
 
 Using TYPO3 Restler from PHP libraries
 -------------------------------------

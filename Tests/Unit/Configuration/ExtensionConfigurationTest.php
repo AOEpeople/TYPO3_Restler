@@ -58,7 +58,6 @@ class ExtensionConfigurationTest extends BaseTest
         $modifiedExtConfig['productionContext'] = '1';
         $modifiedExtConfig['enableOnlineDocumentation'] = '1';
         $modifiedExtConfig['pathToOnlineDocumentation'] = 'api_explorer';
-        $modifiedExtConfig['extensionsWithRequiredExtLocalConfFiles'] = ' extension1, extension2 ';
         $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'] = serialize($modifiedExtConfig);
 
         $this->configuration = new ExtensionConfiguration();
@@ -95,18 +94,6 @@ class ExtensionConfigurationTest extends BaseTest
     public function canCheckThatOnlineDocumentationIsEnabled()
     {
         $this->assertTrue($this->configuration->isOnlineDocumentationEnabled());
-    }
-
-    /**
-     * @test
-     */
-    public function canGetExtensionsWithRequiredExtLocalConfFiles()
-    {
-        $extensionList = $this->configuration->getExtensionsWithRequiredExtLocalConfFiles();
-        $this->assertInternalType('array', $extensionList);
-        $this->assertEquals(2, count($extensionList));
-        $this->assertEquals('extension1', $extensionList[0]);
-        $this->assertEquals('extension2', $extensionList[1]);
     }
 
     /**

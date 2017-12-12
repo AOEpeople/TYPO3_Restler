@@ -79,23 +79,6 @@ class ExtensionConfiguration implements SingletonInterface
     }
 
     /**
-     * @return array
-     */
-    public function getExtensionsWithRequiredExtLocalConfFiles()
-    {
-        $requiredExtensions = array();
-        $extensionList = explode(',', $this->get('extensionsWithRequiredExtLocalConfFiles'));
-        foreach ($extensionList as $extensionName) {
-            $extensionName = trim($extensionName);
-            if (false === empty($extensionName)) {
-                $requiredExtensions[] = $extensionName;
-            }
-        }
-
-        return $requiredExtensions;
-    }
-
-    /**
      * returns configuration value for the given key
      *
      * @param string $key

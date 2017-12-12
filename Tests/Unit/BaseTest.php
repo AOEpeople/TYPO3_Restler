@@ -34,7 +34,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
  * @subpackage Tests
  *
  */
-abstract class BaseTest extends UnitTestCase
+abstract class BaseTest extends \Nimut\TestingFramework\TestCase\UnitTestCase
 {
     /**
      * call unaccessible method of an object (to test it)
