@@ -21,7 +21,8 @@
     "require-dev": {
         "typo3/cms": "^7.6",
         "nimut/testing-framework": "2.0.0",
-        "phpunit/phpcov": "2.0.*",
+        "phpunit/phpunit": "^5.6",
+        "phpunit/phpcov": "^3.1",
         "squizlabs/php_codesniffer": "2.3.*",
         "sebastian/phpcpd": "2.0.*",
         "phpmd/phpmd": "2.2.*"
@@ -60,6 +61,10 @@
         "post-autoload-dump": [
             "mkdir -p .Build/Web/typo3conf/ext/",
             "[ -L .Build/Web/typo3conf/ext/restler ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/restler"
+        ],
+        "test:unit": [
+            "[ -e .Build/bin/phpunit ] || composer update",
+            "TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit"
         ]
     },
     "extra": {
