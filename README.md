@@ -14,9 +14,12 @@ You can download and install this extension from the [TER (TYPO3 Extension Repos
 
 The documentation is available online at [docs.typo3.org][2].
 
+To render the documentation locally, please use the official TYPO3 Documentation rendering Docker Tool.
+<https://github.com/t3docs/docker-render-documentation>
+
 ## Copyright / License
 
-Copyright: (c) 2015 - 2016, AOE GmbH
+Copyright: (c) 2015 - 2018, AOE GmbH
 License: GPLv3, <http://www.gnu.org/licenses/gpl-3.0.en.html>  
 
 [1]: http://typo3.org/extensions/repository/view/restler

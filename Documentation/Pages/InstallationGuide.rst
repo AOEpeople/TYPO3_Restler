@@ -27,7 +27,7 @@ In the context of a fully Composer setup, add in your root composer.json the fol
 
 	"require": {
 		...
-		"aoe/restler": "1.*"
+		"aoe/restler": "2.*"
 	}
 	"autoload": {
 		"psr-0": {
@@ -55,27 +55,17 @@ Because we are using a forked version of Restler (in order to be able to tag a s
 The ".htaccess" file needs to be changed in order to make the REST API available.
 
 .. parsed-literal::
-
-  # Allow access to example.com/api for normal REST calls
-  RewriteRule ^api/(.*)$ typo3conf/ext/restler/Scripts/restler_dispatch.php [NC,QSA,L]
-
-  # Allow access to example.com/api_explorer for the online documentation of your API.
-  # You may want to restrict access to this URL.
-  RewriteRule ^api_explorer/(.*)$ typo3conf/ext/restler/Scripts/restler_dispatch.php [NC,QSA,L]
-
+    # The api_explorer/.* MUST not hit TYPO3 (index.php) otherwise the requests will fail.
+    # This / (target) is only to prevent this to happened.
+    RewriteRule ^api_explorer/.*$ / [NC,QSA,L]
 
 For Nginx use following rule
 
 .. parsed-literal::
 
     location ~^/api_explorer/ {
-            rewrite ^/api_explorer/(.*)$ /typo3conf/ext/restler/Scripts/restler_dispatch.php last;
+            rewrite ^/api_explorer/(.*)$ / last;
     }
-
-    location ~^/api/ {
-            rewrite ^/api/(.*)$ /typo3conf/ext/restler/Scripts/restler_dispatch.php last;
-    }
-
 
 When this is done, than you can call the online documentation of your REST API via this URL:
 
