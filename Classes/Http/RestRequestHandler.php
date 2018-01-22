@@ -4,7 +4,7 @@ namespace Aoe\Restler\Http;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2017 AOE GmbH <dev@aoe.com>
+ *  (c) 2018 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -50,7 +50,7 @@ class RestRequestHandler implements RequestHandlerInterface
     protected $request;
 
     /**
-     * Constructor handing over the bootstrap and the original request
+     * Constructor handing over the bootstrap
      *
      * @param Bootstrap $bootstrap
      */
@@ -63,7 +63,8 @@ class RestRequestHandler implements RequestHandlerInterface
      * Handles a frontend request
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return NULL|\Psr\Http\Message\ResponseInterface|void
+     *
+     * @return NULL|\Psr\Http\Message\ResponseInterface
      */
     public function handleRequest(\Psr\Http\Message\ServerRequestInterface $request)
     {
@@ -79,6 +80,7 @@ class RestRequestHandler implements RequestHandlerInterface
      * This request handler can handle any frontend request.
      *
      * @param ServerRequestInterface $request
+     *
      * @return bool If the request is not an eID request, TRUE otherwise FALSE
      */
     public function canHandleRequest(ServerRequestInterface $request)
@@ -87,8 +89,11 @@ class RestRequestHandler implements RequestHandlerInterface
     }
 
     /**
-     * Returns the priority - how eager the handler is to actually handle the
-     * request.
+     * Returns the priority.
+     *
+     * Shows how eager the handler is to actually handle the
+     * request. An integer > 0 means "I want to handle this request" where
+     * "100" is default. "0" means "I am a fallback solution"
      *
      * @return int The priority of the request handler.
      */
@@ -99,6 +104,7 @@ class RestRequestHandler implements RequestHandlerInterface
 
     /**
      * @param ServerRequestInterface $request
+     *
      * @return bool
      */
     private function isRequestApi(ServerRequestInterface $request)
@@ -108,6 +114,7 @@ class RestRequestHandler implements RequestHandlerInterface
 
     /**
      * @param ServerRequestInterface $request
+     *
      * @return bool
      */
     private function isRequestApiExplorer(ServerRequestInterface $request)

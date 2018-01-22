@@ -56,7 +56,7 @@ The ".htaccess" file needs to be changed in order to make the REST API available
 
 .. parsed-literal::
     # The api_explorer/.* MUST not hit TYPO3 (index.php) otherwise the requests will fail.
-    # This / (target) is only to prevent this to happened.
+    # This / (target) is only to prevent this to happen.
     RewriteRule ^api_explorer/.*$ / [NC,QSA,L]
 
 For Nginx use following rule
