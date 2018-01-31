@@ -30,10 +30,10 @@ EXT: Restler
 		This extension is based on Luracast Restler Version 3.0.
 
 	:Keywords:
-		restler,REST,API,RESTful
+		restler, REST, API, RESTful
 
 	:Copyright:
-		2015 - 2016
+		2015 - 2018
 
 	:Author:
 		AOE GmbH
@@ -42,7 +42,7 @@ EXT: Restler
 		dev@aoe.com
 
 	:License:
-		Copyright 2015 - 2016 AOE GmbH
+		Copyright 2015 - 2018 AOE GmbH
 
 		All rights reserved
 

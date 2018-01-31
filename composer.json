@@ -13,25 +13,23 @@
             "email": "dev@aoe.com"
         }
     ],
-    "config": {
-        "secure-http": false
-    },
     "require": {
         "php": ">=5.5.0",
-        "typo3/cms-core": ">=6.2.14",
+        "typo3/cms-core": ">=7.6.0",
         "luracast/restler": "3.0.0.20171013"
     },
     "require-dev": {
-        "typo3/cms": "6.2.*",
-        "phpunit/phpunit": "4.6.*",
-        "phpunit/phpcov": "2.0.*",
+        "typo3/cms": "^7.6",
+        "nimut/testing-framework": "2.0.0",
+        "phpunit/phpunit": "^5.6",
+        "phpunit/phpcov": "^3.1",
         "squizlabs/php_codesniffer": "2.3.*",
         "sebastian/phpcpd": "2.0.*",
         "phpmd/phpmd": "2.2.*"
     },
     "repositories": [
         {
-            "type": "vcs",
+            "type": "git",
             "url": "https://github.com/AOEpeople/Restler.git"
         }
     ],
@@ -53,6 +51,29 @@
         "psr-4": {
             "Aoe\\Restler\\Tests\\": "Tests",
             "TYPO3\\CMS\\Core\\Tests\\": ".Build/vendor/typo3/cms/typo3/sysext/core/Tests/"
+        }
+    },
+    "config": {
+        "vendor-dir": ".Build/vendor",
+        "bin-dir": ".Build/bin"
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "mkdir -p .Build/Web/typo3conf/ext/",
+            "[ -L .Build/Web/typo3conf/ext/restler ] || ln -snvf ../../../../. .Build/Web/typo3conf/ext/restler"
+        ],
+        "test:unit": [
+            "[ -e .Build/bin/phpunit ] || composer update",
+            "TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.0.0-dev"
+        },
+        "typo3/cms": {
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".Build/Web"
         }
     }
 }
