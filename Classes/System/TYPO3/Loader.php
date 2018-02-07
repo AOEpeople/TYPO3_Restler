@@ -95,8 +95,7 @@ class Loader implements SingletonInterface
         $bootstrapObj = Bootstrap::getInstance();
         $bootstrapObj->loadExtensionTables(true);
         $bootstrapObj->initializeBackendUser();
-        $bootstrapObj->initializeBackendAuthentication();
-        $bootstrapObj->initializeBackendUserMounts();
+        $bootstrapObj->initializeBackendAuthentication(true);
         $bootstrapObj->initializeLanguageObject();
 
         $this->isBackEndUserInitialized = true;
