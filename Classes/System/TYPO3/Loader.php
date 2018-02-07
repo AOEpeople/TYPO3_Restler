@@ -107,8 +107,11 @@ class Loader implements SingletonInterface
         $bootstrapObj = Bootstrap::getInstance();
         $bootstrapObj->loadExtensionTables(true);
         $bootstrapObj->initializeBackendUser();
-        $bootstrapObj->initializeBackendAuthentication();
-        $bootstrapObj->initializeBackendUserMounts();
+        $bootstrapObj->initializeBackendAuthentication(true);
+        if (method_exists($bootstrapObj, 'initializeBackendUserMounts')) {
+            // method exists in TYPO3 6.2 and was removed in TYPO3 7.6
+            $bootstrapObj->initializeBackendUserMounts();
+        }
         $bootstrapObj->initializeLanguageObject();
 
         $this->isBackEndUserInitialized = true;

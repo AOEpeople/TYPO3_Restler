@@ -28,6 +28,7 @@ namespace Aoe\Restler\Tests\Unit\Controller;
 use Aoe\Restler\Controller\BeUserAuthenticationController;
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Aoe\Restler\Tests\Unit\BaseTest;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
 /**
  * @package Restler
@@ -80,12 +81,29 @@ class BeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
+    public function checkThatAuthenticationWillFailWhenBackendUserIsNotLoggedIn()
+    {
+        $this->controller->checkAuthentication = true;
+
+        $beUser = $this->getMockBuilder(BackendUserAuthentication::class)->disableOriginalConstructor()->getMock();
+
+        $this->typo3LoaderMock->expects($this->once())->method('initializeBackendEndUser');
+        $this->typo3LoaderMock->expects($this->once())->method('getBackEndUser')->will($this->returnValue($beUser));
+
+        $this->assertFalse($this->controller->__isAllowed());
+    }
+
+    /**
+     * @test
+     */
     public function checkThatAuthenticationWillBeSuccessful()
     {
         $this->controller->checkAuthentication = true;
 
-        $beUser = $this->getMockBuilder('TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication')
-            ->disableOriginalConstructor()->getMock();
+        $beUser = $this->getMockBuilder(BackendUserAuthentication::class)->disableOriginalConstructor()->getMock();
+        $beUser->user = [
+            'uid' => 1
+        ];
 
         $this->typo3LoaderMock->expects($this->once())->method('initializeBackendEndUser');
         $this->typo3LoaderMock->expects($this->once())->method('getBackEndUser')->will($this->returnValue($beUser));

@@ -81,9 +81,8 @@ class BeUserAuthenticationController implements iAuthenticate
 
         $this->typo3Loader->initializeBackendEndUser();
 
-        // @TODO: if BE-user could not be authenticated, than TYPO3 do a redirect...so we are currently not able to return an error-message
         $beUser = $this->typo3Loader->getBackEndUser();
-        if ($beUser === null) {
+        if (false === is_array($beUser->user) || empty($beUser->user['uid'])) {
             return false;
         }
         return true;
