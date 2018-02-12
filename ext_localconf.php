@@ -29,5 +29,7 @@ if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigur
     ];
 }
 
-// Register request handler for API
-\TYPO3\CMS\Core\Core\Bootstrap::getInstance()->registerRequestHandlerImplementation(\Aoe\Restler\Http\RestRequestHandler::class);
+if (TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_FE) {
+    // Register request handler for API
+    \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->registerRequestHandlerImplementation(\Aoe\Restler\Http\RestRequestHandler::class);
+}
