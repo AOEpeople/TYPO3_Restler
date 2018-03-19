@@ -38,9 +38,15 @@ use RuntimeException;
 
 // @codingStandardsIgnoreStart
 // we must load some PHP/TYPO3-classes manually, because at this point, TYPO3 (and it's auto-loading) is not initialized
-require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/Core/ApplicationContext.php';
-require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/Core/Bootstrap.php';
-require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonInterface.php';
+if (false === class_exists(\TYPO3\CMS\Core\Core\ApplicationContext::class)) {
+    require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/Core/ApplicationContext.php';
+}
+if (false === class_exists(\TYPO3\CMS\Core\Core\Bootstrap::class)) {
+    require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/Core/Bootstrap.php';
+}
+if (false === interface_exists(\TYPO3\CMS\Core\SingletonInterface::class)) {
+    require_once __DIR__ . '/../../../../../../typo3/sysext/core/Classes/SingletonInterface.php';
+}
 // @codingStandardsIgnoreEnd
 
 /**
