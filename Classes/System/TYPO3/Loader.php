@@ -164,8 +164,6 @@ class Loader implements SingletonInterface
             $this->initializeFrontEndUser($pageId, $type);
         }
 
-        EidUtility::initTCA();
-
         $tsfe = $this->getTsfe($pageId, $type);
         $tsfe->determineId();
         $tsfe->initTemplate();
@@ -230,6 +228,11 @@ class Loader implements SingletonInterface
 
         // create timeTracker-object (TYPO3 needs that)
         $GLOBALS['TT'] = new NullTimeTracker();
+
+        if ($typo3Version === self::TYPO3_VERSION_6LTS || $typo3Version === self::TYPO3_VERSION_7LTS) {
+            // this method doesn't exist in TYPO3 8 anymore, so we must call it only in TYPO3 6+7
+            $bootstrapObj->loadCachedTca();
+        }
     }
 
     /**
