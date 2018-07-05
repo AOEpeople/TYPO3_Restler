@@ -146,8 +146,6 @@ class Loader implements SingletonInterface
             $this->initializeFrontEndUser($pageId, $type);
         }
 
-        EidUtility::initTCA();
-
         $tsfe = $this->getTsfe($pageId, $type);
         $tsfe->determineId();
         $tsfe->initTemplate();
