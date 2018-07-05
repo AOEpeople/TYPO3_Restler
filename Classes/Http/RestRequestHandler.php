@@ -71,11 +71,6 @@ class RestRequestHandler implements RequestHandlerInterface
         // We define this constant, so that any TYPO3-Extension can check, if the REST-API is running
         define('REST_API_IS_RUNNING', true);
 
-        if (method_exists($this->bootstrap, 'loadCachedTca')) {
-            // method 'loadCachedTca' exists only in TYPO3 7
-            $this->bootstrap->loadCachedTca();
-        }
-
         // Dispatch the API-call
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $objectManager->get(Dispatcher::class)->dispatch();
