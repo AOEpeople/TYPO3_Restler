@@ -75,7 +75,7 @@ class ConfigurationTest extends BaseTest
         $this->restlerMock
             ->expects($this->at(0))
             ->method('addAPIClass')
-            ->with('Luracast\\Restler\\Explorer', 'path');
+            ->with('Luracast\\Restler\\Explorer\\v2\\Explorer', 'path');
         $this->restlerMock
             ->expects($this->at(1))
             ->method('addAuthenticationClass')

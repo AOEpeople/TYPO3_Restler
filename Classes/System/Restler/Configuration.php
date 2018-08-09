@@ -62,7 +62,7 @@ class Configuration implements ConfigurationInterface
     public function configureRestler(Restler $restler)
     {
         if ($this->extensionConfiguration->isOnlineDocumentationEnabled()) {
-            $restler->addAPIClass('Luracast\\Restler\\Explorer', $this->extensionConfiguration->getPathOfOnlineDocumentation());
+            $restler->addAPIClass('Luracast\\Restler\\Explorer\\v2\\Explorer', $this->extensionConfiguration->getPathOfOnlineDocumentation());
             $restler->addAuthenticationClass('Aoe\\Restler\\Controller\\ExplorerAuthenticationController');
         }
 
