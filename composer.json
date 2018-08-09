@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.5.0",
         "typo3/cms-core": ">=7.6.0",
-        "luracast/restler": "3.0.0.20171013"
+        "luracast/restler": "v3.x-dev"
     },
     "require-dev": {
         "typo3/cms": "^7.6",
@@ -27,12 +27,6 @@
         "sebastian/phpcpd": "2.0.*",
         "phpmd/phpmd": "2.2.*"
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/AOEpeople/Restler.git"
-        }
-    ],
     "replace": {
         "restler": "*"
     },
