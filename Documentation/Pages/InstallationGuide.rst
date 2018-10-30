@@ -21,18 +21,13 @@ Installation
 
 1. Install the extension from TER (sources are available on `our GitHub repository <https://github.com/AOEpeople/TYPO3_Restler>`_).
 
-In the context of a fully Composer setup, add in your root composer.json the following lines before doing a ```composer update```.
+In the context of a fully Composer setup, add in your root composer.json the following line before doing a ```composer update```.
 
 ::
 
 	"require": {
 		...
 		"aoe/restler": "2.*"
-	}
-	"autoload": {
-		"psr-0": {
-			"Luracast\\Restler\\": "vendor/luracast/restler/vendor"
-		}
 	},
 
 Because we are using a forked version of Restler (in order to be able to tag a stable version), you also need to add the following to your composer.json file.
