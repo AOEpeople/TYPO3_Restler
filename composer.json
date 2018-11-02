@@ -75,9 +75,5 @@
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
             "web-dir": ".Build/Web"
         }
-    },
-    "dist": {
-        "url": "https://extranet.aoe.com/artifactory/congstar-composer-internal-local/aoe/restler/restler-build.552.zip",
-        "type": "zip"
     }
 }
