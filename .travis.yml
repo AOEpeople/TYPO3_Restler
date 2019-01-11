@@ -16,7 +16,6 @@ matrix:
       php: 7.0
   allow_failures:
     - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
-    - php: 7.2
 
 notifications:
   email:
