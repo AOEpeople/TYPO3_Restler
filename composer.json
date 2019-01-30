@@ -27,6 +27,12 @@
         "sebastian/phpcpd": "3.0.*",
         "phpmd/phpmd": "2.6.*"
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/AOEpeople/Restler.git"
+        }
+    ],
     "replace": {
         "restler": "*"
     },
