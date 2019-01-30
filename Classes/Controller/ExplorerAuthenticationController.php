@@ -57,7 +57,7 @@ class ExplorerAuthenticationController implements iAuthenticate
      */
     public function __isAllowed()
     {
-        if ($this->restler->apiMethodInfo->className !== 'Luracast\Restler\Explorer') {
+        if ($this->restler->apiMethodInfo->className !== 'Luracast\Restler\Explorer\v2\Explorer') {
             // this controller is not responsible for the authentication
             return false;
         }
