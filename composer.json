@@ -15,7 +15,7 @@
     ],
     "require": {
         "php": "^7.0",
-        "typo3/cms-core": ">=7.6.0",
+        "typo3/minimal": ">=7.6.0",
         "luracast/restler": "3.0.0.20190111"
     },
     "require-dev": {
