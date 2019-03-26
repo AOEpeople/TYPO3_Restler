@@ -26,31 +26,59 @@ namespace Aoe\Restler\System;
  ***************************************************************/
 
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
+use Aoe\Restler\System\TYPO3\Loader;
+use Luracast\Restler\Routes;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package Restler
  */
-class Dispatcher
+class Dispatcher implements MiddlewareInterface
 {
     /**
      * @var RestlerBuilder
      */
     private $restlerBuilder;
 
-    /**
-     * @param RestlerBuilder $restlerBuilder
-     */
-    public function __construct(RestlerBuilder $restlerBuilder)
+    public function __construct(ObjectManager $objectManager=null)
     {
-        $this->restlerBuilder = $restlerBuilder;
+        if (!$objectManager){
+            $objectManager = new ObjectManager();
+        }
+        $this->restlerBuilder = $objectManager->get(RestlerBuilder::class);
     }
 
     /**
-     * dispatch the REST-API-request
+     * Process an incoming server request.
+     *
+     * Processes an incoming server request in order to produce a response.
+     * If unable to produce the response itself, it may delegate to the provided
+     * request handler to do so.
      */
-    public function dispatch()
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $restlerObj = $this->restlerBuilder->build();
-        $restlerObj->handle();
+        if ($this->isRestlerUrl($request->getUri()->getPath())){
+            $output = $restlerObj->handle();
+            return new Response($output);
+        }
+        return $handler->handle($request);
     }
+
+    private function isRestlerUrl($uri) {
+        foreach (Routes::findAll() as $routes) {
+            foreach($routes as $route) {
+                if (strpos($uri, rtrim($route["route"]["url"], '/*'))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

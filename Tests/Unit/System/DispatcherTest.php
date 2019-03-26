@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit\System;
 
 /***************************************************************
@@ -28,7 +29,7 @@ namespace Aoe\Restler\Tests\Unit\System;
 use Aoe\Restler\System\Dispatcher;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
-use Luracast\Restler\Restler;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package Restler
@@ -46,28 +47,38 @@ class DispatcherTest extends BaseTest
      * @var Builder
      */
     protected $restlerBuilder;
-
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
     /**
      * setup
      */
     protected function setUp()
     {
         parent::setUp();
-
         $this->restlerBuilder = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\Builder')
             ->disableOriginalConstructor()->getMock();
-        $this->dispatcher = new Dispatcher($this->restlerBuilder);
+        $this->objectManager = $this->getMockBuilder('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
+            ->disableOriginalConstructor()->getMock();
+        $this->objectManager->expects($this->once())->method('get')->will($this->returnValue($this->restlerBuilder));
+
+        $this->dispatcher = new Dispatcher($this->objectManager);
     }
 
     /**
      * @test
      */
-    public function canDispatch()
+    public function canProcessToTypo3()
     {
-        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
-        $restlerObj->expects($this->once())->method('handle');
-        $this->restlerBuilder->expects($this->once())->method('build')->will($this->returnValue($restlerObj));
+        $request = $this->getMockBuilder('Psr\\Http\\Message\\ServerRequestInterface')->getMock();
+        $requestUri = $this->getMockBuilder('TYPO3\\CMS\\Core\\Http\\Uri')->getMock();
+        $requestUri->expects($this->once())->method('getPath')->will($this->returnValue("/api/device"));
+        $request->expects($this->once())->method('getUri')->will($this->returnValue($requestUri));
+        $handler = $this->getMockBuilder('Psr\\Http\\Server\\RequestHandlerInterface')->getMock();
 
-        $this->dispatcher->dispatch();
+        $handler->expects($this->once())->method('handle');
+
+        $this->dispatcher->process($request, $handler);
     }
 }
