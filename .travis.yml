@@ -1,12 +1,10 @@
 language: php
 
 php:
-  - 7.1
   - 7.2
   - 7.3
 
 env:
-  - TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=0
   - TYPO3_VERSION=^9.5 COVERAGE=0 FUNCTIONAL=0
   - TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
 
@@ -14,11 +12,6 @@ matrix:
   include:
     - env: TYPO3_VERSION=^9.5 COVERAGE=1 FUNCTIONAL=0
       php: 7.2
-  exclude:
-    - env: TYPO3_VERSION=^9.5 COVERAGE=0 FUNCTIONAL=0
-      php: 7.1
-    - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
-      php: 7.1
   allow_failures:
     - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
 
