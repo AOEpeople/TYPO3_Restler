@@ -33,6 +33,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
@@ -45,10 +46,10 @@ class Dispatcher implements MiddlewareInterface
      */
     private $restlerBuilder;
 
-    public function __construct(ObjectManager $objectManager=null)
+    public function __construct(ObjectManager $objectManager = null)
     {
         if (!$objectManager){
-            $objectManager = new ObjectManager();
+            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         }
         $this->restlerBuilder = $objectManager->get(RestlerBuilder::class);
     }
