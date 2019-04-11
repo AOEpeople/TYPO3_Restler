@@ -7,7 +7,7 @@ return [
     'frontend' => [
         'aoe/restler/system/dispatcher' => [
             'target' => \Aoe\Restler\System\Dispatcher::class,
-            'before' => [
+            'after' => [
                 'typo3/cms-frontend/site'
             ]
         ],
