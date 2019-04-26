@@ -65,13 +65,12 @@ class Dispatcher implements MiddlewareInterface
     {
         $restlerObj = $this->restlerBuilder->build($request);
         if ($this->isRestlerUrl($request->getUri()->getPath())){
-
             // wrap reponse into a stream to pass along to the rest of the Typo3 framework
             $body = new Stream('php://temp', 'wb+');
             $body->write($restlerObj->handle());
             $body->rewind();
 
-            return new Response($body);
+            return new Response($body, $restlerObj->responseCode);
         }
         return $handler->handle($request);
     }
