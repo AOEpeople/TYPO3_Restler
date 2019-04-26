@@ -30,6 +30,7 @@ use Aoe\Restler\System\TYPO3\Cache;
 use InvalidArgumentException;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Scope;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
@@ -76,13 +77,13 @@ class Builder implements SingletonInterface
      *
      * @return RestlerExtended
      */
-    public function build()
+    public function build(ServerRequestInterface $request)
     {
         $this->setAutoLoading();
         $this->setCacheDirectory();
         $this->setServerConfiguration();
 
-        $restlerObj = $this->createRestlerObject();
+        $restlerObj = $this->createRestlerObject($request);
         $this->configureRestler($restlerObj);
         $this->addApiClassesByGlobalArray($restlerObj);
         return $restlerObj;
@@ -91,12 +92,13 @@ class Builder implements SingletonInterface
     /**
      * @return RestlerExtended
      */
-    protected function createRestlerObject()
+    protected function createRestlerObject(ServerRequestInterface $request)
     {
         return new RestlerExtended(
             $this->objectManager->get(Cache::class),
             $this->extensionConfiguration->isProductionContextSet(),
-            $this->extensionConfiguration->isCacheRefreshingEnabled()
+            $this->extensionConfiguration->isCacheRefreshingEnabled(),
+            $request
         );
     }
 

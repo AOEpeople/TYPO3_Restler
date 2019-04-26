@@ -27,10 +27,12 @@ namespace Aoe\Restler\System\Restler;
 
 use Aoe\Restler\System\Restler\Format\HalJsonFormat;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
+use Luracast\Restler\Defaults;
 use Luracast\Restler\Restler;
 use Luracast\Restler\RestException;
 use Exception;
 use Luracast\Restler\Scope;
+use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\DependencyInjection\Tests\Compiler\H;
 
 /**
@@ -44,6 +46,8 @@ class RestlerExtended extends Restler
     private $typo3Cache;
 
 
+    /** @var ServerRequestInterface  */
+    protected $request;
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
@@ -59,16 +63,21 @@ class RestlerExtended extends Restler
      *                                   every time to map it to the URL
      *
      * @param boolean $refreshCache      will update the cache when set to true
+     * @param ServerRequestInterface     frontend request
      */
-    public function __construct(Typo3Cache $typo3Cache, $productionMode = false, $refreshCache = false)
+    public function __construct(Typo3Cache $typo3Cache, $productionMode = false, $refreshCache = false, ServerRequestInterface $request = null)
     {
         parent::__construct($productionMode, $refreshCache);
+
+        // restler uses echo;die otherwise and then Typo3 standard mechanisms will not be called
+        Defaults::$returnResponse = true;
 
         // adds format support for application/hal+json
         Scope::$classAliases['HalJsonFormat'] = 'Aoe\Restler\System\Restler\Format\HalJsonFormat';
         $this->setSupportedFormats('HalJsonFormat');
 
         $this->typo3Cache = $typo3Cache;
+        $this->request = $request;
     }
 
     /**
@@ -110,7 +119,19 @@ class RestlerExtended extends Restler
         }
     }
 
+    /**
+     * Rewrap the not accessible private stream in a new one.
+     *
+     * @return bool|resource
+     */
+    public function getRequestStream()
+    {
+        $stream = fopen('php://temp', 'wb+');
+        fwrite($stream, (string)$this->request->getBody());
+        fseek($stream, 0, SEEK_SET);
 
+        return $stream;
+    }
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/

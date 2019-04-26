@@ -26,13 +26,13 @@ namespace Aoe\Restler\System;
  ***************************************************************/
 
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
-use Aoe\Restler\System\TYPO3\Loader;
 use Luracast\Restler\Routes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Http\Stream;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
@@ -63,10 +63,15 @@ class Dispatcher implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $restlerObj = $this->restlerBuilder->build();
+        $restlerObj = $this->restlerBuilder->build($request);
         if ($this->isRestlerUrl($request->getUri()->getPath())){
-            $output = $restlerObj->handle();
-            return new Response($output);
+
+            // wrap reponse into a stream to pass along to the rest of the Typo3 framework
+            $body = new Stream('php://temp', 'wb+');
+            $body->write($restlerObj->handle());
+            $body->rewind();
+
+            return new Response($body);
         }
         return $handler->handle($request);
     }
