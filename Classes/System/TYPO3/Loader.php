@@ -129,6 +129,7 @@ class Loader implements SingletonInterface
      * @param integer $type
      *
      * @return void
+     * @throws \TYPO3\CMS\Core\Error\Http\ServiceUnavailableException
      */
     public function initializeFrontEndRendering($pageId = 0, $type = 0)
     {
