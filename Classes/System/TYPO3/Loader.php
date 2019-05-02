@@ -27,7 +27,6 @@ namespace Aoe\Restler\System\TYPO3;
 
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
@@ -141,8 +140,6 @@ class Loader implements SingletonInterface
         if ($this->isFrontEndRenderingInitialized === true) {
             return;
         }
-
-        $GLOBALS['TT'] = new NullTimeTracker();
 
         if ($this->isFrontEndUserInitialized === false) {
             $this->initializeFrontEndUser($pageId, $type);
