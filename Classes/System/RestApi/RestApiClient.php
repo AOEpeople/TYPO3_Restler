@@ -4,7 +4,7 @@ namespace Aoe\Restler\System\RestApi;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -27,10 +27,12 @@ namespace Aoe\Restler\System\RestApi;
 
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
+use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Luracast\Restler\RestException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 use stdClass;
 
 /**
@@ -150,8 +152,8 @@ class RestApiClient implements SingletonInterface
      */
     protected function getRestlerBuilder()
     {
-        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        return $objectManager->get('Aoe\\Restler\\System\\Restler\\Builder');
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        return $objectManager->get(Builder::class);
     }
 
     /**

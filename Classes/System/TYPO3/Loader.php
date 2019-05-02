@@ -4,7 +4,7 @@ namespace Aoe\Restler\System\TYPO3;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2019 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -170,7 +170,7 @@ class Loader implements SingletonInterface
         }
         if (false === array_key_exists('TSFE', $GLOBALS)) {
             $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController',
+                TypoScriptFrontendController::class,
                 $GLOBALS['TYPO3_CONF_VARS'],
                 $pageId,
                 $type
