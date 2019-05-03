@@ -35,6 +35,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
 /**
@@ -125,7 +126,9 @@ class BuilderTest extends BaseTest
             ->expects($this->once())->method('get')->with('Aoe\\Restler\\System\\TYPO3\\Cache')
             ->will($this->returnValue($typo3CacheMock));
 
-        $createdObj = $this->callUnaccessibleMethodOfObject($this->builder, 'createRestlerObject');
+        $typo3RequestMock = $this->getMockBuilder(ServerRequest::class)->disableOriginalConstructor()->getMock();
+
+        $createdObj = $this->callUnaccessibleMethodOfObject($this->builder, 'createRestlerObject', [$typo3RequestMock] );
         $this->assertInstanceOf('Aoe\Restler\System\Restler\RestlerExtended', $createdObj);
     }
 
