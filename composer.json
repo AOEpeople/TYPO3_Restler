@@ -15,11 +15,11 @@
     ],
     "require": {
         "php": "^7.0",
-        "typo3/cms-core": ">=7.6.0",
+        "typo3/cms-core": "^8.7",
         "luracast/restler": "3.0.0.20190328"
     },
     "require-dev": {
-        "typo3/cms": "^7.6",
+        "typo3/cms": "^8.7",
         "nimut/testing-framework": "2.0.* || ~3.0",
         "phpunit/phpunit": "^5.7 || ~6.0",
         "phpunit/phpcov": "*",
