@@ -11,23 +11,24 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = [
-  'title' => 'restler',
-  'description' => 'This extension integrates the REST-API-framework "restler" in TYPO3',
-  'category' => 'fe',
-  'author' => 'AOE GmbH',
-  'author_company' => 'AOE GmbH',
-  'author_email' => 'dev@aoe.com',
-  'state' => 'stable',
-  'uploadfolder' => 0,
-  'clearCacheOnLoad' => 0,
-  'version' => '3.1.1',
-  'constraints' => [
-    'depends' => [
-      'typo3' => '8.7.0-8.7.99'
+    'title' => 'restler',
+    'description' => 'This extension integrates the REST-API-framework "restler" in TYPO3',
+    'category' => 'fe',
+    'author' => 'AOE GmbH',
+    'author_company' => 'AOE GmbH',
+    'author_email' => 'dev@aoe.com',
+    'state' => 'stable',
+    'uploadfolder' => 0,
+    'clearCacheOnLoad' => 0,
+    'version' => '3.1.1',
+    'constraints' => [
+        'depends' => [
+            'php' => '7.0.0-7.2.99',
+            'typo3' => '8.7.0-8.7.99'
+        ],
+        'conflicts' => [],
+        'suggests' => [],
     ],
-    'conflicts' => [],
-    'suggests' => [],
-  ],
-  '_md5_values_when_last_written' => '',
+    '_md5_values_when_last_written' => '',
 ];
 
