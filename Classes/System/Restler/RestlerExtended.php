@@ -109,6 +109,7 @@ class RestlerExtended extends Restler
 
         if ($this->typo3Cache->isResponseCacheableByTypo3Cache($this->requestMethod, $this->apiMethodInfo->metadata)) {
             $this->typo3Cache->cacheResponseByTypo3Cache(
+                $this->responseCode,
                 $this->url,
                 $_GET,
                 $this->apiMethodInfo->metadata,
@@ -167,6 +168,7 @@ class RestlerExtended extends Restler
         @header('X-Cached-By-Typo3: 1');
 
         // send data to client
+        $this->responseCode = $cacheEntry['responseCode'];
         $this->responseData = $cacheEntry['responseData'];
         return $this->respond();
     }

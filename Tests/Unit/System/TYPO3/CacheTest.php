@@ -105,6 +105,7 @@ class CacheTest extends BaseTest
      */
     public function responseShouldBeCached()
     {
+        $responseCode = 123;
         $requestUri = 'api/shop/devices';
         $requestGetData = array('limit' => 10);
         $apiMethodInfoMetadata = array();
@@ -117,6 +118,7 @@ class CacheTest extends BaseTest
 
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
         $cacheData = array();
+        $cacheData['responseCode'] = $responseCode;
         $cacheData['requestUri'] = $requestUri;
         $cacheData['requestGetData'] = $requestGetData;
         $cacheData['responseData'] = $responseData;
@@ -129,6 +131,7 @@ class CacheTest extends BaseTest
         $this->frontendCacheMock->expects($this->once())->method('set')->with($identifier, $cacheData, $typo3CacheTags, $typo3CacheExpires);
 
         $this->cache->cacheResponseByTypo3Cache(
+            $responseCode,
             $requestUri,
             $requestGetData,
             $apiMethodInfoMetadata,
