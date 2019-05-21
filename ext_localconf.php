@@ -6,6 +6,9 @@ if (!defined('TYPO3_MODE')) {
 // add restler-configuration-class
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'][] = 'Aoe\\Restler\\System\\Restler\\Configuration';
 
+// add restler page routing
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['enhancers']['Restler'] = Aoe\Restler\System\TYPO3\RestlerEnhancer::class;
+
 /**
  * register cache which can cache response of REST-endpoints
  */

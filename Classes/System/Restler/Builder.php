@@ -77,7 +77,7 @@ class Builder implements SingletonInterface
      *
      * @return RestlerExtended
      */
-    public function build(ServerRequestInterface $request)
+    public function build(ServerRequestInterface $request=null)
     {
         $this->setAutoLoading();
         $this->setCacheDirectory();
@@ -92,7 +92,7 @@ class Builder implements SingletonInterface
     /**
      * @return RestlerExtended
      */
-    protected function createRestlerObject(ServerRequestInterface $request)
+    protected function createRestlerObject(ServerRequestInterface $request=null)
     {
         return new RestlerExtended(
             $this->objectManager->get(Cache::class),

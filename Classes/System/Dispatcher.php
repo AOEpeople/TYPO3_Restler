@@ -74,16 +74,16 @@ class Dispatcher implements MiddlewareInterface
              */
             // check for proper template config state
             if (!$GLOBALS['TSFE']->tmpl->loaded) {
-                if (empty($GLOBALS['TSFE']->rootLine)) {
-                    if (empty($GLOBALS['TSFE']->id)) {
-                        $GLOBALS['TSFE']->id = 1;
-                    }
+                if (empty($GLOBALS['TSFE']->rootLine) && !empty($GLOBALS['TSFE']->id)) {
                     $GLOBALS['TSFE']->determineId();
                     if ($GLOBALS['TSFE']->tmpl === null) {
                         $GLOBALS['TSFE']->getConfigArray();
                     }
                 }
-                $GLOBALS['TSFE']->tmpl->start($GLOBALS['TSFE']->rootLine);
+
+                if (!empty($GLOBALS['TSFE']->tmpl) && !empty($GLOBALS['TSFE']->rootLine)) {
+                    $GLOBALS['TSFE']->tmpl->start($GLOBALS['TSFE']->rootLine);
+                }
             }
 
 
