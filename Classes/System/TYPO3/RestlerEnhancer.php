@@ -52,10 +52,14 @@ class RestlerEnhancer implements DecoratingEnhancerInterface
      */
     public function decorateForMatching(RouteCollection $collection, string $routePath): void
     {
-        $restlerObj = $this->restlerBuilder->build(null);
-        if ($this->isRestlerUrl('/' . $routePath)) {
+        $this->restlerBuilder->build(null);
+
+        // set path according to typo3/sysext/core/Classes/Routing/PageRouter.php:132
+        $prefixedUrlPath = '/' . trim($routePath, '/');
+        
+        if ($this->isRestlerUrl($prefixedUrlPath)) {
             $defaultRoute = $collection->get('default');
-            $defaultRoute->setPath($routePath);
+            $defaultRoute->setPath($prefixedUrlPath);
             $collection->add('restler', $defaultRoute);
         }
     }
