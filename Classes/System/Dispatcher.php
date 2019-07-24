@@ -26,7 +26,6 @@ namespace Aoe\Restler\System;
  ***************************************************************/
 
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
-use Luracast\Restler\Routes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -48,7 +47,7 @@ class Dispatcher implements MiddlewareInterface
 
     public function __construct(ObjectManager $objectManager = null)
     {
-        if (!$objectManager){
+        if (!$objectManager) {
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         }
         $this->restlerBuilder = $objectManager->get(RestlerBuilder::class);
@@ -64,7 +63,7 @@ class Dispatcher implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $restlerObj = $this->restlerBuilder->build($request);
-        if ($this->isRestlerUrl($request->getUri()->getPath())){
+        if ($this->isRestlerUrl($request->getUri()->getPath())) {
             /**
              * We might end up with a loaded TSFE->config but an empty
              * TSFE->tmpl->setup. That is depending on the state of the caches.
@@ -97,15 +96,9 @@ class Dispatcher implements MiddlewareInterface
         return $handler->handle($request);
     }
 
-    private function isRestlerUrl($uri) {
-        foreach (Routes::findAll() as $routes) {
-            foreach($routes as $route) {
-                if (strpos($uri, rtrim($route["route"]["url"], '/*'))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    private function isRestlerUrl($uri): bool
+    {
+        return \Aoe\Restler\System\Restler\Routes::containsUrl($uri);
     }
 
 }

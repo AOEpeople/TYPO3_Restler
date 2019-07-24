@@ -3,14 +3,11 @@
 namespace Aoe\Restler\System\TYPO3;
 
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
-use Luracast\Restler\Routes;
-use Symfony\Component\Debug\Debug;
 use TYPO3\CMS\Core\Routing\Aspect\AspectInterface;
 use TYPO3\CMS\Core\Routing\Enhancer\DecoratingEnhancerInterface;
 use TYPO3\CMS\Core\Routing\RouteCollection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 class RestlerEnhancer implements DecoratingEnhancerInterface
 {
@@ -90,15 +87,9 @@ class RestlerEnhancer implements DecoratingEnhancerInterface
         return [];
     }
 
-    private function isRestlerUrl($uri) {
-        foreach (Routes::findAll() as $routes) {
-            foreach($routes as $route) {
-                if (strpos($uri, rtrim($route["route"]["url"], '/*'))) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    private function isRestlerUrl($uri): bool
+    {
+        return \Aoe\Restler\System\Restler\Routes::containsUrl($uri);
     }
 
 }
