@@ -33,7 +33,7 @@
         }
     ],
     "replace": {
-        "restler": "*"
+        "luracast/restler": "*"
     },
     "keywords": [
         "TYPO3",
