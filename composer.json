@@ -32,9 +32,6 @@
             "url": "https://github.com/AOEpeople/Restler.git"
         }
     ],
-    "replace": {
-        "luracast/restler": "*"
-    },
     "keywords": [
         "TYPO3",
         "Restler",
