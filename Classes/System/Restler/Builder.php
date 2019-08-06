@@ -34,6 +34,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
@@ -173,7 +174,7 @@ class Builder implements SingletonInterface
     private function setAutoLoading()
     {
         // set auto-loading for restler
-        $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
+        $autoload = Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
         if (file_exists($autoload)) {
             require_once $autoload;
         }
