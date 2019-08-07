@@ -42,7 +42,7 @@ before_script:
   - composer config minimum-stability $MINIMUM_STABILITY
   # Add patch for v10 and master
   - >
-    if [ "$TYPO3" == "dev-master" ]; then
+    if [[ "$TYPO3_VERSION" == "dev-master" || "$TYPO3_VERSION" == "^10.0" ]]; then
       jq --indent 4 '.extra.patches."nimut/testing-framework"."Patch for TYPO3 v10: https://github.com/Nimut/testing-framework/pull/118" = "Build/Patches/nimut-testing-framework-118.diff"' composer.json | sponge composer.json
     fi
   # Installs TYPO3
