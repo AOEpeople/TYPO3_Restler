@@ -28,6 +28,7 @@ addons:
   apt:
     packages:
       - parallel
+      - moreutils
 
 cache:
   directories:
