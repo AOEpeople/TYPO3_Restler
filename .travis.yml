@@ -5,17 +5,17 @@ php:
   - 7.3
 
 env:
-  - TYPO3_VERSION=^9.5 MINIMUM_STABILITY=stable COVERAGE=0 FUNCTIONAL=0
-  - TYPO3_VERSION=^10.0 MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
-  - TYPO3_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
+  - TYPO3_VERSION=^9.5 TESTING_VERSION=^4 MINIMUM_STABILITY=stable COVERAGE=0 FUNCTIONAL=0
+  - TYPO3_VERSION=^10.0 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
+  - TYPO3_VERSION=dev-master TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
 
 matrix:
   include:
-    - env: TYPO3_VERSION=^9.5 MINIMUM_STABILITY=stable COVERAGE=1 FUNCTIONAL=0
+    - env: TYPO3_VERSION=^9.5 TESTING_VERSION=^4 MINIMUM_STABILITY=stable COVERAGE=1 FUNCTIONAL=0
       php: 7.2
   allow_failures:
-    - env: TYPO3_VERSION=^10.0 MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
-    - env: TYPO3_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
+    - env: TYPO3_VERSION=^10.0 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
+    - env: TYPO3_VERSION=dev-master TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
 
 notifications:
   email:
@@ -40,8 +40,13 @@ before_install:
 before_script:
   # Switch stability for dev-master of typo3
   - composer config minimum-stability $MINIMUM_STABILITY
+  # Add patch for v10 and master
+  - >
+    if [ "$TYPO3" == "dev-master" ]; then
+      jq --indent 4 '.extra.patches."nimut/testing-framework"."Patch for TYPO3 v10: https://github.com/Nimut/testing-framework/pull/118" = "Build/Patches/nimut-testing-framework-118.diff"' composer.json | sponge composer.json
+    fi
   # Installs TYPO3
-  - composer require typo3/cms-core=$TYPO3_VERSION
+  - composer require typo3/cms-core=$TYPO3_VERSION nimut/testing-framework=$TESTING_VERSION
   # Restore composer.json
   - git checkout composer.json
   - export "TYPO3_PATH_WEB"=$PWD/.Build/Web;
