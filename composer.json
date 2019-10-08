@@ -16,7 +16,7 @@
     "require": {
         "php": "^7.1",
         "typo3/cms-core": "^9.5 || ^10.0",
-        "luracast/restler": "3.0.0.20190328"
+        "luracast/restler": "3.0.0.20191001"
     },
     "require-dev": {
         "nimut/testing-framework": "4.1.5",
