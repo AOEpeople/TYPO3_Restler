@@ -37,7 +37,7 @@ class RestlerEnhancer implements DecoratingEnhancerInterface
      */
     public function getRoutePathRedecorationPattern(): string
     {
-        return '.$';
+        return '\.[^.]+$';
     }
 
     /**
