@@ -6,7 +6,7 @@ if (!defined('TYPO3_MODE')) {
 // add restler-configuration-class
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'][] = 'Aoe\\Restler\\System\\Restler\\Configuration';
 
-// add restler page routing
+// add restler page routing for system Typo3 V9 and up
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['enhancers']['Restler'] = Aoe\Restler\System\TYPO3\RestlerEnhancer::class;
 
 /**
