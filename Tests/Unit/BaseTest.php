@@ -25,7 +25,6 @@ namespace Aoe\Restler\Tests\Unit;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
@@ -69,7 +68,11 @@ abstract class BaseTest extends \Nimut\TestingFramework\TestCase\UnitTestCase
     private function setAutoLoadingForRestler()
     {
         // set auto-loading for restler
-        $autoload = Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
+        if (class_exists('\TYPO3\CMS\Core\Core\Environment')) {
+            $autoload = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
+        } else {
+            $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
+        }
         if (file_exists($autoload)) {
             require_once $autoload;
         }
