@@ -72,6 +72,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
     {
+        $this->typo3LoaderMock->expects($this->never())->method('initializeFrontEndUser');
         $this->typo3LoaderMock->expects($this->never())->method('getFrontEndUser');
         $this->assertFalse($this->controller->__isAllowed());
     }
@@ -85,6 +86,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
 
         $feUser = $this->createMockedFrontEndUser();
         $feUser->user = null;
+        $this->typo3LoaderMock->expects($this->once())->method('initializeFrontEndUser');
         $this->typo3LoaderMock->expects($this->once())->method('getFrontEndUser')->will($this->returnValue($feUser));
 
         $this->assertFalse($this->controller->__isAllowed());
@@ -99,6 +101,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
 
         $feUser = $this->createMockedFrontEndUser();
         $feUser->user = array('username' => 'max.mustermann');
+        $this->typo3LoaderMock->expects($this->once())->method('initializeFrontEndUser');
         $this->typo3LoaderMock->expects($this->once())->method('getFrontEndUser')->will($this->returnValue($feUser));
 
         $this->assertTrue($this->controller->__isAllowed());
