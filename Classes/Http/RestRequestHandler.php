@@ -26,6 +26,7 @@ namespace Aoe\Restler\Http;
  ***************************************************************/
 
 use Aoe\Restler\System\Dispatcher;
+use Aoe\Restler\System\DispatcherWithoutMiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Http\RequestHandlerInterface;
@@ -73,7 +74,11 @@ class RestRequestHandler implements RequestHandlerInterface
 
         // Dispatch the API-call
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $objectManager->get(Dispatcher::class)->dispatch();
+        if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
+            $objectManager->get(Dispatcher::class)->dispatch();
+        } else {
+            $objectManager->get(DispatcherWithoutMiddlewareInterface::class)->dispatch();
+        }
     }
 
     /**
