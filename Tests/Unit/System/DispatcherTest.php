@@ -27,6 +27,7 @@ namespace Aoe\Restler\Tests\Unit\System;
  ***************************************************************/
 
 use Aoe\Restler\System\Dispatcher;
+use Aoe\Restler\System\DispatcherWithoutMiddlewareInterface;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -64,6 +65,13 @@ class DispatcherTest extends BaseTest
         $this->objectManager->expects($this->once())->method('get')->will($this->returnValue($this->restlerBuilder));
 
         $this->dispatcher = new Dispatcher($this->objectManager);
+
+        if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
+            $this->dispatcher = new Dispatcher($this->objectManager);
+        } else {
+            $this->dispatcher = new DispatcherWithoutMiddlewareInterface($this->restlerBuilder);
+        }
+
     }
 
     /**
@@ -71,14 +79,35 @@ class DispatcherTest extends BaseTest
      */
     public function canProcessToTypo3()
     {
-        $request = $this->getMockBuilder('Psr\\Http\\Message\\ServerRequestInterface')->getMock();
-        $requestUri = $this->getMockBuilder('TYPO3\\CMS\\Core\\Http\\Uri')->getMock();
-        $requestUri->expects($this->once())->method('getPath')->will($this->returnValue("/api/device"));
-        $request->expects($this->once())->method('getUri')->will($this->returnValue($requestUri));
-        $handler = $this->getMockBuilder('Psr\\Http\\Server\\RequestHandlerInterface')->getMock();
+        if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
+            $request = $this->getMockBuilder('Psr\\Http\\Message\\ServerRequestInterface')->getMock();
+            $requestUri = $this->getMockBuilder('TYPO3\\CMS\\Core\\Http\\Uri')->getMock();
+            $requestUri->expects($this->once())->method('getPath')->will($this->returnValue("/api/device"));
+            $request->expects($this->once())->method('getUri')->will($this->returnValue($requestUri));
+            $handler = $this->getMockBuilder('Psr\\Http\\Server\\RequestHandlerInterface')->getMock();
 
-        $handler->expects($this->once())->method('handle');
+            $handler->expects($this->once())->method('handle');
 
-        $this->dispatcher->process($request, $handler);
+            $this->dispatcher->process($request, $handler);
+
+        } else {
+            // TODO mark as skipped
+        }
+
+    }
+
+    /**
+     * @test
+     */
+    public function canDispatch()
+    {
+        if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
+            $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+            $restlerObj->expects($this->once())->method('handle');
+            $this->restlerBuilder->expects($this->once())->method('build')->will($this->returnValue($restlerObj));
+            $this->dispatcher->dispatch();
+        } else {
+            // TODO mark as skipped
+        }
     }
 }
