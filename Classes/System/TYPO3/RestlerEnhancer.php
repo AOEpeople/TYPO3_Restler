@@ -9,6 +9,16 @@ use TYPO3\CMS\Core\Routing\RouteCollection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
+/**
+ * Puts the URLs which should be handled by restler into the current route collection
+ * and maps them to the current default route.
+ *
+ * Please be aware that this seems to have some side effects on other DecoratingEnhancers like PageTypeDecorator
+ * routeEnhancers:
+ *   RestlerEnhancer:
+ *     type: Restler
+ *     default: '.json'
+ */
 class RestlerEnhancer implements DecoratingEnhancerInterface
 {
     /**
@@ -16,10 +26,19 @@ class RestlerEnhancer implements DecoratingEnhancerInterface
      */
     private $restlerBuilder;
 
+    private $default;
+
     public function __construct($configuration)
     {
+        $default = $configuration['default'] ?? '';
+
+        if (!is_string($default)) {
+            throw new \InvalidArgumentException('default must be string', 1538327508);
+        }
+
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
         $this->restlerBuilder = $objectManager->get(RestlerBuilder::class);
+        $this->default = $default;
     }
 
 
@@ -37,7 +56,7 @@ class RestlerEnhancer implements DecoratingEnhancerInterface
      */
     public function getRoutePathRedecorationPattern(): string
     {
-        return '.$';
+        return preg_quote($this->default, '#') . '$';
     }
 
     /**
