@@ -38,7 +38,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  *
  * @covers \Aoe\Restler\System\Dispatcher
  */
-class DispatcherTest extends BaseTest
+class DispatcherWithoutMiddlewareInterfaceTest extends BaseTest
 {
     /**
      * @var Dispatcher
