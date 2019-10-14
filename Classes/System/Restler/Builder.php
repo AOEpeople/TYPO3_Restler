@@ -174,7 +174,12 @@ class Builder implements SingletonInterface
     private function setAutoLoading()
     {
         // set auto-loading for restler
-        $autoload = Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
+        if (class_exists('\TYPO3\CMS\Core\Core\Environment')) {
+            $autoload = Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
+        } else {
+            $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
+        }
+
         if (file_exists($autoload)) {
             require_once $autoload;
         }
