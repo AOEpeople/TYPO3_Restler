@@ -31,3 +31,11 @@ if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigur
         'groups' => ['system']
     ];
 }
+
+// Routing for pre Typo3 V9 systems
+if(\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(\TYPO3\CMS\Core\Utility\VersionNumberUtility::getCurrentTypo3Version()) < 9000000) {
+    if (TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_FE) {
+        // Register request handler for API
+        \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->registerRequestHandlerImplementation(\Aoe\Restler\Http\RestRequestHandler::class);
+    }
+}
