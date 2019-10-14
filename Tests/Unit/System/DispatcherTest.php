@@ -64,8 +64,6 @@ class DispatcherTest extends BaseTest
             ->disableOriginalConstructor()->getMock();
         $this->objectManager->expects($this->once())->method('get')->will($this->returnValue($this->restlerBuilder));
 
-        $this->dispatcher = new Dispatcher($this->objectManager);
-
         if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
             $this->dispatcher = new Dispatcher($this->objectManager);
         } else {
