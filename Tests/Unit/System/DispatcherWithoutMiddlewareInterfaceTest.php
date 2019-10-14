@@ -49,10 +49,6 @@ class DispatcherWithoutMiddlewareInterfaceTest extends BaseTest
      */
     protected $restlerBuilder;
     /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-    /**
      * setup
      */
     protected function setUp()
@@ -62,9 +58,6 @@ class DispatcherWithoutMiddlewareInterfaceTest extends BaseTest
             parent::setUp();
             $this->restlerBuilder = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\Builder')
                 ->disableOriginalConstructor()->getMock();
-            $this->objectManager = $this->getMockBuilder('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
-                ->disableOriginalConstructor()->getMock();
-            $this->objectManager->expects($this->once())->method('get')->will($this->returnValue($this->restlerBuilder));
 
             $this->dispatcher = new DispatcherWithoutMiddlewareInterface($this->restlerBuilder);
 
