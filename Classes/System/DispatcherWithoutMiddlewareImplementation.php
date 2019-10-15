@@ -31,7 +31,7 @@ use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 /**
  * @package Restler
  */
-class DispatcherWithoutMiddlewareInterface
+class DispatcherWithoutMiddlewareImplementation
 {
     /**
      * @var RestlerBuilder
