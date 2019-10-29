@@ -78,6 +78,11 @@ class RestlerExtended extends Restler
 
         $this->typo3Cache = $typo3Cache;
         $this->request = $request;
+
+        // set pathes from request if present
+        if ($this->request !== null) {
+            $this->url = $this->getPath();
+        }
     }
 
     /**
@@ -98,6 +103,28 @@ class RestlerExtended extends Restler
 
         // if no cache exist: restler should handle the request
         return parent::handle();
+    }
+
+    /**
+     * Determine path (and baseUrl) for current request.
+     *
+     * @return string|string[]|null
+     */
+    protected function getPath()
+    {
+        if ($this->request !== null) {
+            // set base path depending on site config
+            $siteBasePath = $this->request->getAttribute('site')->getBase()->getPath();
+            if ($siteBasePath !== '/') {
+                $siteBasePath .= '/';
+            }
+            $this->baseUrl = (string)$this->request->getUri()->withQuery('')->withPath($siteBasePath);
+
+            // set url with base path removed
+            return preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $this->request->getUri()->getPath());
+        } else {
+            return parent::getPath();
+        }
     }
 
     /**

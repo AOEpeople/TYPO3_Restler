@@ -63,7 +63,8 @@ class Dispatcher implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $restlerObj = $this->restlerBuilder->build($request);
-        if ($this->isRestlerUrl($request->getUri()->getPath())) {
+
+        if ($this->isRestlerUrl('/' . $restlerObj->url)) {
             /**
              * We might end up with a loaded TSFE->config but an empty
              * TSFE->tmpl->setup. That is depending on the state of the caches.
