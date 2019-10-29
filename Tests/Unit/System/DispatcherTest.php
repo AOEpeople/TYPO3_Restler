@@ -75,12 +75,15 @@ class DispatcherTest extends BaseTest
      */
     public function canProcessToTypo3()
     {
-        $request = $this->getMockBuilder('Psr\\Http\\Message\\ServerRequestInterface')->getMock();
         $requestUri = $this->getMockBuilder('TYPO3\\CMS\\Core\\Http\\Uri')->getMock();
-        $requestUri->expects($this->once())->method('getPath')->will($this->returnValue("/api/device"));
-        $request->expects($this->once())->method('getUri')->will($this->returnValue($requestUri));
-        $handler = $this->getMockBuilder('Psr\\Http\\Server\\RequestHandlerInterface')->getMock();
+        $requestUri->method('getPath')->willReturn("/api/device");
+        $requestUri->method('withQuery')->willReturn($requestUri);
+        $requestUri->method('withPath')->willReturn($requestUri);
 
+        $request = $this->getMockBuilder('Psr\\Http\\Message\\ServerRequestInterface')->getMock();
+        $request->method('getUri')->willReturn($requestUri);
+
+        $handler = $this->getMockBuilder('Psr\\Http\\Server\\RequestHandlerInterface')->getMock();
         $handler->expects($this->once())->method('handle');
 
         $this->dispatcher->process($request, $handler);
