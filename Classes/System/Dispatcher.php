@@ -64,7 +64,7 @@ class Dispatcher implements MiddlewareInterface
     {
         $restlerObj = $this->restlerBuilder->build($request);
 
-        if ($this->isRestlerUrl("/" . $restlerObj->url)) {
+        if ($this->isRestlerUrl('/' . $restlerObj->url)) {
             /**
              * We might end up with a loaded TSFE->config but an empty
              * TSFE->tmpl->setup. That is depending on the state of the caches.
@@ -75,22 +75,22 @@ class Dispatcher implements MiddlewareInterface
             // See https://review.typo3.org/c/Packages/TYPO3.CMS/+/60713 for reasons
 
             // check for proper template config state
-            if (!$GLOBALS["TSFE"]->tmpl->loaded) {
-                if (empty($GLOBALS["TSFE"]->rootLine) && !empty($GLOBALS["TSFE"]->id)) {
-                    $GLOBALS["TSFE"]->determineId();
-                    if ($GLOBALS["TSFE"]->tmpl === null) {
-                        $GLOBALS["TSFE"]->getConfigArray();
+            if (!$GLOBALS['TSFE']->tmpl->loaded) {
+                if (empty($GLOBALS['TSFE']->rootLine) && !empty($GLOBALS['TSFE']->id)) {
+                    $GLOBALS['TSFE']->determineId();
+                    if ($GLOBALS['TSFE']->tmpl === null) {
+                        $GLOBALS['TSFE']->getConfigArray();
                     }
                 }
 
-                if (!empty($GLOBALS["TSFE"]->tmpl) && !empty($GLOBALS["TSFE"]->rootLine)) {
-                    $GLOBALS["TSFE"]->tmpl->start($GLOBALS["TSFE"]->rootLine);
+                if (!empty($GLOBALS['TSFE']->tmpl) && !empty($GLOBALS['TSFE']->rootLine)) {
+                    $GLOBALS['TSFE']->tmpl->start($GLOBALS['TSFE']->rootLine);
                 }
             }
 
 
             // wrap reponse into a stream to pass along to the rest of the Typo3 framework
-            $body = new Stream("php://temp", "wb+");
+            $body = new Stream('php://temp', 'wb+');
             $body->write($restlerObj->handle());
             $body->rewind();
 
