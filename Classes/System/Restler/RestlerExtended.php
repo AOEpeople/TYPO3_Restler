@@ -126,7 +126,7 @@ class RestlerExtended extends Restler
             $this->baseUrl = (string)$this->request->getUri()->withQuery('')->withPath($siteBasePath);
 
             // set url with base path removed
-            return preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $this->request->getUri()->getPath());
+            return rtrim( preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $this->request->getUri()->getPath()), '/');
         } else {
             return parent::getPath();
         }
