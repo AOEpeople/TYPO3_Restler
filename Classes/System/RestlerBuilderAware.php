@@ -32,9 +32,23 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 abstract class RestlerBuilderAware
 {
     /**
+     * @var object
+     */
+    private $objectManager;
+
+    /**
      * @var RestlerBuilder
      */
     private $restlerBuilder;
+
+    public function __construct(ObjectManager $objectManager = null)
+    {
+        if (!$objectManager) {
+            $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        } else {
+            $this->objectManager = $objectManager;
+        }
+    }
 
     /**
      * Get restlerBuilder on demand.
@@ -44,8 +58,7 @@ abstract class RestlerBuilderAware
     protected function getRestlerBuilder()
     {
         if ($this->restlerBuilder === null) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-            $this->restlerBuilder = $objectManager->get(RestlerBuilder::class);
+            $this->restlerBuilder = $this->objectManager->get(RestlerBuilder::class);
         }
 
         return $this->restlerBuilder;

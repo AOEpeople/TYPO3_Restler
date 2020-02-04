@@ -31,9 +31,15 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\Stream;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
 {
+    public function __construct(ObjectManager $objectManager = null)
+    {
+        parent::__construct($objectManager);
+    }
+
     /**
      * Process an incoming server request.
      *
