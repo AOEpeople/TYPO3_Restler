@@ -2,12 +2,10 @@
 
 namespace Aoe\Restler\System\TYPO3;
 
-use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
+use Aoe\Restler\System\RestlerBuilderAware;
 use TYPO3\CMS\Core\Routing\Aspect\AspectInterface;
 use TYPO3\CMS\Core\Routing\Enhancer\DecoratingEnhancerInterface;
 use TYPO3\CMS\Core\Routing\RouteCollection;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Puts the URLs which should be handled by restler into the current route collection
@@ -19,13 +17,8 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  *     type: Restler
  *     default: '.json'
  */
-class RestlerEnhancer implements DecoratingEnhancerInterface
+class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerInterface
 {
-    /**
-     * @var RestlerBuilder
-     */
-    private $restlerBuilder;
-
     private $default;
 
     public function __construct($configuration)
@@ -36,11 +29,8 @@ class RestlerEnhancer implements DecoratingEnhancerInterface
             throw new \InvalidArgumentException('default must be string', 1538327508);
         }
 
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $this->restlerBuilder = $objectManager->get(RestlerBuilder::class);
         $this->default = $default;
     }
-
 
     /**
      * Gets pattern that can be used to redecorate (undecorate)
@@ -68,15 +58,17 @@ class RestlerEnhancer implements DecoratingEnhancerInterface
      */
     public function decorateForMatching(RouteCollection $collection, string $routePath): void
     {
-        $this->restlerBuilder->build(null);
-
         // set path according to typo3/sysext/core/Classes/Routing/PageRouter.php:132
         $prefixedUrlPath = '/' . trim($routePath, '/');
-        
-        if ($this->isRestlerUrl($prefixedUrlPath)) {
-            $defaultRoute = $collection->get('default');
-            $defaultRoute->setPath($prefixedUrlPath);
-            $collection->add('restler', $defaultRoute);
+
+        if ($this->isRestlerPrefix($prefixedUrlPath)) {
+            $this->getRestlerBuilder()->build(null);
+
+            if ($this->isRestlerUrl($prefixedUrlPath)) {
+                $defaultRoute = $collection->get('default');
+                $defaultRoute->setPath($prefixedUrlPath);
+                $collection->add('restler', $defaultRoute);
+            }
         }
     }
 
@@ -110,5 +102,4 @@ class RestlerEnhancer implements DecoratingEnhancerInterface
     {
         return \Aoe\Restler\System\Restler\Routes::containsUrl($uri);
     }
-
 }

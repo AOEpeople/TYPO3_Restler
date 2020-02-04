@@ -25,34 +25,15 @@ namespace Aoe\Restler\System;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\Stream;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
-/**
- * @package Restler
- */
-class Dispatcher implements MiddlewareInterface
+class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
 {
-    /**
-     * @var RestlerBuilder
-     */
-    private $restlerBuilder;
-
-    public function __construct(ObjectManager $objectManager = null)
-    {
-        if (!$objectManager) {
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        }
-        $this->restlerBuilder = $objectManager->get(RestlerBuilder::class);
-    }
-
     /**
      * Process an incoming server request.
      *
@@ -62,40 +43,42 @@ class Dispatcher implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $restlerObj = $this->restlerBuilder->build($request);
+        if ($this->isRestlerPrefix($request->getUri()->getPath())) {
+            $restlerObj = $this->getRestlerBuilder()->build($request);
 
-        if ($this->isRestlerUrl('/' . $restlerObj->url)) {
-            /**
-             * We might end up with a loaded TSFE->config but an empty
-             * TSFE->tmpl->setup. That is depending on the state of the caches.
-             * This in turn will lead to an empty extbase configuration.
-             * And this will lead to failures loading sys_file_reference
-             * as it will use the default tableName of tx_extbase_domain_model_filereference
-             */
-            // See https://review.typo3.org/c/Packages/TYPO3.CMS/+/60713 for reasons
+            if ($this->isRestlerUrl('/' . $restlerObj->url)) {
+                /**
+                 * We might end up with a loaded TSFE->config but an empty
+                 * TSFE->tmpl->setup. That is depending on the state of the caches.
+                 * This in turn will lead to an empty extbase configuration.
+                 * And this will lead to failures loading sys_file_reference
+                 * as it will use the default tableName of tx_extbase_domain_model_filereference
+                 */
+                // See https://review.typo3.org/c/Packages/TYPO3.CMS/+/60713 for reasons
 
-            // check for proper template config state
-            if (!$GLOBALS['TSFE']->tmpl->loaded) {
-                if (empty($GLOBALS['TSFE']->rootLine) && !empty($GLOBALS['TSFE']->id)) {
-                    $GLOBALS['TSFE']->determineId();
-                    if ($GLOBALS['TSFE']->tmpl === null) {
-                        $GLOBALS['TSFE']->getConfigArray();
+                // check for proper template config state
+                if (!$GLOBALS['TSFE']->tmpl->loaded) {
+                    if (empty($GLOBALS['TSFE']->rootLine) && !empty($GLOBALS['TSFE']->id)) {
+                        $GLOBALS['TSFE']->determineId();
+                        if ($GLOBALS['TSFE']->tmpl === null) {
+                            $GLOBALS['TSFE']->getConfigArray();
+                        }
+                    }
+
+                    if (!empty($GLOBALS['TSFE']->tmpl) && !empty($GLOBALS['TSFE']->rootLine)) {
+                        $GLOBALS['TSFE']->tmpl->start($GLOBALS['TSFE']->rootLine);
                     }
                 }
 
-                if (!empty($GLOBALS['TSFE']->tmpl) && !empty($GLOBALS['TSFE']->rootLine)) {
-                    $GLOBALS['TSFE']->tmpl->start($GLOBALS['TSFE']->rootLine);
-                }
+                // wrap reponse into a stream to pass along to the rest of the Typo3 framework
+                $body = new Stream('php://temp', 'wb+');
+                $body->write($restlerObj->handle());
+                $body->rewind();
+
+                return new Response($body, $restlerObj->responseCode);
             }
-
-
-            // wrap reponse into a stream to pass along to the rest of the Typo3 framework
-            $body = new Stream('php://temp', 'wb+');
-            $body->write($restlerObj->handle());
-            $body->rewind();
-
-            return new Response($body, $restlerObj->responseCode);
         }
+
         return $handler->handle($request);
     }
 
@@ -103,5 +86,4 @@ class Dispatcher implements MiddlewareInterface
     {
         return \Aoe\Restler\System\Restler\Routes::containsUrl($uri);
     }
-
 }
