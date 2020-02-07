@@ -23,6 +23,7 @@ class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerI
 
     public function __construct($configuration)
     {
+        parent::__construct(null);
         $default = $configuration['default'] ?? '';
 
         if (!is_string($default)) {
