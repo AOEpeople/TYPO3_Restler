@@ -49,7 +49,7 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if ($this->isRestlerPrefix($request->getUri()->getPath())) {
+        if ($this->isRestlerPrefix($this->extractSiteUrl($request))) {
             $restlerObj = $this->getRestlerBuilder()->build($request);
 
             if ($this->isRestlerUrl('/' . $restlerObj->url)) {
@@ -91,5 +91,22 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
     private function isRestlerUrl($uri): bool
     {
         return \Aoe\Restler\System\Restler\Routes::containsUrl($uri);
+    }
+
+    protected function extractSiteUrl($request)
+    {
+        // set base path depending on site config
+        $site = $request->getAttribute('site');
+        if ($site !== null && $site instanceof \TYPO3\CMS\Core\Site\Entity\Site) {
+            $siteBasePath = $request->getAttribute('site')->getBase()->getPath();
+            if ($siteBasePath !== '/') {
+                $siteBasePath .= '/';
+            }
+        } else {
+            $siteBasePath = '/';
+        }
+
+        // set url with base path removed
+        return '/' . rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $request->getUri()->getPath()), '/');
     }
 }
