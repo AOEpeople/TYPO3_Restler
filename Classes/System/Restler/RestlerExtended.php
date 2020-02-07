@@ -25,26 +25,20 @@ namespace Aoe\Restler\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\System\Restler\Format\HalJsonFormat;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
-use Luracast\Restler\Defaults;
-use Luracast\Restler\Restler;
-use Luracast\Restler\RestException;
 use Exception;
+use Luracast\Restler\Defaults;
+use Luracast\Restler\RestException;
+use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\DependencyInjection\Tests\Compiler\H;
 
-/**
- * @package Restler
- */
 class RestlerExtended extends Restler
 {
     /**
      * @var Typo3Cache
      */
     private $typo3Cache;
-
 
     /** @var ServerRequestInterface  */
     protected $request;
@@ -58,11 +52,11 @@ class RestlerExtended extends Restler
      * Constructor
      *
      * @param Typo3Cache $typo3Cache
-     * @param boolean $productionMode    When set to false, it will run in
+     * @param bool $productionMode    When set to false, it will run in
      *                                   debug mode and parse the class files
      *                                   every time to map it to the URL
      *
-     * @param boolean $refreshCache      will update the cache when set to true
+     * @param bool $refreshCache      will update the cache when set to true
      * @param ServerRequestInterface     frontend request
      */
     public function __construct(Typo3Cache $typo3Cache, $productionMode = false, $refreshCache = false, ServerRequestInterface $request = null)
@@ -115,7 +109,7 @@ class RestlerExtended extends Restler
         if ($this->request !== null) {
             // set base path depending on site config
             $site = $this->request->getAttribute('site');
-            if ($site !== null && $site instanceof TYPO3\CMS\Core\Site\Entity\Site) {
+            if ($site !== null && $site instanceof \TYPO3\CMS\Core\Site\Entity\Site) {
                 $siteBasePath = $this->request->getAttribute('site')->getBase()->getPath();
                 if ($siteBasePath !== '/') {
                     $siteBasePath .= '/';
@@ -126,10 +120,9 @@ class RestlerExtended extends Restler
             $this->baseUrl = (string)$this->request->getUri()->withQuery('')->withPath($siteBasePath);
 
             // set url with base path removed
-            return rtrim( preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $this->request->getUri()->getPath()), '/');
-        } else {
-            return parent::getPath();
+            return rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $this->request->getUri()->getPath()), '/');
         }
+        return parent::getPath();
     }
 
     /**
@@ -191,7 +184,7 @@ class RestlerExtended extends Restler
                     } else {
                         $expires = gmdate('D, d M Y H:i:s \G\M\T', time() + $cacheEntry['frontendCacheExpires']);
                     }
-                    @header('Expires: '.$expires);
+                    @header('Expires: ' . $expires);
                 } else {
                     @header($responseHeader);
                 }
