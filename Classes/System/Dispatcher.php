@@ -99,7 +99,7 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
         $site = $request->getAttribute('site');
         if ($site !== null && $site instanceof \TYPO3\CMS\Core\Site\Entity\Site) {
             $siteBasePath = $request->getAttribute('site')->getBase()->getPath();
-            if ($siteBasePath !== '/') {
+            if ($siteBasePath !== '/' && $siteBasePath[-1] !== '/') {
                 $siteBasePath .= '/';
             }
         } else {

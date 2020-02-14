@@ -111,7 +111,7 @@ class RestlerExtended extends Restler
             $site = $this->request->getAttribute('site');
             if ($site !== null && $site instanceof \TYPO3\CMS\Core\Site\Entity\Site) {
                 $siteBasePath = $this->request->getAttribute('site')->getBase()->getPath();
-                if ($siteBasePath !== '/') {
+                if ($siteBasePath !== '/' && $siteBasePath[-1] !== '/') {
                     $siteBasePath .= '/';
                 }
             } else {
