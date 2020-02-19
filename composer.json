@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": "^7.2",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
@@ -23,12 +23,12 @@
     },
     "require-dev": {
         "typo3/cms": "^8.7",
-        "nimut/testing-framework": "3.0.*",
-        "phpunit/phpunit": "^6.5",
-        "phpunit/phpcov": "3.0.* || ^4.0",
-        "squizlabs/php_codesniffer": "^3.3",
-        "sebastian/phpcpd": "3.0.*",
-        "phpmd/phpmd": "^2.6"
+        "nimut/testing-framework": "^5.0",
+        "phpunit/phpunit": "^7.0",
+        "phpunit/phpcov": "^5.0",
+        "squizlabs/php_codesniffer": "^3.5",
+        "sebastian/phpcpd": "^4.0",
+        "phpmd/phpmd": "^2.8"
     },
     "repositories": [
         {
