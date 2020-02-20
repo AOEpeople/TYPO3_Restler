@@ -9,7 +9,7 @@ env:
   - TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=0
   - TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
 
-jobs:
+matrix:
   include:
     - env: TYPO3_VERSION=^8.7 COVERAGE=1 FUNCTIONAL=0
   allow_failures:
@@ -20,8 +20,7 @@ notifications:
     on_success: never
     on_failure: never
 
-os:
-  - linux
+sudo: false
 
 addons:
   apt:
