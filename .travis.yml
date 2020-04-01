@@ -4,24 +4,32 @@ php:
   - 7.0
   - 7.1
   - 7.2
+  - 7.3
+  - 7.4
 
 env:
-  - TYPO3_VERSION=^8.7 COVERAGE=0 FUNCTIONAL=0
-  - TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
+  - TYPO3_VERSION=^8.7 COVERAGE=0
+  - TYPO3_VERSION=dev-master COVERAGE=0
 
 matrix:
   include:
-    - env: TYPO3_VERSION=^8.7 COVERAGE=1 FUNCTIONAL=0
+    - env: TYPO3_VERSION=^8.7 COVERAGE=1
+      php: 7.2
+  exclude:
+    - env: TYPO3_VERSION=dev-master COVERAGE=0
       php: 7.0
+    - env: TYPO3_VERSION=dev-master COVERAGE=0
+      php: 7.1
   allow_failures:
-    - env: TYPO3_VERSION=dev-master COVERAGE=0 FUNCTIONAL=0
+    - env: TYPO3_VERSION=dev-master COVERAGE=0
 
 notifications:
   email:
     on_success: never
     on_failure: never
 
-sudo: false
+os:
+  - linux
 
 addons:
   apt:
@@ -46,7 +54,6 @@ before_script:
   - export "UNIT_XML"='.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml'
   # Symlink TYPO3-Core
   - ln -nfs .Build/vendor/typo3/cms/typo3 typo3
-
 
 script:
   - >
