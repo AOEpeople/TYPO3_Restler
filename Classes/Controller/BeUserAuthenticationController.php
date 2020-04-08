@@ -26,14 +26,11 @@ namespace Aoe\Restler\Controller;
  ***************************************************************/
 
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
-use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Luracast\Restler\iAuthenticate;
 
 /**
  * This class checks, if client is allowed to access the requested and protected API-class
  * This class checks, if BE-user is logged in
- *
- * @IgnoreAnnotation("class")
  */
 class BeUserAuthenticationController implements iAuthenticate
 {

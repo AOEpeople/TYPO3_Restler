@@ -3,6 +3,34 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
+if (class_exists('\Doctrine\Common\Annotations\AnnotationReader')) {
+    // base restler annotations
+    $restlerAnnotations = ['url',
+        'access',
+        'smart-auto-routing',
+        'class',
+        'cache',
+        'expires',
+        'throttle',
+        'status',
+        'header',
+        'param',
+        'throws',
+        'return',
+        'var',
+        'format',
+        'view',
+        'errorView'];
+
+    foreach ($restlerAnnotations as $ignoreAnnotation) {
+        \Doctrine\Common\Annotations\AnnotationReader::addGlobalIgnoredName($ignoreAnnotation);
+    }
+
+    // restler plugin annotations
+    \Doctrine\Common\Annotations\AnnotationReader::addGlobalIgnoredName('restler_typo3cache_expires');
+    \Doctrine\Common\Annotations\AnnotationReader::addGlobalIgnoredName('restler_typo3cache_tags');
+}
+
 // add restler-configuration-class
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'][] = 'Aoe\\Restler\\System\\Restler\\Configuration';
 

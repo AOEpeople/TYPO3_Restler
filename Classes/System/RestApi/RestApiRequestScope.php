@@ -25,7 +25,6 @@ namespace Aoe\Restler\System\RestApi;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -33,8 +32,6 @@ use TYPO3\CMS\Core\SingletonInterface;
 /**
  * We must override the Scope-class from restler. Otherwise we can't override the 'original' Restler-object (which represents
  * the REST-API-Request) when we want to execute (multiple) REST-API-requests via the class Aoe\Restler\System\Restler\RestApiRequest
- *
- * @IgnoreAnnotation("class")
  */
 class RestApiRequestScope extends Scope implements SingletonInterface
 {
