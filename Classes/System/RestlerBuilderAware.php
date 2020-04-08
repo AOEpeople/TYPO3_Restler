@@ -25,6 +25,7 @@ namespace Aoe\Restler\System;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -41,6 +42,13 @@ abstract class RestlerBuilderAware
      */
     private $restlerBuilder;
 
+    /**
+     * @var ExtensionConfiguration
+     */
+    private $extensionConfiguration;
+
+    private $apiPrefix = '/api';
+
     public function __construct(ObjectManager $objectManager = null)
     {
         if (!$objectManager) {
@@ -48,6 +56,8 @@ abstract class RestlerBuilderAware
         } else {
             $this->objectManager = $objectManager;
         }
+
+        $this->extensionConfiguration = $this->objectManager->get(ExtensionConfiguration::class);
     }
 
     /**
@@ -71,11 +81,12 @@ abstract class RestlerBuilderAware
 
     protected function isRestlerApiUrl($prefixedUrlPath)
     {
-        return strpos($prefixedUrlPath, '/api/') === 0;
+        return $prefixedUrlPath === $this->apiPrefix || strpos($prefixedUrlPath, $this->apiPrefix . '/') === 0;
     }
 
     protected function isRestlerApiExplorerUrl($prefixedUrlPath)
     {
-        return strpos($prefixedUrlPath, '/api_explorer/') === 0;
+        $apiExplorerPrefix = '/' . $this->extensionConfiguration->getPathOfOnlineDocumentation();
+        return $this->extensionConfiguration->isOnlineDocumentationEnabled() && ($prefixedUrlPath === $apiExplorerPrefix || strpos($prefixedUrlPath, $apiExplorerPrefix . '/') === 0);
     }
 }
