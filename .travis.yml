@@ -67,7 +67,7 @@ before_script:
   # Switch stability for dev-master of typo3
   - composer config minimum-stability $MINIMUM_STABILITY
   # Installs TYPO3
-  - composer require typo3/$TYPO3_VERSION nimut/testing-framework=$TESTING_VERSION
+  - travis_wait composer require -v typo3/$TYPO3_VERSION nimut/testing-framework=$TESTING_VERSION
   # Restore composer.json
   - git checkout composer.json
   - export "TYPO3_PATH_WEB"=$PWD/.Build/Web;
