@@ -62,7 +62,7 @@ class DispatcherTest extends BaseTest
                 ->disableOriginalConstructor()->getMock();
             $this->objectManager = $this->getMockBuilder('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
                 ->disableOriginalConstructor()->getMock();
-            $this->objectManager->expects($this->once())->method('get')->will($this->returnValue($this->restlerBuilder));
+            $this->objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValue($this->restlerBuilder));
 
             $this->dispatcher = new Dispatcher($this->objectManager);
         } else {
