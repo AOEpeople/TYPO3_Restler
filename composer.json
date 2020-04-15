@@ -19,7 +19,7 @@
         "ext-mbstring": "*",
         "ext-iconv": "*",
         "typo3/cms-core": "^7.6 || ^8.7 || ^9.5 || ^10.0",
-        "luracast/restler": "3.0.0.20190328"
+        "luracast/restler": "3.0.0.20200415"
     },
     "require-dev": {
         "nimut/testing-framework": "~3.0 || ~4.1.5",
