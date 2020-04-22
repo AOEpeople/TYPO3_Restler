@@ -50,17 +50,21 @@ class ExtensionConfigurationTest extends BaseTest
      */
     protected function setUp()
     {
-        parent::setUp();
+        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
+            parent::setUp();
 
-        $this->originalExtConfig = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'];
-        $modifiedExtConfig = unserialize($this->originalExtConfig);
-        $modifiedExtConfig['refreshCache'] = '0';
-        $modifiedExtConfig['productionContext'] = '1';
-        $modifiedExtConfig['enableOnlineDocumentation'] = '1';
-        $modifiedExtConfig['pathToOnlineDocumentation'] = 'api_explorer';
-        $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'] = serialize($modifiedExtConfig);
+            $this->originalExtConfig = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'];
+            $modifiedExtConfig = unserialize($this->originalExtConfig);
+            $modifiedExtConfig['refreshCache'] = '0';
+            $modifiedExtConfig['productionContext'] = '1';
+            $modifiedExtConfig['enableOnlineDocumentation'] = '1';
+            $modifiedExtConfig['pathToOnlineDocumentation'] = 'api_explorer';
+            $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'] = serialize($modifiedExtConfig);
 
-        $this->configuration = new ExtensionConfiguration();
+            $this->configuration = new ExtensionConfiguration();
+        } else {
+            $this->markTestSkipped("We have Typo3 coniguration management");
+        }
     }
 
     /**

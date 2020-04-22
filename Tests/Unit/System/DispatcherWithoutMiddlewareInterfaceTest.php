@@ -27,6 +27,7 @@ namespace Aoe\Restler\Tests\Unit\System;
  ***************************************************************/
 
 use Aoe\Restler\System\Dispatcher;
+use Aoe\Restler\System\DispatcherWithoutMiddlewareImplementation;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -37,7 +38,7 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  *
  * @covers \Aoe\Restler\System\Dispatcher
  */
-class DispatcherTest extends BaseTest
+class DispatcherWithoutMiddlewareImplementationTest extends BaseTest
 {
     /**
      * @var Dispatcher
@@ -48,44 +49,32 @@ class DispatcherTest extends BaseTest
      */
     protected $restlerBuilder;
     /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-    /**
      * setup
      */
     protected function setUp()
     {
-        if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
+        if (!interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
+
             parent::setUp();
             $this->restlerBuilder = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\Builder')
                 ->disableOriginalConstructor()->getMock();
-            $this->objectManager = $this->getMockBuilder('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
-                ->disableOriginalConstructor()->getMock();
-            $this->objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValue($this->restlerBuilder));
 
-            $this->dispatcher = new Dispatcher($this->objectManager);
+            $this->dispatcher = new DispatcherWithoutMiddlewareImplementation($this->restlerBuilder);
+
         } else {
-            $this->markTestSkipped("No MiddlewareInterface");
+            $this->markTestSkipped("Only MiddlewareInterface");
         }
+
     }
 
     /**
      * @test
      */
-    public function canProcessToTypo3()
+    public function canDispatch()
     {
-        $requestUri = $this->getMockBuilder('TYPO3\\CMS\\Core\\Http\\Uri')->getMock();
-        $requestUri->method('getPath')->willReturn("/api/device");
-        $requestUri->method('withQuery')->willReturn($requestUri);
-        $requestUri->method('withPath')->willReturn($requestUri);
-
-        $request = $this->getMockBuilder('Psr\\Http\\Message\\ServerRequestInterface')->getMock();
-        $request->method('getUri')->willReturn($requestUri);
-
-        $handler = $this->getMockBuilder('Psr\\Http\\Server\\RequestHandlerInterface')->getMock();
-        $handler->expects($this->once())->method('handle');
-
-        $this->dispatcher->process($request, $handler);
+        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerObj->expects($this->once())->method('handle');
+        $this->restlerBuilder->expects($this->once())->method('build')->will($this->returnValue($restlerObj));
+        $this->dispatcher->dispatch();
     }
 }

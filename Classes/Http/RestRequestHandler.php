@@ -25,7 +25,7 @@ namespace Aoe\Restler\Http;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\System\Dispatcher;
+use Aoe\Restler\System\DispatcherWithoutMiddlewareImplementation;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\Http\RequestHandlerInterface;
@@ -73,7 +73,7 @@ class RestRequestHandler implements RequestHandlerInterface
 
         // Dispatch the API-call
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $objectManager->get(Dispatcher::class)->dispatch();
+        $objectManager->get(DispatcherWithoutMiddlewareImplementation::class)->dispatch();
     }
 
     /**

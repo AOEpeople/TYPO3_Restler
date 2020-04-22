@@ -68,7 +68,11 @@ abstract class BaseTest extends \Nimut\TestingFramework\TestCase\UnitTestCase
     private function setAutoLoadingForRestler()
     {
         // set auto-loading for restler
-        $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
+        if (class_exists('\TYPO3\CMS\Core\Core\Environment')) {
+            $autoload = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
+        } else {
+            $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
+        }
         if (file_exists($autoload)) {
             require_once $autoload;
         }

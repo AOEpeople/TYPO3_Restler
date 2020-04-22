@@ -25,17 +25,14 @@ namespace Aoe\Restler\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\System\Restler\Format\HalJsonFormat;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
-use Luracast\Restler\Restler;
-use Luracast\Restler\RestException;
 use Exception;
+use Luracast\Restler\Defaults;
+use Luracast\Restler\RestException;
+use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
-use Symfony\Component\DependencyInjection\Tests\Compiler\H;
+use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * @package Restler
- */
 class RestlerExtended extends Restler
 {
     /**
@@ -43,7 +40,8 @@ class RestlerExtended extends Restler
      */
     private $typo3Cache;
 
-
+    /** @var ServerRequestInterface  */
+    protected $request;
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
@@ -54,21 +52,31 @@ class RestlerExtended extends Restler
      * Constructor
      *
      * @param Typo3Cache $typo3Cache
-     * @param boolean $productionMode    When set to false, it will run in
+     * @param bool $productionMode    When set to false, it will run in
      *                                   debug mode and parse the class files
      *                                   every time to map it to the URL
      *
-     * @param boolean $refreshCache      will update the cache when set to true
+     * @param bool $refreshCache      will update the cache when set to true
+     * @param ServerRequestInterface     frontend request
      */
-    public function __construct(Typo3Cache $typo3Cache, $productionMode = false, $refreshCache = false)
+    public function __construct(Typo3Cache $typo3Cache, $productionMode = false, $refreshCache = false, ServerRequestInterface $request = null)
     {
         parent::__construct($productionMode, $refreshCache);
+
+        // restler uses echo;die otherwise and then Typo3 standard mechanisms will not be called
+        Defaults::$returnResponse = true;
 
         // adds format support for application/hal+json
         Scope::$classAliases['HalJsonFormat'] = 'Aoe\Restler\System\Restler\Format\HalJsonFormat';
         $this->setSupportedFormats('HalJsonFormat');
 
         $this->typo3Cache = $typo3Cache;
+        $this->request = $request;
+
+        // set pathes from request if present
+        if ($this->request !== null) {
+            $this->url = $this->getPath();
+        }
     }
 
     /**
@@ -92,6 +100,32 @@ class RestlerExtended extends Restler
     }
 
     /**
+     * Determine path (and baseUrl) for current request.
+     *
+     * @return string|string[]|null
+     */
+    protected function getPath()
+    {
+        if ($this->request !== null) {
+            // set base path depending on site config
+            $site = $this->request->getAttribute('site');
+            if ($site !== null && $site instanceof \TYPO3\CMS\Core\Site\Entity\Site) {
+                $siteBasePath = $this->request->getAttribute('site')->getBase()->getPath();
+                if ($siteBasePath !== '/' && $siteBasePath[-1] !== '/') {
+                    $siteBasePath .= '/';
+                }
+            } else {
+                $siteBasePath = '/';
+            }
+            $this->baseUrl = (string)$this->request->getUri()->withQuery('')->withPath($siteBasePath);
+
+            // set url with base path removed
+            return rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $this->request->getUri()->getPath()), '/');
+        }
+        return parent::getPath();
+    }
+
+    /**
      * override postCall so that we can cache response via TYPO3-caching-framework - if it's possible
      */
     protected function postCall()
@@ -100,6 +134,7 @@ class RestlerExtended extends Restler
 
         if ($this->typo3Cache->isResponseCacheableByTypo3Cache($this->requestMethod, $this->apiMethodInfo->metadata)) {
             $this->typo3Cache->cacheResponseByTypo3Cache(
+                $this->responseCode,
                 $this->url,
                 $_GET,
                 $this->apiMethodInfo->metadata,
@@ -110,7 +145,19 @@ class RestlerExtended extends Restler
         }
     }
 
+    /**
+     * Rewrap the not accessible private stream in a new one.
+     *
+     * @return bool|resource
+     */
+    public function getRequestStream()
+    {
+        $stream = fopen('php://temp', 'wb+');
+        fwrite($stream, (string)$this->request->getBody());
+        fseek($stream, 0, SEEK_SET);
 
+        return $stream;
+    }
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
@@ -137,7 +184,7 @@ class RestlerExtended extends Restler
                     } else {
                         $expires = gmdate('D, d M Y H:i:s \G\M\T', time() + $cacheEntry['frontendCacheExpires']);
                     }
-                    @header('Expires: '.$expires);
+                    @header('Expires: ' . $expires);
                 } else {
                     @header($responseHeader);
                 }
@@ -146,6 +193,7 @@ class RestlerExtended extends Restler
         @header('X-Cached-By-Typo3: 1');
 
         // send data to client
+        $this->responseCode = $cacheEntry['responseCode'];
         $this->responseData = $cacheEntry['responseData'];
         return $this->respond();
     }

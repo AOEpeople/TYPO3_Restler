@@ -180,6 +180,7 @@ class RestApiRequest extends Restler
     private function handleRequestByTypo3Cache()
     {
         $cacheEntry = $this->typo3Cache->getCacheEntry($this->url, $_GET);
+        $this->responseCode = $cacheEntry['responseCode'];
         $this->responseData = $cacheEntry['responseData'];
         $this->responseFormat = new $cacheEntry['responseFormatClass']();
 
@@ -356,6 +357,7 @@ class RestApiRequest extends Restler
 
         if ($this->typo3Cache->isResponseCacheableByTypo3Cache($this->requestMethod, $this->apiMethodInfo->metadata)) {
             $this->typo3Cache->cacheResponseByTypo3Cache(
+                $this->responseCode,
                 $this->url,
                 $_GET,
                 $this->apiMethodInfo->metadata,

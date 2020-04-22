@@ -97,6 +97,7 @@ class Cache implements SingletonInterface
     /**
      * cache response
      *
+     * @param int $responseCode
      * @param string $requestUri
      * @param array $requestGetData
      * @param array $apiMethodInfoMetadata
@@ -105,6 +106,7 @@ class Cache implements SingletonInterface
      * @param array $responseHeaders
      */
     public function cacheResponseByTypo3Cache(
+        $responseCode,
         $requestUri,
         array $requestGetData,
         array $apiMethodInfoMetadata,
@@ -118,6 +120,7 @@ class Cache implements SingletonInterface
         $typo3CacheTags = explode(',', $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_TAGS]);
 
         $cacheData = array();
+        $cacheData['responseCode'] = $responseCode;
         $cacheData['requestUri'] = $requestUri;
         $cacheData['requestGetData'] = $requestGetData;
         $cacheData['responseData'] = $responseData;

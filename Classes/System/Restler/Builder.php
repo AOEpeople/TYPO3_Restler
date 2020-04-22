@@ -30,9 +30,11 @@ use Aoe\Restler\System\TYPO3\Cache;
 use InvalidArgumentException;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Scope;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 
@@ -76,13 +78,13 @@ class Builder implements SingletonInterface
      *
      * @return RestlerExtended
      */
-    public function build()
+    public function build(ServerRequestInterface $request=null)
     {
         $this->setAutoLoading();
         $this->setCacheDirectory();
         $this->setServerConfiguration();
 
-        $restlerObj = $this->createRestlerObject();
+        $restlerObj = $this->createRestlerObject($request);
         $this->configureRestler($restlerObj);
         $this->addApiClassesByGlobalArray($restlerObj);
         return $restlerObj;
@@ -91,12 +93,13 @@ class Builder implements SingletonInterface
     /**
      * @return RestlerExtended
      */
-    protected function createRestlerObject()
+    protected function createRestlerObject(ServerRequestInterface $request=null)
     {
         return new RestlerExtended(
             $this->objectManager->get(Cache::class),
             $this->extensionConfiguration->isProductionContextSet(),
-            $this->extensionConfiguration->isCacheRefreshingEnabled()
+            $this->extensionConfiguration->isCacheRefreshingEnabled(),
+            $request
         );
     }
 
@@ -171,7 +174,12 @@ class Builder implements SingletonInterface
     private function setAutoLoading()
     {
         // set auto-loading for restler
-        $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
+        if (class_exists('\TYPO3\CMS\Core\Core\Environment')) {
+            $autoload = Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
+        } else {
+            $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
+        }
+
         if (file_exists($autoload)) {
             require_once $autoload;
         }

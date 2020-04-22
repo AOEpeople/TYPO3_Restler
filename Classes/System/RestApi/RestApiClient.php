@@ -31,6 +31,7 @@ use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Luracast\Restler\RestException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use stdClass;
 
 /**
@@ -101,7 +102,7 @@ class RestApiClient implements SingletonInterface
     public function executeRequest($requestMethod, $requestUri, $getData = null, $postData = null)
     {
         if ($this->isRequestPreparationRequired()) {
-            $this->prepareRequest();
+            $this->prepareRequest($requestMethod, $requestUri, $getData, $postData);
         }
 
         try {
@@ -173,9 +174,10 @@ class RestApiClient implements SingletonInterface
      * build the 'original' REST-API-Request (aka Restler-object, which is always
      * required) and store it in the REST-API-Request-Scope (aka Scope-object)
      */
-    private function prepareRequest()
+    private function prepareRequest($requestMethod, $requestUri, $getData = null, $postData = null)
     {
-        $originalRestApiRequest = $this->getRestlerBuilder()->build();
+        // TODO: pass along the post data
+        $originalRestApiRequest = $this->getRestlerBuilder()->build(new ServerRequest($requestUri, $requestMethod));
         $this->restApiRequestScope->storeOriginalRestApiRequest($originalRestApiRequest);
         $this->isRequestPrepared = true;
     }

@@ -88,15 +88,17 @@ class Loader implements SingletonInterface
      */
     public function initializeBackendEndUser()
     {
-        if ($this->isBackEndUserInitialized === true) {
-            return;
-        }
+        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
+            if ($this->isBackEndUserInitialized === true) {
+                return;
+            }
 
-        $bootstrapObj = Bootstrap::getInstance();
-        $bootstrapObj->loadExtensionTables(true);
-        $bootstrapObj->initializeBackendUser();
-        $bootstrapObj->initializeBackendAuthentication(true);
-        $bootstrapObj->initializeLanguageObject();
+            $bootstrapObj = Bootstrap::getInstance();
+            $bootstrapObj->loadExtensionTables(true);
+            $bootstrapObj->initializeBackendUser();
+            $bootstrapObj->initializeBackendAuthentication(true);
+            $bootstrapObj->initializeLanguageObject();
+        }
 
         $this->isBackEndUserInitialized = true;
     }
@@ -109,16 +111,19 @@ class Loader implements SingletonInterface
      */
     public function initializeFrontEndUser($pageId = 0, $type = 0)
     {
-        if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->fe_user)) {
-            // FE-user is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
-            $this->isFrontEndUserInitialized = true;
-        }
-        if ($this->isFrontEndUserInitialized === true) {
-            return;
+        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
+            if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->fe_user)) {
+                // FE-user is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+                $this->isFrontEndUserInitialized = true;
+            }
+            if ($this->isFrontEndUserInitialized === true) {
+                return;
+            }
+
+            $tsfe = $this->getTsfe($pageId, $type);
+            $tsfe->initFEUser();
         }
 
-        $tsfe = $this->getTsfe($pageId, $type);
-        $tsfe->initFEUser();
         $this->isFrontEndUserInitialized = true;
     }
 
@@ -132,28 +137,31 @@ class Loader implements SingletonInterface
      */
     public function initializeFrontEndRendering($pageId = 0, $type = 0)
     {
-        if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->tmpl)) {
-            // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
-            $this->isFrontEndRenderingInitialized = true;
+        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
+            if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->tmpl)) {
+                // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+                $this->isFrontEndRenderingInitialized = true;
+            }
+            if ($this->isFrontEndRenderingInitialized === true) {
+                return;
+            }
+
+            $GLOBALS['TT'] = new NullTimeTracker();
+
+            if ($this->isFrontEndUserInitialized === false) {
+                $this->initializeFrontEndUser($pageId, $type);
+            }
+
+            EidUtility::initTCA();
+
+            $tsfe = $this->getTsfe($pageId, $type);
+            $tsfe->determineId();
+            $tsfe->initTemplate();
+            $tsfe->getConfigArray();
+            $tsfe->newCObj();
+            $tsfe->calculateLinkVars();
         }
-        if ($this->isFrontEndRenderingInitialized === true) {
-            return;
-        }
 
-        $GLOBALS['TT'] = new NullTimeTracker();
-
-        if ($this->isFrontEndUserInitialized === false) {
-            $this->initializeFrontEndUser($pageId, $type);
-        }
-
-        EidUtility::initTCA();
-
-        $tsfe = $this->getTsfe($pageId, $type);
-        $tsfe->determineId();
-        $tsfe->initTemplate();
-        $tsfe->getConfigArray();
-        $tsfe->newCObj();
-        $tsfe->calculateLinkVars();
         $this->isFrontEndRenderingInitialized = true;
     }
 
