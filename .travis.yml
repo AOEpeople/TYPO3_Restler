@@ -10,20 +10,20 @@ env:
   - TYPO3_VERSION=cms=^7.6 TESTING_VERSION=3.0.* MINIMUM_STABILITY=stable COVERAGE=0 FUNCTIONAL=0
   - TYPO3_VERSION=cms=^8.7 TESTING_VERSION=^3.0 MINIMUM_STABILITY=stable COVERAGE=0 FUNCTIONAL=0
   - TYPO3_VERSION=cms-core=^9.5 TESTING_VERSION=^4 MINIMUM_STABILITY=stable COVERAGE=0 FUNCTIONAL=0
-  - TYPO3_VERSION=cms-core=^10.1 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
+  - TYPO3_VERSION=cms-core=^10.4 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
   - TYPO3_VERSION=cms-core=dev-master TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
 
 matrix:
   exclude:
     - env: TYPO3_VERSION=cms-core=^9.5 TESTING_VERSION=^4 MINIMUM_STABILITY=stable COVERAGE=0 FUNCTIONAL=0
       php: 7.0
-    - env: TYPO3_VERSION=cms-core=^10.1 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
+    - env: TYPO3_VERSION=cms-core=^10.4 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
       php: 7.0
     - env: TYPO3_VERSION=cms-core=dev-master TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
       php: 7.0
     - env: TYPO3_VERSION=cms-core=^9.5 TESTING_VERSION=^4 MINIMUM_STABILITY=stable COVERAGE=0 FUNCTIONAL=0
       php: 7.1
-    - env: TYPO3_VERSION=cms-core=^10.1 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
+    - env: TYPO3_VERSION=cms-core=^10.4 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
       php: 7.1
     - env: TYPO3_VERSION=cms-core=dev-master TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
       php: 7.1
@@ -41,7 +41,7 @@ matrix:
   allow_failures:
     - env: TYPO3_VERSION=cms=^7.6 TESTING_VERSION=3.0.* MINIMUM_STABILITY=stable COVERAGE=1 FUNCTIONAL=0
     - env: TYPO3_VERSION=cms=^7.6 TESTING_VERSION=3.0.* MINIMUM_STABILITY=stable COVERAGE=0 FUNCTIONAL=0
-    - env: TYPO3_VERSION=cms-core=^10.1 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
+    - env: TYPO3_VERSION=cms-core=^10.4 TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
     - env: TYPO3_VERSION=cms-core=dev-master TESTING_VERSION=dev-master MINIMUM_STABILITY=dev COVERAGE=0 FUNCTIONAL=0
 
 notifications:
@@ -64,12 +64,14 @@ cache:
 before_install:
   - composer self-update
   - composer --version
+  # turn off XDebug for speed up
+  - phpenv config-rm xdebug.ini || return 0
 
 before_script:
   # Switch stability for dev-master of typo3
   - composer config minimum-stability $MINIMUM_STABILITY
   # Installs TYPO3
-  - travis_wait composer require -v typo3/$TYPO3_VERSION nimut/testing-framework=$TESTING_VERSION
+  - travis_wait 30 composer require -v typo3/$TYPO3_VERSION nimut/testing-framework=$TESTING_VERSION
   # Restore composer.json
   - git checkout composer.json
   - export "TYPO3_PATH_WEB"=$PWD/.Build/Web;
