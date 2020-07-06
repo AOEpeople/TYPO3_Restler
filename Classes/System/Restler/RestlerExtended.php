@@ -63,8 +63,10 @@ class RestlerExtended extends Restler
     {
         parent::__construct($productionMode, $refreshCache);
 
-        // restler uses echo;die otherwise and then Typo3 standard mechanisms will not be called
-        Defaults::$returnResponse = true;
+        if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
+            // restler uses echo;die otherwise and then Typo3 standard mechanisms will not be called
+            Defaults::$returnResponse = true;
+        }
 
         // adds format support for application/hal+json
         Scope::$classAliases['HalJsonFormat'] = 'Aoe\Restler\System\Restler\Format\HalJsonFormat';
