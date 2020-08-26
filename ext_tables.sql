@@ -7,7 +7,7 @@ CREATE TABLE cf_cache_restler (
   expires int(11) unsigned NOT NULL default '0',
   content mediumblob,
   PRIMARY KEY  (id),
-  KEY cache_id (identifier,expires)
+  KEY cache_id (identifier(180),expires)
 ) ENGINE=InnoDB;
 
 #
@@ -18,6 +18,7 @@ CREATE TABLE cf_cache_restler_tags (
   identifier varchar(250) NOT NULL default '',
   tag varchar(250) NOT NULL default '',
   PRIMARY KEY  (id),
-  KEY cache_id (identifier),
-  KEY cache_tag (tag)
+  KEY cache_id (identifier(191)),
+  KEY cache_tag (tag(191))
+
 ) ENGINE=InnoDB;
