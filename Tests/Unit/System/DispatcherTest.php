@@ -66,7 +66,7 @@ class DispatcherTest extends BaseTest
 
             $this->dispatcher = new Dispatcher($this->objectManager);
         } else {
-            $this->markTestSkipped("No MiddlewareInterface");
+            $this->markTestSkipped("No MiddlewareInterface available in TYPO3 < 9.5");
         }
     }
 
