@@ -82,4 +82,3 @@ jobs:
         run: |
           wget https://scrutinizer-ci.com/ocular.phar
           php ocular.phar code-coverage:upload --format=php-clover unittest-coverage.clover
-          find 'Tests/Functional' -wholename '*Test.php' -exec php ocular.phar code-coverage:upload --format=php-clover {}functionaltest-coverage.clover \;
