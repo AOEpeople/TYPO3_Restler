@@ -64,7 +64,6 @@ class DispatcherWithoutMiddlewareImplementationTest extends BaseTest
         } else {
             $this->markTestSkipped("Only MiddlewareInterface");
         }
-
     }
 
     /**

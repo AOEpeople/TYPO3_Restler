@@ -50,7 +50,7 @@ class ExtensionConfigurationTest extends BaseTest
      */
     protected function setUp()
     {
-        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
+        if (!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
             parent::setUp();
 
             $this->originalExtConfig = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'];
@@ -63,7 +63,7 @@ class ExtensionConfigurationTest extends BaseTest
 
             $this->configuration = new ExtensionConfiguration();
         } else {
-            $this->markTestSkipped("We have Typo3 coniguration management");
+            $this->markTestSkipped("We have TYPO3 configuration management");
         }
     }
 
