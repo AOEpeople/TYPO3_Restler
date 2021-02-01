@@ -1,6 +1,6 @@
 # Restler for TYPO3
 
-[![Build Status](https://travis-ci.org/AOEpeople/TYPO3_Restler.svg?branch=master)](https://travis-ci.org/AOEpeople/TYPO3_Restler)
+[![Build Status](https://github.com/AOEpeople/TYPO3_Restler/workflows/CI/badge.svg?branch=master)](https://github.com/AOEpeople/TYPO3_Restler/actions)
 [![Code Coverage](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=master)
 
@@ -19,7 +19,7 @@ To render the documentation locally, please use the official TYPO3 Documentation
 
 ## Copyright / License
 
-Copyright: (c) 2015 - 2018, AOE GmbH
+Copyright: (c) 2015 - 2021, AOE GmbH
 License: GPLv3, <http://www.gnu.org/licenses/gpl-3.0.en.html>  
 
 [1]: http://typo3.org/extensions/repository/view/restler
