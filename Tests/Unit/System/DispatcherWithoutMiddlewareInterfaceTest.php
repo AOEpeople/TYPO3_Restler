@@ -26,22 +26,20 @@ namespace Aoe\Restler\Tests\Unit\System;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\System\Dispatcher;
 use Aoe\Restler\System\DispatcherWithoutMiddlewareImplementation;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package Restler
  * @subpackage Tests
  *
- * @covers \Aoe\Restler\System\Dispatcher
+ * @covers \Aoe\Restler\System\DispatcherWithoutMiddlewareImplementation
  */
 class DispatcherWithoutMiddlewareImplementationTest extends BaseTest
 {
     /**
-     * @var Dispatcher
+     * @var DispatcherWithoutMiddlewareImplementation
      */
     protected $dispatcher;
     /**
@@ -62,7 +60,7 @@ class DispatcherWithoutMiddlewareImplementationTest extends BaseTest
             $this->dispatcher = new DispatcherWithoutMiddlewareImplementation($this->restlerBuilder);
 
         } else {
-            $this->markTestSkipped("Only MiddlewareInterface");
+            $this->markTestSkipped("Outdated if MiddlewareInterface is available (TYPO3 > 8.7)");
         }
     }
 
