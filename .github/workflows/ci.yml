@@ -47,19 +47,19 @@ jobs:
         run: find . -name \*.php ! -path "./.Build/*" ! -path "./scripts/*" ! -path "./typo3_src/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
 
       - name: Unit Tests without coverage
-        if: matrix.typo3 != '^8.7' || matrix.php != '7.2'
+        if: matrix.typo3 != '^9.5' || matrix.php != '7.2'
         run: |
           export "UNIT_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml
-          .Build/bin/phpunit --colors --debug -c $UNIT_XML Tests/Unit
+          .Build/bin/phpunit --colors -c $UNIT_XML Tests/Unit
 
       - name: Unit Tests with coverage
-        if: matrix.typo3 == '^8.7' && matrix.php == '7.2'
+        if: matrix.typo3 == '^9.5' && matrix.php == '7.2'
         run: |
           export "UNIT_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml
-          .Build/bin/phpunit --whitelist Classes --coverage-clover=unittest-coverage.clover --colors --debug -c $UNIT_XML Tests/Unit/
+          .Build/bin/phpunit --whitelist Classes --coverage-clover=unittest-coverage.clover --colors -c $UNIT_XML Tests/Unit/
 
       - name: Upload coverage results to Scrutinizer
-        if: matrix.typo3 == '^8.7'
+        if: matrix.typo3 == '^9.5'
         run: |
           wget https://scrutinizer-ci.com/ocular.phar
           php ocular.phar code-coverage:upload --format=php-clover unittest-coverage.clover
