@@ -1,8 +1,8 @@
 # Restler for TYPO3
 
-[![Build Status](https://github.com/AOEpeople/TYPO3_Restler/workflows/CI/badge.svg?branch=master)](https://github.com/AOEpeople/TYPO3_Restler/actions)
-[![Code Coverage](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=master)
+[![Build Status](https://github.com/AOEpeople/TYPO3_Restler/workflows/CI/badge.svg?branch=main)](https://github.com/AOEpeople/TYPO3_Restler/actions)
+[![Code Coverage](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=main)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=main)
 
 This is a TYPO3-Extension, that integrates the popular [PHP REST-framework Restler](https://github.com/Luracast/Restler) in TYPO3.
 
