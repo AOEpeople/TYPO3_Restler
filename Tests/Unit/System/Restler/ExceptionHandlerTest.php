@@ -1,10 +1,11 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit\System\Restler;
 
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -50,100 +51,100 @@ class ExceptionHandlerTest extends BaseTest
             $message = 'dummy-message';
         }
 
-        $restler = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restler = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
 
-        $exceptionHandler = $this->getMockBuilder('Aoe\\Restler\\Tests\\Unit\\System\\Restler\\Fixtures\\ExceptionHandler')
+        $exceptionHandler = $this->getMockBuilder(ExceptionHandler::class)
             ->disableOriginalConstructor()
-            ->setMethods(array('getRestler', 'getRestlerException'))
+            ->setMethods(['getRestler', 'getRestlerException'])
             ->getMock();
-        $exceptionHandler->expects($this->any())->method('getRestler')->will($this->returnValue($restler));
+        $exceptionHandler->expects(self::any())->method('getRestler')->willReturn($restler);
 
         $restlerException = new RestException($statusCode, $message);
 
-        $exceptionHandler->expects($this->any())->method('getRestlerException')->will($this->returnValue($restlerException));
+        $exceptionHandler->expects(self::any())->method('getRestlerException')->willReturn($restlerException);
 
-        $functionName = 'handle'.$statusCode;
-        $this->assertEquals($message, $exceptionHandler->$functionName());
+        $functionName = 'handle' . $statusCode;
+        self::assertEquals($message, $exceptionHandler->$functionName());
     }
 
     public function statusCodes()
     {
-        return array(
-            array(100, 'Continue'),
-            array(101, 'Switching Protocols'),
-            array(102, 'Processing'),
-            array(200, 'OK'),
-            array(201, 'Created'),
-            array(202, 'Accepted'),
-            array(203, 'Non-Authoritative Information'),
-            array(204, 'No Content'),
-            array(205, 'Reset Content'),
-            array(206, 'Partial Content'),
-            array(207, 'Multi-Status'),
-            array(208, 'Already Reported'),
-            array(226, 'IM Used'),
-            array(300, 'Multiple Choices'),
-            array(301, 'Moved Permanently'),
-            array(302, 'Found'),
-            array(303, 'See Other'),
-            array(304, 'Not Modified'),
-            array(305, 'Use Proxy'),
-            array(306, 'Switch Proxy'),
-            array(307, 'Temporary Redirect'),
-            array(308, 'Permanent Redirect'),
-            array(400, 'Bad Request'),
-            array(401, 'Unauthorized'),
-            array(402, 'Payment Required'),
-            array(403, 'Forbidden'),
-            array(404, 'Not Found'),
-            array(405, 'Method Not Allowed'),
-            array(406, 'Not Acceptable'),
-            array(407, 'Proxy Authentication Required'),
-            array(408, 'Request Timeout'),
-            array(409, 'Conflict'),
-            array(410, 'Gone'),
-            array(411, 'Length Required'),
-            array(412, 'Precondition Failed'),
-            array(413, 'Request Entity Too Large'),
-            array(414, 'Request-URI Too Long'),
-            array(415, 'Unsupported Media Type'),
-            array(416, 'Requested Range Not Satisfiable'),
-            array(417, 'Expectation Failed'),
-            array(418, 'I\'m a teapot'),
-            array(420, ''),
-            array(421, 'Misdirected Request'),
-            array(422, 'Unprocessable Entity'),
-            array(423, 'Locked'),
-            array(424, 'Failed Dependency'),
-            array(425, 'Unordered Collection'),
-            array(426, 'Upgrade Required'),
-            array(428, 'Precondition Required'),
-            array(429, 'Too Many Requests'),
-            array(430, ''),
-            array(431, 'Request Header Fields Too Large'),
-            array(444, 'No Response'),
-            array(449, 'Retry With'),
-            array(451, 'Unavailable For Legal Reasons'),
-            array(500, 'Internal Server Error'),
-            array(501, 'Not Implemented'),
-            array(502, 'Bad Gateway'),
-            array(503, 'Service Unavailable'),
-            array(504, 'Gateway Timeout'),
-            array(505, 'HTTP Version Not Supported'),
-            array(506, 'Variant Also Negotiates'),
-            array(507, 'Insufficient Storage'),
-            array(508, ''),
-            array(509, 'Bandwidth Limit Exceeded'),
-            array(510, 'Not Extended'),
-            array(900, ''),
-            array(901, ''),
-            array(902, ''),
-            array(903, ''),
-            array(904, ''),
-            array(905, ''),
-            array(906, ''),
-            array(907, ''),
-            array(950, ''),
-        );
+        return [
+            [100, 'Continue'],
+            [101, 'Switching Protocols'],
+            [102, 'Processing'],
+            [200, 'OK'],
+            [201, 'Created'],
+            [202, 'Accepted'],
+            [203, 'Non-Authoritative Information'],
+            [204, 'No Content'],
+            [205, 'Reset Content'],
+            [206, 'Partial Content'],
+            [207, 'Multi-Status'],
+            [208, 'Already Reported'],
+            [226, 'IM Used'],
+            [300, 'Multiple Choices'],
+            [301, 'Moved Permanently'],
+            [302, 'Found'],
+            [303, 'See Other'],
+            [304, 'Not Modified'],
+            [305, 'Use Proxy'],
+            [306, 'Switch Proxy'],
+            [307, 'Temporary Redirect'],
+            [308, 'Permanent Redirect'],
+            [400, 'Bad Request'],
+            [401, 'Unauthorized'],
+            [402, 'Payment Required'],
+            [403, 'Forbidden'],
+            [404, 'Not Found'],
+            [405, 'Method Not Allowed'],
+            [406, 'Not Acceptable'],
+            [407, 'Proxy Authentication Required'],
+            [408, 'Request Timeout'],
+            [409, 'Conflict'],
+            [410, 'Gone'],
+            [411, 'Length Required'],
+            [412, 'Precondition Failed'],
+            [413, 'Request Entity Too Large'],
+            [414, 'Request-URI Too Long'],
+            [415, 'Unsupported Media Type'],
+            [416, 'Requested Range Not Satisfiable'],
+            [417, 'Expectation Failed'],
+            [418, 'I\'m a teapot'],
+            [420, ''],
+            [421, 'Misdirected Request'],
+            [422, 'Unprocessable Entity'],
+            [423, 'Locked'],
+            [424, 'Failed Dependency'],
+            [425, 'Unordered Collection'],
+            [426, 'Upgrade Required'],
+            [428, 'Precondition Required'],
+            [429, 'Too Many Requests'],
+            [430, ''],
+            [431, 'Request Header Fields Too Large'],
+            [444, 'No Response'],
+            [449, 'Retry With'],
+            [451, 'Unavailable For Legal Reasons'],
+            [500, 'Internal Server Error'],
+            [501, 'Not Implemented'],
+            [502, 'Bad Gateway'],
+            [503, 'Service Unavailable'],
+            [504, 'Gateway Timeout'],
+            [505, 'HTTP Version Not Supported'],
+            [506, 'Variant Also Negotiates'],
+            [507, 'Insufficient Storage'],
+            [508, ''],
+            [509, 'Bandwidth Limit Exceeded'],
+            [510, 'Not Extended'],
+            [900, ''],
+            [901, ''],
+            [902, ''],
+            [903, ''],
+            [904, ''],
+            [905, ''],
+            [906, ''],
+            [907, ''],
+            [950, ''],
+        ];
     }
 }

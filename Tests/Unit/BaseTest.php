@@ -4,7 +4,7 @@ namespace Aoe\Restler\Tests\Unit;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -25,16 +25,15 @@ namespace Aoe\Restler\Tests\Unit;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Tests\UnitTestCase;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use Nimut\TestingFramework\TestCase\UnitTestCase;
+use TYPO3\CMS\Core\Core\Environment;
 
 /**
  * @package Restler
  * @subpackage Tests
  *
  */
-abstract class BaseTest extends \Nimut\TestingFramework\TestCase\UnitTestCase
+abstract class BaseTest extends UnitTestCase
 {
     /**
      * call unaccessible method of an object (to test it)
@@ -43,7 +42,7 @@ abstract class BaseTest extends \Nimut\TestingFramework\TestCase\UnitTestCase
      * @param  array $methodParams
      * @return mixed
      */
-    protected function callUnaccessibleMethodOfObject($object, $methodName, array $methodParams = array())
+    protected function callUnaccessibleMethodOfObject($object, $methodName, array $methodParams = [])
     {
         $class = new \ReflectionClass(get_class($object));
         $method = $class->getMethod($methodName);
@@ -69,7 +68,7 @@ abstract class BaseTest extends \Nimut\TestingFramework\TestCase\UnitTestCase
     {
         // set auto-loading for restler
         if (class_exists('\TYPO3\CMS\Core\Core\Environment')) {
-            $autoload = \TYPO3\CMS\Core\Core\Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
+            $autoload = Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
         } else {
             $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
         }

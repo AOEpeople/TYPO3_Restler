@@ -4,7 +4,7 @@ namespace Aoe\Restler\Tests\Unit\System\TYPO3;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -55,10 +55,10 @@ class CacheTest extends BaseTest
     {
         parent::setUp();
 
-        $this->frontendCacheMock = $this->getMockBuilder('TYPO3\\CMS\\Core\\Cache\\Frontend\\FrontendInterface')
+        $this->frontendCacheMock = $this->getMockBuilder(FrontendInterface::class)
             ->disableOriginalConstructor()->getMock();
-        $cacheManagerMock = $this->getMockBuilder('TYPO3\\CMS\\Core\\Cache\\CacheManager')->disableOriginalConstructor()->getMock();
-        $cacheManagerMock->expects($this->once())->method('getCache')->with('cache_restler')->willReturn($this->frontendCacheMock);
+        $cacheManagerMock = $this->getMockBuilder(CacheManager::class)->disableOriginalConstructor()->getMock();
+        $cacheManagerMock->expects(self::once())->method('getCache')->with('cache_restler')->willReturn($this->frontendCacheMock);
 
         $this->cache = new Cache($cacheManagerMock);
     }
@@ -69,11 +69,11 @@ class CacheTest extends BaseTest
     public function responseShouldBeCacheableWhenRestEndpointUseGetMethodAndTypo3CacheIsConfigured()
     {
         $requestMethod = 'GET';
-        $apiMethodInfoMetadata = array();
+        $apiMethodInfoMetadata = [];
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_EXPIRES] = 0;
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_TAGS] = 'tag_a';
 
-        $this->assertTrue($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
+        self::assertTrue($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
     }
 
     /**
@@ -82,11 +82,11 @@ class CacheTest extends BaseTest
     public function responseShouldNotBeCacheableWhenRestEndpointUseNoGetMethod()
     {
         $requestMethod = 'POST';
-        $apiMethodInfoMetadata = array();
+        $apiMethodInfoMetadata = [];
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_EXPIRES] = 0;
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_TAGS] = 'tag_a';
 
-        $this->assertFalse($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
+        self::assertFalse($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
     }
 
     /**
@@ -95,7 +95,7 @@ class CacheTest extends BaseTest
     public function responseShouldNotBeCacheableWhenTypo3CacheIsNotConfigured()
     {
         $requestMethod = 'GET';
-        $apiMethodInfoMetadata = array();
+        $apiMethodInfoMetadata = [];
 
         $this->assertFalse($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
     }
@@ -107,17 +107,17 @@ class CacheTest extends BaseTest
     {
         $responseCode = 123;
         $requestUri = 'api/shop/devices';
-        $requestGetData = array('limit' => 10);
-        $apiMethodInfoMetadata = array();
+        $requestGetData = ['limit' => 10];
+        $apiMethodInfoMetadata = [];
         $apiMethodInfoMetadata['expires'] = 600;
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_EXPIRES] = 3600;
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_TAGS] = 'tag_a,tag_b';
         $responseData = 'this-would-be-the-json-response-which-we-want-cache';
         $responseFormatClass = 'this-would-be-the-php-class-which-can-decode/encode-the-json-response';
-        $responseHeaders = array('header1', 'header2');
+        $responseHeaders = ['header1', 'header2'];
 
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
-        $cacheData = array();
+        $cacheData = [];
         $cacheData['responseCode'] = $responseCode;
         $cacheData['requestUri'] = $requestUri;
         $cacheData['requestGetData'] = $requestGetData;
@@ -125,10 +125,10 @@ class CacheTest extends BaseTest
         $cacheData['responseFormatClass'] = $responseFormatClass;
         $cacheData['responseHeaders'] = $responseHeaders;
         $cacheData['frontendCacheExpires'] = $apiMethodInfoMetadata['expires'];
-        $typo3CacheTags = array('tag_a', 'tag_b');
+        $typo3CacheTags = ['tag_a', 'tag_b'];
         $typo3CacheExpires = $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_EXPIRES];
 
-        $this->frontendCacheMock->expects($this->once())->method('set')->with($identifier, $cacheData, $typo3CacheTags, $typo3CacheExpires);
+        $this->frontendCacheMock->expects(self::once())->method('set')->with($identifier, $cacheData, $typo3CacheTags, $typo3CacheExpires);
 
         $this->cache->cacheResponseByTypo3Cache(
             $responseCode,
@@ -147,12 +147,12 @@ class CacheTest extends BaseTest
     public function shouldGetCacheEntry()
     {
         $requestUri = 'api/shop/devices';
-        $requestGetData = array('limit' => 10);
+        $requestGetData = ['limit' => 10];
         $response = 'this-would-be-the-json-response-from-cache';
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
 
-        $this->frontendCacheMock->expects($this->once())->method('get')->with($identifier)->willReturn($response);
-        $this->assertEquals($response, $this->cache->getCacheEntry($requestUri, $requestGetData));
+        $this->frontendCacheMock->expects(self::once())->method('get')->with($identifier)->willReturn($response);
+        self::assertEquals($response, $this->cache->getCacheEntry($requestUri, $requestGetData));
     }
 
     /**
@@ -161,11 +161,11 @@ class CacheTest extends BaseTest
     public function shouldHaveCacheEntry()
     {
         $requestUri = 'api/shop/devices';
-        $requestGetData = array('limit' => 10);
+        $requestGetData = ['limit' => 10];
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
 
-        $this->frontendCacheMock->expects($this->once())->method('has')->with($identifier)->willReturn(true);
-        $this->assertTrue($this->cache->hasCacheEntry($requestUri, $requestGetData));
+        $this->frontendCacheMock->expects(self::once())->method('has')->with($identifier)->willReturn(true);
+        self::assertTrue($this->cache->hasCacheEntry($requestUri, $requestGetData));
     }
 
     /**
@@ -174,11 +174,11 @@ class CacheTest extends BaseTest
     public function shouldHaveNoCacheEntry()
     {
         $requestUri = 'api/shop/devices';
-        $requestGetData = array('limit' => 10);
+        $requestGetData = ['limit' => 10];
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
 
         $this->frontendCacheMock->expects($this->once())->method('has')->with($identifier)->willReturn(false);
-        $this->assertFalse($this->cache->hasCacheEntry($requestUri, $requestGetData));
+        self::assertFalse($this->cache->hasCacheEntry($requestUri, $requestGetData));
     }
 
     /**

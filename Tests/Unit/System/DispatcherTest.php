@@ -5,7 +5,7 @@ namespace Aoe\Restler\Tests\Unit\System;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -29,6 +29,7 @@ namespace Aoe\Restler\Tests\Unit\System;
 use Aoe\Restler\System\Dispatcher;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
+use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
@@ -58,11 +59,11 @@ class DispatcherTest extends BaseTest
     {
         if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
             parent::setUp();
-            $this->restlerBuilder = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\Builder')
+            $this->restlerBuilder = $this->getMockBuilder(Builder::class)
                 ->disableOriginalConstructor()->getMock();
-            $this->objectManager = $this->getMockBuilder('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
+            $this->objectManager = $this->getMockBuilder(ObjectManager::class)
                 ->disableOriginalConstructor()->getMock();
-            $this->objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValue($this->restlerBuilder));
+            $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->restlerBuilder);
 
             $this->dispatcher = new Dispatcher($this->objectManager);
         } else {
@@ -75,7 +76,7 @@ class DispatcherTest extends BaseTest
      */
     public function canProcessToTypo3()
     {
-        $requestUri = $this->getMockBuilder('TYPO3\\CMS\\Core\\Http\\Uri')->getMock();
+        $requestUri = $this->getMockBuilder(Uri::class)->getMock();
         $requestUri->method('getPath')->willReturn("/api/device");
         $requestUri->method('withQuery')->willReturn($requestUri);
         $requestUri->method('withPath')->willReturn($requestUri);
@@ -84,7 +85,7 @@ class DispatcherTest extends BaseTest
         $request->method('getUri')->willReturn($requestUri);
 
         $handler = $this->getMockBuilder('Psr\\Http\\Server\\RequestHandlerInterface')->getMock();
-        $handler->expects($this->once())->method('handle');
+        $handler->expects(self::once())->method('handle');
 
         $this->dispatcher->process($request, $handler);
     }

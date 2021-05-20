@@ -4,7 +4,7 @@ namespace Aoe\Restler\Tests\Unit\Configuration;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -63,7 +63,7 @@ class ExtensionConfigurationTest extends BaseTest
 
             $this->configuration = new ExtensionConfiguration();
         } else {
-            $this->markTestSkipped("We have TYPO3 configuration management");
+            self::markTestSkipped("We have TYPO3 configuration management");
         }
     }
 
@@ -81,7 +81,7 @@ class ExtensionConfigurationTest extends BaseTest
      */
     public function canCheckThatCacheRefreshingIsNotEnabled()
     {
-        $this->assertFalse($this->configuration->isCacheRefreshingEnabled());
+        self::assertFalse($this->configuration->isCacheRefreshingEnabled());
     }
 
     /**
@@ -89,7 +89,7 @@ class ExtensionConfigurationTest extends BaseTest
      */
     public function canCheckThatProductionContextIsSet()
     {
-        $this->assertTrue($this->configuration->isProductionContextSet());
+        self::assertTrue($this->configuration->isProductionContextSet());
     }
 
     /**
@@ -97,7 +97,7 @@ class ExtensionConfigurationTest extends BaseTest
      */
     public function canCheckThatOnlineDocumentationIsEnabled()
     {
-        $this->assertTrue($this->configuration->isOnlineDocumentationEnabled());
+        self::assertTrue($this->configuration->isOnlineDocumentationEnabled());
     }
 
     /**
@@ -105,6 +105,6 @@ class ExtensionConfigurationTest extends BaseTest
      */
     public function canGetPathOfOnlineDocumentation()
     {
-        $this->assertEquals('api_explorer', $this->configuration->getPathOfOnlineDocumentation());
+        self::assertEquals('api_explorer', $this->configuration->getPathOfOnlineDocumentation());
     }
 }

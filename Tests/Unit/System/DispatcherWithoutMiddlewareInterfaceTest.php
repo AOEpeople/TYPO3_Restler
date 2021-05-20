@@ -5,7 +5,7 @@ namespace Aoe\Restler\Tests\Unit\System;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -29,6 +29,7 @@ namespace Aoe\Restler\Tests\Unit\System;
 use Aoe\Restler\System\DispatcherWithoutMiddlewareImplementation;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
+use Luracast\Restler\Restler;
 
 /**
  * @package Restler
@@ -54,13 +55,13 @@ class DispatcherWithoutMiddlewareImplementationTest extends BaseTest
         if (!interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
 
             parent::setUp();
-            $this->restlerBuilder = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\Builder')
+            $this->restlerBuilder = $this->getMockBuilder(Builder::class)
                 ->disableOriginalConstructor()->getMock();
 
             $this->dispatcher = new DispatcherWithoutMiddlewareImplementation($this->restlerBuilder);
 
         } else {
-            $this->markTestSkipped("Outdated if MiddlewareInterface is available (TYPO3 > 8.7)");
+            self::markTestSkipped("Outdated if MiddlewareInterface is available (TYPO3 > 8.7)");
         }
     }
 
@@ -69,9 +70,9 @@ class DispatcherWithoutMiddlewareImplementationTest extends BaseTest
      */
     public function canDispatch()
     {
-        $restlerObj = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
-        $restlerObj->expects($this->once())->method('handle');
-        $this->restlerBuilder->expects($this->once())->method('build')->will($this->returnValue($restlerObj));
+        $restlerObj = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $restlerObj->expects(self::once())->method('handle');
+        $this->restlerBuilder->expects(self::once())->method('build')->willReturn($restlerObj);
         $this->dispatcher->dispatch();
     }
 }
