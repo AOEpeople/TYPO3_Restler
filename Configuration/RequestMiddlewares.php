@@ -8,11 +8,12 @@ return [
         'aoe/restler/system/dispatcher' => [
             'target' => \Aoe\Restler\System\Dispatcher::class,
             'after' => [
-                'typo3/cms-frontend/prepare-tsfe-rendering'
+                'typo3/cms-frontend/site',
             ],
             'before' => [
-                'typo3/cms-frontend/shortcut-and-mountpoint-redirect'
-            ]
+                'typo3/cms-frontend/base-redirect-resolver',
+                'typo3/cms-frontend/static-route-resolver',
+            ],
         ],
     ],
 ];
