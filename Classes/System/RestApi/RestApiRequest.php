@@ -33,6 +33,7 @@ use Luracast\Restler\Format\JsonFormat;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Exception;
 use stdClass;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * This class represents a single REST-API-request, which can be called from PHP.
@@ -151,8 +152,8 @@ class RestApiRequest extends Restler
      */
     protected function getRestApiJsonFormat()
     {
-        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        return $objectManager->get('Aoe\\Restler\\System\\RestApi\\RestApiJsonFormat');
+        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
+        return $objectManager->get(RestApiJsonFormat::class);
     }
 
     /**

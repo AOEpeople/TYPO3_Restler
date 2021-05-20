@@ -4,7 +4,7 @@ namespace Aoe\Restler\Configuration;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -44,7 +44,7 @@ class ExtensionConfiguration implements SingletonInterface
      */
     public function __construct()
     {
-        if(class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
+        if (class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
             $this->configuration = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('restler');
         } else {
             $this->configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler']);

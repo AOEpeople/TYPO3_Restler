@@ -4,7 +4,7 @@ namespace Aoe\Restler\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -92,7 +92,7 @@ class BeUserAuthenticationController implements iAuthenticate
      * return dummy string, because we DON'T need that for our case (we use NO base-authentification via REST-API)
      *
      * @return string
-     * @see Luracast\Restler\iAuthenticate
+     * @see \Luracast\Restler\iAuthenticate
      */
     public function __getWWWAuthenticateString()
     {

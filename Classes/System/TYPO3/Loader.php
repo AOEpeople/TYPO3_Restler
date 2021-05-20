@@ -177,7 +177,7 @@ class Loader implements SingletonInterface
         }
         if (false === array_key_exists('TSFE', $GLOBALS)) {
             $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController',
+                TypoScriptFrontendController::class,
                 $GLOBALS['TYPO3_CONF_VARS'],
                 $pageId,
                 $type
