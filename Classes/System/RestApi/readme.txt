@@ -12,8 +12,7 @@ This can be useful, if:
 You can also define, that some ('internal') REST-API-Endpoints are ONLY callable by using a PHP-client. To archive this, you must
 implement your own Authentication-class (to protect the 'internal' REST-API-Endpoint) and than check, if a REST-API-Endpoint is
 currently running and was called by using the PHP-client:
-$objectManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-$restApiClient = $objectManager->get('Aoe\\Restler\\System\\RestApi\\RestApiClient');
+$restApiClient = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager)->get(\Aoe\Restler\System\RestApi\RestApiClient::class);
 if ($restApiClient->isExecutingRequest()) {
     if ($restApiClient->isProductionContextSet()) {
         // REST-API-Endpoint is currently running and was called by using the PHP-client (in production-mode)
@@ -31,28 +30,25 @@ If we want to call REST-API-endpoints by using a PHP-client, than the code shoul
 ##################################################
 # Example to do GET-request (without GET-params) #
 ##################################################
-$objectManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-$restApiClient = $objectManager->get('Aoe\\Restler\\System\\RestApi\\RestApiClient');
+$restApiClient = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager)->get(\Aoe\Restler\System\RestApi\RestApiClient::class);
 $result = $restApiClient->executeRequest('GET', '/api/products/320');
 
 
 ###############################################
 # Example to do GET-request (with GET-params) #
 ###############################################
-$getData  = array('context' => 'mobile');
-$objectManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-$restApiClient = $objectManager->get('Aoe\\Restler\\System\\RestApi\\RestApiClient');
+$getData = ['context' => 'mobile'];
+$restApiClient = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager)->get(\Aoe\Restler\System\RestApi\RestApiClient::class);
 $result = $restApiClient->executeRequest('GET', '/api/products/320', $getData);
 
 
 ##############################
 # Example to do POST-request #
 ##############################
-$getData  = array();
-$postData = array(
+$getData = [];
+$postData = [
     'id' => 1,
     'name' => 'Test-Product'
-);
-$objectManager = TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-$restApiClient = $objectManager->get('Aoe\\Restler\\System\\RestApi\\RestApiClient');
+];
+$restApiClient = GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager)->get(\Aoe\Restler\System\RestApi\RestApiClient::class);
 $result = $restApiClient->executeRequest('POST', '/api/products', $getData, $postData);

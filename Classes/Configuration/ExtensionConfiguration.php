@@ -45,7 +45,7 @@ class ExtensionConfiguration implements SingletonInterface
     public function __construct()
     {
         if (class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
-            $this->configuration = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('restler');
+            $this->configuration = GeneralUtility::makeInstance('TYPO3\CMS\Core\Configuration\ExtensionConfiguration')->get('restler');
         } else {
             $this->configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler']);
         }

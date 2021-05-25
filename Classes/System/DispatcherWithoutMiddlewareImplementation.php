@@ -27,6 +27,8 @@ namespace Aoe\Restler\System;
  ***************************************************************/
 
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package Restler
@@ -41,9 +43,9 @@ class DispatcherWithoutMiddlewareImplementation
     /**
      * @param RestlerBuilder $restlerBuilder
      */
-    public function __construct(RestlerBuilder $restlerBuilder)
+    public function __construct(RestlerBuilder $restlerBuilder = null)
     {
-        $this->restlerBuilder = $restlerBuilder;
+        $this->restlerBuilder = $restlerBuilder ?? GeneralUtility::makeInstance(ObjectManager::class)->get(RestlerBuilder::class);
     }
 
     /**

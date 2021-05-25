@@ -36,7 +36,8 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package Restler
@@ -49,28 +50,22 @@ class Builder implements SingletonInterface
     private $extensionConfiguration;
 
     /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @var CacheManager
      */
     private $cacheManager;
 
     /**
      * @param ExtensionConfiguration $extensionConfiguration
-     * @param ObjectManagerInterface $objectManager
      * @param CacheManager $cacheManager
      */
     public function __construct(
-        ExtensionConfiguration $extensionConfiguration,
-        ObjectManagerInterface $objectManager,
-        CacheManager $cacheManager
+        ExtensionConfiguration $extensionConfiguration = null,
+        CacheManager $cacheManager = null
     ) {
-        $this->extensionConfiguration = $extensionConfiguration;
-        $this->objectManager = $objectManager;
-        $this->cacheManager = $cacheManager;
+        $this->extensionConfiguration = $extensionConfiguration ?? GeneralUtility::makeInstance(ObjectManager::class)
+                ->get(ExtensionConfiguration::class);
+
+        $this->cacheManager = $cacheManager ?? GeneralUtility::makeInstance(ObjectManager::class)->get(CacheManager::class);
     }
 
     /**
@@ -78,7 +73,7 @@ class Builder implements SingletonInterface
      *
      * @return RestlerExtended
      */
-    public function build(ServerRequestInterface $request=null)
+    public function build(ServerRequestInterface $request = null)
     {
         $this->setAutoLoading();
         $this->setCacheDirectory();
@@ -93,10 +88,10 @@ class Builder implements SingletonInterface
     /**
      * @return RestlerExtended
      */
-    protected function createRestlerObject(ServerRequestInterface $request=null)
+    protected function createRestlerObject(ServerRequestInterface $request = null)
     {
         return new RestlerExtended(
-            $this->objectManager->get(Cache::class),
+            GeneralUtility::makeInstance(ObjectManager::class)->get(Cache::class),
             $this->extensionConfiguration->isProductionContextSet(),
             $this->extensionConfiguration->isCacheRefreshingEnabled(),
             $request
@@ -137,7 +132,7 @@ class Builder implements SingletonInterface
         }
 
         foreach ($restlerConfigurationClasses as $restlerConfigurationClass) {
-            $configurationObj = $this->objectManager->get($restlerConfigurationClass);
+            $configurationObj = GeneralUtility::makeInstance(ObjectManager::class)->get($restlerConfigurationClass);
 
             /* @var $configurationObj ConfigurationInterface */
             if (false === $configurationObj instanceof ConfigurationInterface) {
@@ -185,9 +180,8 @@ class Builder implements SingletonInterface
         }
 
         // set auto-loading for extBase/TYPO3-classes
-        $objectManager = $this->objectManager;
-        Scope::$resolver = function ($className) use ($objectManager) {
-            return $objectManager->get($className);
+        Scope::$resolver = function ($className) {
+            return GeneralUtility::makeInstance(ObjectManager::class)->get($className);
         };
     }
 

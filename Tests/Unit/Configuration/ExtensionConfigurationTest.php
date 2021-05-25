@@ -63,7 +63,7 @@ class ExtensionConfigurationTest extends BaseTest
 
             $this->configuration = new ExtensionConfiguration();
         } else {
-            self::markTestSkipped("We have TYPO3 configuration management");
+            self::markTestSkipped("We have TYPO3 configuration management (TYPO3 > 8.7)");
         }
     }
 

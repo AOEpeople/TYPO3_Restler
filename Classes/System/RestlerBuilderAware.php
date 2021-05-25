@@ -33,11 +33,6 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 abstract class RestlerBuilderAware
 {
     /**
-     * @var object
-     */
-    private $objectManager;
-
-    /**
      * @var RestlerBuilder
      */
     private $restlerBuilder;
@@ -49,15 +44,10 @@ abstract class RestlerBuilderAware
 
     private $apiPrefix = '/api';
 
-    public function __construct(ObjectManager $objectManager = null)
+    public function __construct(ExtensionConfiguration $extensionConfiguration = null)
     {
-        if (!$objectManager) {
-            $this->objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        } else {
-            $this->objectManager = $objectManager;
-        }
-
-        $this->extensionConfiguration = $this->objectManager->get(ExtensionConfiguration::class);
+        $this->extensionConfiguration = $extensionConfiguration ?? GeneralUtility::makeInstance(ObjectManager::class)
+                ->get(ExtensionConfiguration::class);
     }
 
     /**
@@ -68,7 +58,8 @@ abstract class RestlerBuilderAware
     protected function getRestlerBuilder()
     {
         if ($this->restlerBuilder === null) {
-            $this->restlerBuilder = $this->objectManager->get(RestlerBuilder::class);
+            $this->restlerBuilder = GeneralUtility::makeInstance(ObjectManager::class)
+                ->get(RestlerBuilder::class);
         }
 
         return $this->restlerBuilder;

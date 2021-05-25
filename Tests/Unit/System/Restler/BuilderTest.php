@@ -33,16 +33,15 @@ use Aoe\Restler\Tests\Unit\BaseTest;
 use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\InvalidConfiguration;
 use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\ValidConfiguration;
 use Luracast\Restler\Defaults;
-use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit_Framework_MockObject_MockObject;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Http\Uri;
-use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package Restler
@@ -71,7 +70,7 @@ class BuilderTest extends BaseTest
      */
     protected $extensionConfigurationMock;
     /**
-     * @var ObjectManagerInterface|MockObject
+     * @var ObjectManager|MockObject
      */
     protected $objectManagerMock;
     /**
@@ -89,9 +88,13 @@ class BuilderTest extends BaseTest
         $this->originalRestlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
         $this->originalServerVars = $_SERVER;
 
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerMock);
+
         $this->extensionConfigurationMock = $this->getMockBuilder(ExtensionConfiguration::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()->getMock();
         $this->cacheManagerMock = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
@@ -100,7 +103,6 @@ class BuilderTest extends BaseTest
 
         $this->builder = new Builder(
             $this->extensionConfigurationMock,
-            $this->objectManagerMock,
             $this->cacheManagerMock
         );
     }
@@ -156,13 +158,11 @@ class BuilderTest extends BaseTest
         $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
         $configurationMock->expects(self::once())->method('configureRestler')->with($restlerObj);
 
+        $this->objectManagerMock->expects(self::once())->method('get')->with($configurationClass)->willReturn($configurationMock);
+
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = [$configurationClass];
         unset($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']);
-
-        $this->objectManagerMock
-            ->expects(self::once())->method('get')->with($configurationClass)
-            ->willReturn($configurationMock);
 
         $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', [$restlerObj]);
     }
@@ -178,13 +178,11 @@ class BuilderTest extends BaseTest
         $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
         $configurationMock->expects(self::exactly(2))->method('configureRestler')->with($restlerObj);
 
+        $this->objectManagerMock->expects(self::exactly(2))->method('get')->with($configurationClass)->willReturn($configurationMock);
+
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = [$configurationClass];
         $GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'] = [$configurationClass];
-
-        $this->objectManagerMock
-            ->expects(self::exactly(2))->method('get')->with($configurationClass)
-            ->willReturn($configurationMock);
 
         $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', [$restlerObj]);
     }
@@ -251,9 +249,9 @@ class BuilderTest extends BaseTest
 
         $this->callUnaccessibleMethodOfObject($this->builder, 'setAutoLoading');
 
-        $closureToCreateObjectsViaObjectManager = Scope::$resolver;
-        self::assertTrue(is_callable($closureToCreateObjectsViaObjectManager));
-        $createdObj = $closureToCreateObjectsViaObjectManager($requestedClass);
+        $closureToCreateObjectsViaTypo3GeneralUtilityMakeInstance = Scope::$resolver;
+        self::assertTrue(is_callable($closureToCreateObjectsViaTypo3GeneralUtilityMakeInstance));
+        $createdObj = $closureToCreateObjectsViaTypo3GeneralUtilityMakeInstance($requestedClass);
         self::assertEquals($createdObj, $this->extensionConfigurationMock);
     }
 

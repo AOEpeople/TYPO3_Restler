@@ -152,8 +152,7 @@ class RestApiClient implements SingletonInterface
      */
     protected function getRestlerBuilder()
     {
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        return $objectManager->get(RestlerBuilder::class);
+        return GeneralUtility::makeInstance(ObjectManager::class)->get(RestlerBuilder::class);
     }
 
     /**
