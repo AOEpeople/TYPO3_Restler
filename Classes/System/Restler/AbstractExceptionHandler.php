@@ -60,15 +60,15 @@ abstract class AbstractExceptionHandler
      */
     public function handle100()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle101()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle102()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
 
 
@@ -77,43 +77,43 @@ abstract class AbstractExceptionHandler
      */
     public function handle200()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle201()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle202()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle203()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle204()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle205()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle206()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle207()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle208()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle226()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
 
 
@@ -122,39 +122,39 @@ abstract class AbstractExceptionHandler
      */
     public function handle300()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle301()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle302()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle303()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle304()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle305()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle306()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle307()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle308()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
 
 
@@ -163,135 +163,135 @@ abstract class AbstractExceptionHandler
      */
     public function handle400()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle401()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle402()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle403()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle404()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle405()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle406()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle407()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle408()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle409()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle410()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle411()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle412()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle413()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle414()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle415()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle416()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle417()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle418()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle420()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle421()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle422()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle423()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle424()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle425()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle426()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle428()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle429()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle430()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle431()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle444()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle449()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle451()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
 
     /**
@@ -299,47 +299,47 @@ abstract class AbstractExceptionHandler
      */
     public function handle500()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle501()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle502()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle503()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle504()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle505()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle506()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle507()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle508()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle509()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle510()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
 
 
@@ -348,39 +348,39 @@ abstract class AbstractExceptionHandler
      */
     public function handle900()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle901()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle902()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle903()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle904()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle905()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle906()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle907()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
     public function handle950()
     {
-        return $this->handleException($this->getRestlerException(), $this->getRestler());
+        return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
 
     /**
@@ -409,11 +409,14 @@ abstract class AbstractExceptionHandler
     /**
      * This method must be protected - otherwise we can't test this class in unittests
      *
+     * @param array $exceptionHandlerArgs
      * @return RestException
      */
-    protected function getRestlerException()
+    protected function getRestlerException(array $exceptionHandlerArgs = [])
     {
-        $restler = $this->getRestler();
-        return $restler->exception;
+        if (count($exceptionHandlerArgs) > 0 && $exceptionHandlerArgs[0] instanceof RestException) {
+            return $exceptionHandlerArgs[0];
+        }
+        return $this->getRestler()->exception;
     }
 }
