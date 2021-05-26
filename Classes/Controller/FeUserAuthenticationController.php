@@ -114,9 +114,10 @@ class FeUserAuthenticationController implements iAuthenticate
             return false;
         }
 
-        $this->typo3Loader->initializeFrontEndUser($this->determinePageIdFromArguments());
+        $this->typo3Loader->initializeFrontendUser($this->determinePageIdFromArguments());
 
-        $feUser = $this->typo3Loader->getFrontEndUser();
+        $feUser = $this->typo3Loader->getFrontendUser();
+
         if ($feUser->user === null) {
             return false;
         }

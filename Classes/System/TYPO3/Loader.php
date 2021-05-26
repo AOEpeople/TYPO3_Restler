@@ -45,28 +45,28 @@ class Loader implements SingletonInterface
      *
      * @var boolean
      */
-    private $isBackEndUserInitialized = false;
+    private $isBackendUserInitialized = false;
     /**
      * defines, if usage of frontend-user is enabled (this is needed, if the eID-script must determine the frontend-user)
      *
      * @var boolean
      */
-    private $isFrontEndUserInitialized = false;
+    private $isFrontendUserInitialized = false;
     /**
      * defines, if frontend-rendering is enabled (this is needed, if the eID-script must render some content-elements or RTE-fields)
      *
      * @var boolean
      */
-    private $isFrontEndRenderingInitialized = false;
+    private $isFrontendRenderingInitialized = false;
 
     /**
      * @return BackendUserAuthentication
      * @throws LogicException
      */
-    public function getBackEndUser()
+    public function getBackendUser()
     {
-        if ($this->isBackEndUserInitialized === false) {
-            throw new LogicException('be-user is not initialized - initialize with BE-user with method \'initializeBackendEndUser\'');
+        if ($this->isBackendUserInitialized === false) {
+            throw new LogicException('be-user is not initialized - initialize with BE-user with method \'initializeBackendUser\'');
         }
         return $GLOBALS['BE_USER'];
     }
@@ -75,10 +75,10 @@ class Loader implements SingletonInterface
      * @return FrontendUserAuthentication
      * @throws LogicException
      */
-    public function getFrontEndUser()
+    public function getFrontendUser()
     {
-        if ($this->isFrontEndUserInitialized === false) {
-            throw new LogicException('fe-user is not initialized - initialize with FE-user with method \'initializeFrontEndUser\'');
+        if ($this->isFrontendUserInitialized === false) {
+            throw new LogicException('fe-user is not initialized - initialize with FE-user with method \'initializeFrontendUser\'');
         }
         return $GLOBALS['TSFE']->fe_user;
     }
@@ -86,10 +86,10 @@ class Loader implements SingletonInterface
     /**
      * enable the usage of backend-user
      */
-    public function initializeBackendEndUser()
+    public function initializeBackendUser()
     {
-        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
-            if ($this->isBackEndUserInitialized === true) {
+        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
+            if ($this->isBackendUserInitialized === true) {
                 return;
             }
 
@@ -100,7 +100,7 @@ class Loader implements SingletonInterface
             $bootstrapObj->initializeLanguageObject();
         }
 
-        $this->isBackEndUserInitialized = true;
+        $this->isBackendUserInitialized = true;
     }
 
     /**
@@ -109,14 +109,14 @@ class Loader implements SingletonInterface
      * @param integer $pageId
      * @param integer $type
      */
-    public function initializeFrontEndUser($pageId = 0, $type = 0)
+    public function initializeFrontendUser($pageId = 0, $type = 0)
     {
-        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
+        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
             if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->fe_user)) {
                 // FE-user is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
-                $this->isFrontEndUserInitialized = true;
+                $this->isFrontendUserInitialized = true;
             }
-            if ($this->isFrontEndUserInitialized === true) {
+            if ($this->isFrontendUserInitialized === true) {
                 return;
             }
 
@@ -124,7 +124,7 @@ class Loader implements SingletonInterface
             $tsfe->initFEUser();
         }
 
-        $this->isFrontEndUserInitialized = true;
+        $this->isFrontendUserInitialized = true;
     }
 
     /**
@@ -135,21 +135,21 @@ class Loader implements SingletonInterface
      *
      * @return void
      */
-    public function initializeFrontEndRendering($pageId = 0, $type = 0)
+    public function initializeFrontendRendering($pageId = 0, $type = 0)
     {
-        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
+        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
             if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->tmpl)) {
                 // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
-                $this->isFrontEndRenderingInitialized = true;
+                $this->isFrontendRenderingInitialized = true;
             }
-            if ($this->isFrontEndRenderingInitialized === true) {
+            if ($this->isFrontendRenderingInitialized === true) {
                 return;
             }
 
             $GLOBALS['TT'] = new NullTimeTracker();
 
-            if ($this->isFrontEndUserInitialized === false) {
-                $this->initializeFrontEndUser($pageId, $type);
+            if ($this->isFrontendUserInitialized === false) {
+                $this->initializeFrontendUser($pageId, $type);
             }
 
             EidUtility::initTCA();
@@ -162,7 +162,7 @@ class Loader implements SingletonInterface
             $tsfe->calculateLinkVars();
         }
 
-        $this->isFrontEndRenderingInitialized = true;
+        $this->isFrontendRenderingInitialized = true;
     }
 
     /**
