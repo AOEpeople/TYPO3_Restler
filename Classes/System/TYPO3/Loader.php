@@ -25,13 +25,17 @@ namespace Aoe\Restler\System\TYPO3;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
+use TYPO3\CMS\Core\Site\Entity\NullSite;
+use TYPO3\CMS\Core\TimeTracker\TimeTracker;
+use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
 use LogicException;
 
@@ -137,16 +141,18 @@ class Loader implements SingletonInterface
      */
     public function initializeFrontendRendering($pageId = 0, $type = 0)
     {
-        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
-            if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->tmpl)) {
-                // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
-                $this->isFrontendRenderingInitialized = true;
-            }
-            if ($this->isFrontendRenderingInitialized === true) {
-                return;
-            }
+        if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->tmpl)) {
+            // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+            $this->isFrontendRenderingInitialized = true;
+        }
+        if ($this->isFrontendRenderingInitialized === true) {
+            return;
+        }
 
-            $GLOBALS['TT'] = new NullTimeTracker();
+        if (class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
+            $this->getTsfe($pageId, $type);
+        } else {
+            $GLOBALS['TT'] = GeneralUtility::makeInstance(TimeTracker::class);
 
             if ($this->isFrontendUserInitialized === false) {
                 $this->initializeFrontendUser($pageId, $type);
@@ -170,19 +176,37 @@ class Loader implements SingletonInterface
      * @param integer $type
      * @return TypoScriptFrontendController
      */
-    private function getTsfe($pageId, $type = 0)
+    private function getTsfe($pageId = 0, $type = 0)
     {
-        if ($type > 0) {
-            $_GET['type'] = $type;
+        if (false === array_key_exists('TSFE', $GLOBALS) && $GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
+            return $GLOBALS['TSFE'];
         }
-        if (false === array_key_exists('TSFE', $GLOBALS)) {
+
+        if (class_exists(\TYPO3\CMS\Core\Site\Entity\NullSite::class)) {
+            $context = GeneralUtility::makeInstance(Context::class);
+            $nullSite = new NullSite();
+            $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
+                TypoScriptFrontendController::class,
+                $context,
+                $nullSite,
+                $nullSite->getDefaultLanguage()
+            );
+            $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class, $context);
+            $GLOBALS['TSFE']->tmpl = GeneralUtility::makeInstance(TemplateService::class);
+        } else {
+            if ($type > 0) {
+                $_GET['type'] = $type;
+            }
             $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
                 TypoScriptFrontendController::class,
                 $GLOBALS['TYPO3_CONF_VARS'],
                 $pageId,
                 $type
             );
+            $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class);
+            $GLOBALS['TSFE']->tmpl = GeneralUtility::makeInstance(TemplateService::class);
         }
+
         return $GLOBALS['TSFE'];
     }
 }
