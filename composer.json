@@ -22,11 +22,11 @@
         "luracast/restler": "3.0.0.20191001"
     },
     "require-dev": {
-        "nimut/testing-framework": "*",
-        "phpunit/phpcov": "*",
+        "nimut/testing-framework": "^5.2",
+        "phpunit/phpcov": "^5.0",
         "squizlabs/php_codesniffer": "*",
-        "sebastian/phpcpd": "*",
-        "phpmd/phpmd": "*"
+        "sebastian/phpcpd": "^4.1",
+        "phpmd/phpmd": "^2.10"
     },
     "repositories": [
         {
