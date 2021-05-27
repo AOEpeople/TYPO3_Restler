@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        typo3: [ ^8.7, ^9.5, ^10.4 ]
+        typo3: [ ^9.5, ^10.4 ]
         php: [ '7.2', '7.3', '7.4' ]
         experimental: [false]
 
