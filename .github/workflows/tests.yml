@@ -1,6 +1,14 @@
 name: Tests
 
-on: [ push, pull_request ]
+on:
+  push:
+    branches:
+      - '!TYPO3V8'
+      - '!TYPO3V9'
+  pull_request:
+    branches:
+      - '!TYPO3V8'
+      - '!TYPO3V9'
 
 jobs:
   build:
