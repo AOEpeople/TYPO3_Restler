@@ -4,7 +4,7 @@ namespace Aoe\Restler\System\TYPO3;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -92,19 +92,22 @@ class Loader implements SingletonInterface
      */
     public function initializeBackendUser()
     {
-        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
-            if ($this->isBackendUserInitialized === true) {
-                return;
-            }
+        if ($this->isBackendUserInitialized === true) {
+            return;
+        }
 
+        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
             $bootstrapObj = Bootstrap::getInstance();
             $bootstrapObj->loadExtensionTables(true);
             $bootstrapObj->initializeBackendUser();
             $bootstrapObj->initializeBackendAuthentication(true);
             $bootstrapObj->initializeLanguageObject();
-        }
 
-        $this->isBackendUserInitialized = true;
+            $this->isBackendUserInitialized = true;
+
+        } else if ($this->hasBackendUser()) {
+            $this->isBackendUserInitialized = true;
+        }
     }
 
     /**
@@ -116,7 +119,7 @@ class Loader implements SingletonInterface
     public function initializeFrontendUser($pageId = 0, $type = 0)
     {
         if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
-            if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->fe_user)) {
+            if ($this->hasActiveFrontendUserSession()) {
                 // FE-user is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
                 $this->isFrontendUserInitialized = true;
             }
@@ -141,7 +144,7 @@ class Loader implements SingletonInterface
      */
     public function initializeFrontendRendering($pageId = 0, $type = 0)
     {
-        if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->tmpl)) {
+        if ($this->isFrontendInitialized()) {
             // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
             $this->isFrontendRenderingInitialized = true;
         }
@@ -169,6 +172,39 @@ class Loader implements SingletonInterface
         }
 
         $this->isFrontendRenderingInitialized = true;
+    }
+
+    /**
+     * Checks if a frontend user is logged in and the session is active.
+     *
+     * @return bool
+     */
+    protected function isFrontendInitialized()
+    {
+        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
+            $GLOBALS['TSFE']->tmpl instanceof TemplateService;
+    }
+
+    /**
+     * Checks if a frontend user is logged in and the session is active.
+     *
+     * @return bool
+     */
+    protected function hasActiveFrontendUserSession()
+    {
+        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
+            $GLOBALS['TSFE']->fe_user instanceof FrontendUserAuthentication &&
+            isset($GLOBALS['TSFE']->fe_user->user['uid']);
+    }
+
+    /**
+     * Checks if a backend user is logged in.
+     *
+     * @return bool
+     */
+    protected function hasBackendUser()
+    {
+        return ($GLOBALS['BE_USER'] ?? null) instanceof BackendUserAuthentication;
     }
 
     /**
