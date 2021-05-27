@@ -1,6 +1,12 @@
 name: Tests TYPO3V8
 
-on: [ push, pull_request ]
+on:
+  push:
+    branches:
+      - TYPO3V8
+  pull_request:
+    branches:
+      - TYPO3V8
 
 jobs:
   build:
