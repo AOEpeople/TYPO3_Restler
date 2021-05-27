@@ -27,8 +27,9 @@ namespace Aoe\Restler\System\TYPO3;
 
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Core\Bootstrap;
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Site\Entity\NullSite;
+use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -214,18 +215,21 @@ class Loader implements SingletonInterface
      */
     private function getTsfe($pageId = 0, $type = 0)
     {
-        if (false === array_key_exists('TSFE', $GLOBALS) && $GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
+        if (array_key_exists('TSFE', $GLOBALS) && $GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
             return $GLOBALS['TSFE'];
         }
 
-        if (class_exists(\TYPO3\CMS\Core\Site\Entity\NullSite::class)) {
+        if (class_exists(\TYPO3\CMS\Core\Site\SiteFinder::class)) {
             $context = GeneralUtility::makeInstance(Context::class);
-            $nullSite = new NullSite();
+            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+            $site = $siteFinder->getSiteByPageId($pageId);
+            $pageArguments = new PageArguments($pageId, $type, [], [], []);
             $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
                 TypoScriptFrontendController::class,
                 $context,
-                $nullSite,
-                $nullSite->getDefaultLanguage()
+                $site,
+                $site->getDefaultLanguage(),
+                $pageArguments
             );
             $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class, $context);
             $GLOBALS['TSFE']->tmpl = GeneralUtility::makeInstance(TemplateService::class);
