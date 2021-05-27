@@ -18,7 +18,7 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
-        "typo3/cms-core": "^9.5 || ^10.4",
+        "typo3/cms-core": "^10.4",
         "luracast/restler": "3.0.0.20200415"
     },
     "require-dev": {
@@ -67,7 +67,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "3.1.3-dev"
+            "dev-main": "10.1.0-dev"
         },
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
