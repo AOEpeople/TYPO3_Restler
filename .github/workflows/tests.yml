@@ -1,4 +1,4 @@
-name: Tests TYPO3V8
+name: Tests
 
 on:
   push:
