@@ -1,6 +1,6 @@
 # Restler for TYPO3
 
-[![Build Status](https://github.com/AOEpeople/TYPO3_Restler/workflows/CI/badge.svg?branch=main)](https://github.com/AOEpeople/TYPO3_Restler/actions)
+[![Tests](https://github.com/AOEpeople/TYPO3_Restler/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/AOEpeople/TYPO3_Restler/actions)
 [![Code Coverage](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=main)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=main)
 
