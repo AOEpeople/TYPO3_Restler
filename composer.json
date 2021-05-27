@@ -18,7 +18,7 @@
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
-        "typo3/cms-core": "^8.7 || ^9.5 || ^10.4",
+        "typo3/cms-core": "^8.7",
         "luracast/restler": "3.0.0.20191001"
     },
     "require-dev": {
