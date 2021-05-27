@@ -59,11 +59,3 @@ if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigur
         'groups' => ['system']
     ];
 }
-
-// Routing for pre Typo3 V9 systems
-if (!interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
-    if (TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_FE) {
-        // Register request handler for API
-        \TYPO3\CMS\Core\Core\Bootstrap::getInstance()->registerRequestHandlerImplementation(\Aoe\Restler\Http\RestRequestHandler::class);
-    }
-}

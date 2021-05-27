@@ -46,12 +46,6 @@ use LogicException;
 class Loader implements SingletonInterface
 {
     /**
-     * defines, if usage of backend-user is enabled
-     *
-     * @var boolean
-     */
-    private $isBackendUserInitialized = false;
-    /**
      * defines, if usage of frontend-user is enabled (this is needed, if the eID-script must determine the frontend-user)
      *
      * @var boolean
@@ -65,12 +59,22 @@ class Loader implements SingletonInterface
     private $isFrontendRenderingInitialized = false;
 
     /**
+     * Checks if a backend user is logged in.
+     *
+     * @return bool
+     */
+    public function hasBackendUser()
+    {
+        return ($GLOBALS['BE_USER'] ?? null) instanceof BackendUserAuthentication;
+    }
+
+    /**
      * @return BackendUserAuthentication
      * @throws LogicException
      */
     public function getBackendUser()
     {
-        if ($this->isBackendUserInitialized === false) {
+        if ($this->hasBackendUser() === false) {
             throw new LogicException('be-user is not initialized - initialize with BE-user with method \'initializeBackendUser\'');
         }
         return $GLOBALS['BE_USER'];
@@ -89,29 +93,6 @@ class Loader implements SingletonInterface
     }
 
     /**
-     * enable the usage of backend-user
-     */
-    public function initializeBackendUser()
-    {
-        if ($this->isBackendUserInitialized === true) {
-            return;
-        }
-
-        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
-            $bootstrapObj = Bootstrap::getInstance();
-            $bootstrapObj->loadExtensionTables(true);
-            $bootstrapObj->initializeBackendUser();
-            $bootstrapObj->initializeBackendAuthentication(true);
-            $bootstrapObj->initializeLanguageObject();
-
-            $this->isBackendUserInitialized = true;
-
-        } else if ($this->hasBackendUser()) {
-            $this->isBackendUserInitialized = true;
-        }
-    }
-
-    /**
      * enable the usage of frontend-user
      *
      * @param integer $pageId
@@ -119,19 +100,6 @@ class Loader implements SingletonInterface
      */
     public function initializeFrontendUser($pageId = 0, $type = 0)
     {
-        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
-            if ($this->hasActiveFrontendUserSession()) {
-                // FE-user is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
-                $this->isFrontendUserInitialized = true;
-            }
-            if ($this->isFrontendUserInitialized === true) {
-                return;
-            }
-
-            $tsfe = $this->getTsfe($pageId, $type);
-            $tsfe->initFEUser();
-        }
-
         $this->isFrontendUserInitialized = true;
     }
 
@@ -153,24 +121,7 @@ class Loader implements SingletonInterface
             return;
         }
 
-        if (class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
-            $this->getTsfe($pageId, $type);
-        } else {
-            $GLOBALS['TT'] = GeneralUtility::makeInstance(TimeTracker::class);
-
-            if ($this->isFrontendUserInitialized === false) {
-                $this->initializeFrontendUser($pageId, $type);
-            }
-
-            EidUtility::initTCA();
-
-            $tsfe = $this->getTsfe($pageId, $type);
-            $tsfe->determineId();
-            $tsfe->initTemplate();
-            $tsfe->getConfigArray();
-            $tsfe->newCObj();
-            $tsfe->calculateLinkVars();
-        }
+        $this->getTsfe($pageId, $type);
 
         $this->isFrontendRenderingInitialized = true;
     }
@@ -199,16 +150,6 @@ class Loader implements SingletonInterface
     }
 
     /**
-     * Checks if a backend user is logged in.
-     *
-     * @return bool
-     */
-    protected function hasBackendUser()
-    {
-        return ($GLOBALS['BE_USER'] ?? null) instanceof BackendUserAuthentication;
-    }
-
-    /**
      * @param integer $pageId
      * @param integer $type
      * @return TypoScriptFrontendController
@@ -219,33 +160,19 @@ class Loader implements SingletonInterface
             return $GLOBALS['TSFE'];
         }
 
-        if (class_exists(\TYPO3\CMS\Core\Site\SiteFinder::class)) {
-            $context = GeneralUtility::makeInstance(Context::class);
-            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-            $site = $siteFinder->getSiteByPageId($pageId);
-            $pageArguments = new PageArguments($pageId, $type, [], [], []);
-            $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-                TypoScriptFrontendController::class,
-                $context,
-                $site,
-                $site->getDefaultLanguage(),
-                $pageArguments
-            );
-            $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class, $context);
-            $GLOBALS['TSFE']->tmpl = GeneralUtility::makeInstance(TemplateService::class);
-        } else {
-            if ($type > 0) {
-                $_GET['type'] = $type;
-            }
-            $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-                TypoScriptFrontendController::class,
-                $GLOBALS['TYPO3_CONF_VARS'],
-                $pageId,
-                $type
-            );
-            $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class);
-            $GLOBALS['TSFE']->tmpl = GeneralUtility::makeInstance(TemplateService::class);
-        }
+        $context = GeneralUtility::makeInstance(Context::class);
+        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+        $site = $siteFinder->getSiteByPageId($pageId);
+        $pageArguments = new PageArguments($pageId, $type, [], [], []);
+        $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
+            TypoScriptFrontendController::class,
+            $context,
+            $site,
+            $site->getDefaultLanguage(),
+            $pageArguments
+        );
+        $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class, $context);
+        $GLOBALS['TSFE']->tmpl = GeneralUtility::makeInstance(TemplateService::class);
 
         return $GLOBALS['TSFE'];
     }
