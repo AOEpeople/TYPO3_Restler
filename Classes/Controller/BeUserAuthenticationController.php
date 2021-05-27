@@ -4,7 +4,7 @@ namespace Aoe\Restler\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -79,9 +79,9 @@ class BeUserAuthenticationController implements iAuthenticate
             return false;
         }
 
-        $this->typo3Loader->initializeBackendEndUser();
+        $this->typo3Loader->initializeBackendUser();
 
-        $beUser = $this->typo3Loader->getBackEndUser();
+        $beUser = $this->typo3Loader->getBackendUser();
         if (false === is_array($beUser->user) || empty($beUser->user['uid'])) {
             return false;
         }
@@ -92,7 +92,7 @@ class BeUserAuthenticationController implements iAuthenticate
      * return dummy string, because we DON'T need that for our case (we use NO base-authentification via REST-API)
      *
      * @return string
-     * @see Luracast\Restler\iAuthenticate
+     * @see \Luracast\Restler\iAuthenticate
      */
     public function __getWWWAuthenticateString()
     {

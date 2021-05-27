@@ -25,21 +25,16 @@ namespace Aoe\Restler\System;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\System\Restler\Routes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Http\Stream;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
 {
-    public function __construct(ObjectManager $objectManager = null)
-    {
-        parent::__construct($objectManager);
-    }
-
     /**
      * Process an incoming server request.
      *
@@ -90,7 +85,7 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
 
     private function isRestlerUrl($uri): bool
     {
-        return \Aoe\Restler\System\Restler\Routes::containsUrl($uri);
+        return Routes::containsUrl($uri);
     }
 
     protected function extractSiteUrl($request)

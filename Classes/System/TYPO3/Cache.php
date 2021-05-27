@@ -28,6 +28,8 @@ namespace Aoe\Restler\System\TYPO3;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package Restler
@@ -74,8 +76,9 @@ class Cache implements SingletonInterface
     /**
      * @param CacheManager $cacheManager
      */
-    public function __construct(CacheManager $cacheManager)
+    public function __construct(CacheManager $cacheManager = null)
     {
+        $cacheManager = $cacheManager ?? GeneralUtility::makeInstance(ObjectManager::class)->get(CacheManager::class);
         $this->cache = $cacheManager->getCache('cache_restler');
     }
 

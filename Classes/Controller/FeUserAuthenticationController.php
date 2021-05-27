@@ -4,7 +4,7 @@ namespace Aoe\Restler\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -55,7 +55,7 @@ class FeUserAuthenticationController implements iAuthenticate
      * render TYPO3-contentElements, after the user is authenticated), than the PHPdoc-comment must look like this:
      * @class Aoe\Restler\Controller\FeUserAuthenticationController {@argumentNameOfPageId pageId}
      *
-     * @see Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
+     * @see \Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
      *
      * @var boolean
      */
@@ -77,8 +77,8 @@ class FeUserAuthenticationController implements iAuthenticate
      * When this controller should be used for authentication-checks, than the PHPdoc-comment must look like this:
      * @class Aoe\Restler\Controller\FeUserAuthenticationController {@checkAuthentication true}
      *
-     * @see Aoe\RestlerExamples\Controller\FeUserController::getDataOfLoggedInFeUser
-     * @see Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
+     * @see \Aoe\RestlerExamples\Controller\FeUserController::getDataOfLoggedInFeUser
+     * @see \Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
      *
      * @var boolean
      */
@@ -114,9 +114,10 @@ class FeUserAuthenticationController implements iAuthenticate
             return false;
         }
 
-        $this->typo3Loader->initializeFrontEndUser($this->determinePageIdFromArguments());
+        $this->typo3Loader->initializeFrontendUser($this->determinePageIdFromArguments());
 
-        $feUser = $this->typo3Loader->getFrontEndUser();
+        $feUser = $this->typo3Loader->getFrontendUser();
+
         if ($feUser->user === null) {
             return false;
         }
@@ -127,7 +128,7 @@ class FeUserAuthenticationController implements iAuthenticate
      * return dummy string, because we DON'T need that for our case (we use NO base-authentification via REST-API)
      *
      * @return string
-     * @see Luracast\Restler\iAuthenticate
+     * @see \Luracast\Restler\iAuthenticate
      */
     public function __getWWWAuthenticateString()
     {

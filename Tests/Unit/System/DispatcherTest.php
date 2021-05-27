@@ -5,7 +5,7 @@ namespace Aoe\Restler\Tests\Unit\System;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -26,9 +26,12 @@ namespace Aoe\Restler\Tests\Unit\System;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Dispatcher;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
+use TYPO3\CMS\Core\Http\Uri;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
@@ -48,23 +51,25 @@ class DispatcherTest extends BaseTest
      */
     protected $restlerBuilder;
     /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-    /**
      * setup
      */
     protected function setUp()
     {
         if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
             parent::setUp();
-            $this->restlerBuilder = $this->getMockBuilder('Aoe\\Restler\\System\\Restler\\Builder')
-                ->disableOriginalConstructor()->getMock();
-            $this->objectManager = $this->getMockBuilder('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')
-                ->disableOriginalConstructor()->getMock();
-            $this->objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValue($this->restlerBuilder));
 
-            $this->dispatcher = new Dispatcher($this->objectManager);
+            $this->restlerBuilder = $this->getMockBuilder(Builder::class)
+                ->disableOriginalConstructor()->getMock();
+            $this->objectManager = $this->getMockBuilder(ObjectManager::class)
+                ->disableOriginalConstructor()->getMock();
+            $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->restlerBuilder);
+            GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManager);
+
+            $configurationMock = self::getMockBuilder(ExtensionConfiguration::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+
+            $this->dispatcher = new Dispatcher($configurationMock);
         } else {
             $this->markTestSkipped("No MiddlewareInterface available in TYPO3 < 9.5");
         }
@@ -75,7 +80,7 @@ class DispatcherTest extends BaseTest
      */
     public function canProcessToTypo3()
     {
-        $requestUri = $this->getMockBuilder('TYPO3\\CMS\\Core\\Http\\Uri')->getMock();
+        $requestUri = $this->getMockBuilder(Uri::class)->getMock();
         $requestUri->method('getPath')->willReturn("/api/device");
         $requestUri->method('withQuery')->willReturn($requestUri);
         $requestUri->method('withPath')->willReturn($requestUri);
@@ -84,7 +89,7 @@ class DispatcherTest extends BaseTest
         $request->method('getUri')->willReturn($requestUri);
 
         $handler = $this->getMockBuilder('Psr\\Http\\Server\\RequestHandlerInterface')->getMock();
-        $handler->expects($this->once())->method('handle');
+        $handler->expects(self::once())->method('handle');
 
         $this->dispatcher->process($request, $handler);
     }

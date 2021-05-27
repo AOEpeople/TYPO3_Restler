@@ -151,8 +151,7 @@ class RestApiRequest extends Restler
      */
     protected function getRestApiJsonFormat()
     {
-        $objectManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Object\\ObjectManager');
-        return $objectManager->get('Aoe\\Restler\\System\\RestApi\\RestApiJsonFormat');
+        return GeneralUtility::makeInstance(RestApiJsonFormat::class);
     }
 
     /**

@@ -44,6 +44,11 @@ class RestRequestHandler implements RequestHandlerInterface
     protected $bootstrap;
 
     /**
+     * @var DispatcherWithoutMiddlewareImplementation
+     */
+    protected $dispatcher;
+
+    /**
      * The request handed over
      * @var \Psr\Http\Message\ServerRequestInterface
      */
@@ -53,10 +58,13 @@ class RestRequestHandler implements RequestHandlerInterface
      * Constructor handing over the bootstrap
      *
      * @param Bootstrap $bootstrap
+     * @param DispatcherWithoutMiddlewareImplementation $dispatcher
      */
-    public function __construct(Bootstrap $bootstrap)
+    public function __construct(Bootstrap $bootstrap, DispatcherWithoutMiddlewareImplementation $dispatcher)
     {
-        $this->bootstrap = $bootstrap;
+        $this->bootstrap = $bootstrap ?? GeneralUtility::makeInstance(Bootstrap::class);
+        $this->dispatcher = $dispatcher ?? GeneralUtility::makeInstance(ObjectManager::class)
+                ->get(DispatcherWithoutMiddlewareImplementation::class);
     }
 
     /**
@@ -72,8 +80,7 @@ class RestRequestHandler implements RequestHandlerInterface
         define('REST_API_IS_RUNNING', true);
 
         // Dispatch the API-call
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        $objectManager->get(DispatcherWithoutMiddlewareImplementation::class)->dispatch();
+        $this->dispatcher->dispatch();
     }
 
     /**

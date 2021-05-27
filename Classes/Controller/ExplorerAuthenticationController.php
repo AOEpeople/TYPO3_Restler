@@ -4,7 +4,7 @@ namespace Aoe\Restler\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -25,6 +25,7 @@ namespace Aoe\Restler\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Luracast\Restler\Explorer\v2\Explorer;
 use Luracast\Restler\iAuthenticate;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
@@ -57,7 +58,7 @@ class ExplorerAuthenticationController implements iAuthenticate
      */
     public function __isAllowed()
     {
-        if ($this->restler->apiMethodInfo->className !== 'Luracast\Restler\Explorer\v2\Explorer') {
+        if ($this->restler->apiMethodInfo->className !== Explorer::class) {
             // this controller is not responsible for the authentication
             return false;
         }
@@ -66,7 +67,7 @@ class ExplorerAuthenticationController implements iAuthenticate
 
     /**
      * @return string
-     * @see Luracast\Restler\iAuthenticate
+     * @see \Luracast\Restler\iAuthenticate
      */
     public function __getWWWAuthenticateString()
     {

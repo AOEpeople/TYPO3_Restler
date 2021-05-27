@@ -4,7 +4,7 @@ namespace Aoe\Restler\Tests\Unit\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2016 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -54,7 +54,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->typo3LoaderMock = $this->getMockBuilder('Aoe\\Restler\\System\\TYPO3\\Loader')
+        $this->typo3LoaderMock = $this->getMockBuilder(TYPO3Loader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->controller = new BeUserAuthenticationController($this->typo3LoaderMock);
@@ -73,9 +73,9 @@ class BeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
     {
-        $this->typo3LoaderMock->expects($this->never())->method('initializeBackendEndUser');
-        $this->typo3LoaderMock->expects($this->never())->method('getBackEndUser');
-        $this->assertFalse($this->controller->__isAllowed());
+        $this->typo3LoaderMock->expects(self::never())->method('initializeBackendUser');
+        $this->typo3LoaderMock->expects(self::never())->method('getBackEndUser');
+        self::assertFalse($this->controller->__isAllowed());
     }
 
     /**
@@ -87,10 +87,10 @@ class BeUserAuthenticationControllerTest extends BaseTest
 
         $beUser = $this->getMockBuilder(BackendUserAuthentication::class)->disableOriginalConstructor()->getMock();
 
-        $this->typo3LoaderMock->expects($this->once())->method('initializeBackendEndUser');
-        $this->typo3LoaderMock->expects($this->once())->method('getBackEndUser')->will($this->returnValue($beUser));
+        $this->typo3LoaderMock->expects(self::once())->method('initializeBackendUser');
+        $this->typo3LoaderMock->expects(self::once())->method('getBackEndUser')->willReturn($beUser);
 
-        $this->assertFalse($this->controller->__isAllowed());
+        self::assertFalse($this->controller->__isAllowed());
     }
 
     /**
@@ -105,10 +105,10 @@ class BeUserAuthenticationControllerTest extends BaseTest
             'uid' => 1
         ];
 
-        $this->typo3LoaderMock->expects($this->once())->method('initializeBackendEndUser');
-        $this->typo3LoaderMock->expects($this->once())->method('getBackEndUser')->will($this->returnValue($beUser));
+        $this->typo3LoaderMock->expects(self::once())->method('initializeBackendUser');
+        $this->typo3LoaderMock->expects(self::once())->method('getBackEndUser')->willReturn($beUser);
 
-        $this->assertTrue($this->controller->__isAllowed());
+        self::assertTrue($this->controller->__isAllowed());
     }
 
     /**
@@ -116,6 +116,6 @@ class BeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkForCorrectAuthenticationString()
     {
-        $this->assertEquals('', $this->controller->__getWWWAuthenticateString());
+        self::assertEquals('', $this->controller->__getWWWAuthenticateString());
     }
 }

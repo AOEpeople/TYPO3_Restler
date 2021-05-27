@@ -4,7 +4,7 @@ namespace Aoe\Restler\Tests\Unit\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -28,6 +28,8 @@ namespace Aoe\Restler\Tests\Unit\Controller;
 use Aoe\Restler\Controller\ExplorerAuthenticationController;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\Data\ApiMethodInfo;
+use Luracast\Restler\Explorer\v2\Explorer;
+use Luracast\Restler\Restler;
 
 /**
  * @package Restler
@@ -53,12 +55,12 @@ class ExplorerAuthenticationControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')
+        $this->apiMethodInfoMock = $this->getMockBuilder(ApiMethodInfo::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         /* @var $restlerMock \Luracast\Restler\Restler */
-        $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $this->apiMethodInfoMock;
 
         $this->controller = new ExplorerAuthenticationController();
@@ -71,7 +73,7 @@ class ExplorerAuthenticationControllerTest extends BaseTest
     public function checkThatAuthenticationWillFail()
     {
         $this->apiMethodInfoMock->className = 'NoneExplorerClass';
-        $this->assertFalse($this->controller->__isAllowed());
+        self::assertFalse($this->controller->__isAllowed());
     }
 
     /**
@@ -79,8 +81,8 @@ class ExplorerAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillBeSuccessful()
     {
-        $this->apiMethodInfoMock->className = 'Luracast\Restler\Explorer\v2\Explorer';
-        $this->assertTrue($this->controller->__isAllowed());
+        $this->apiMethodInfoMock->className = Explorer::class;
+        self::assertTrue($this->controller->__isAllowed());
     }
 
     /**
@@ -88,7 +90,7 @@ class ExplorerAuthenticationControllerTest extends BaseTest
      */
     public function checkForCorrectAuthenticationString()
     {
-        $this->apiMethodInfoMock->className = 'Luracast\Restler\Explorer\v2\Explorer';
-        $this->assertEquals('Query name="api_key"', $this->controller->__getWWWAuthenticateString());
+        $this->apiMethodInfoMock->className = Explorer::class;
+        self::assertEquals('Query name="api_key"', $this->controller->__getWWWAuthenticateString());
     }
 }

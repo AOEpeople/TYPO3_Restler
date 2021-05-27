@@ -4,7 +4,7 @@ namespace Aoe\Restler\Tests\Unit\Controller;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -28,6 +28,9 @@ namespace Aoe\Restler\Tests\Unit\Controller;
 use Aoe\Restler\Controller\FeUserAuthenticationController;
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Aoe\Restler\Tests\Unit\BaseTest;
+use Luracast\Restler\Data\ApiMethodInfo;
+use Luracast\Restler\Restler;
+use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 /**
  * @package Restler
@@ -53,7 +56,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
     {
         parent::setUp();
 
-        $this->typo3LoaderMock = $this->getMockBuilder('Aoe\\Restler\\System\\TYPO3\\Loader')
+        $this->typo3LoaderMock = $this->getMockBuilder(TYPO3Loader::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->controller = new FeUserAuthenticationController($this->typo3LoaderMock);
@@ -72,9 +75,9 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
     {
-        $this->typo3LoaderMock->expects($this->never())->method('initializeFrontEndUser');
-        $this->typo3LoaderMock->expects($this->never())->method('getFrontEndUser');
-        $this->assertFalse($this->controller->__isAllowed());
+        $this->typo3LoaderMock->expects(self::never())->method('initializeFrontEndUser');
+        $this->typo3LoaderMock->expects(self::never())->method('getFrontEndUser');
+        self::assertFalse($this->controller->__isAllowed());
     }
 
     /**
@@ -86,10 +89,10 @@ class FeUserAuthenticationControllerTest extends BaseTest
 
         $feUser = $this->createMockedFrontEndUser();
         $feUser->user = null;
-        $this->typo3LoaderMock->expects($this->once())->method('initializeFrontEndUser');
-        $this->typo3LoaderMock->expects($this->once())->method('getFrontEndUser')->will($this->returnValue($feUser));
+        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontEndUser');
+        $this->typo3LoaderMock->expects(self::once())->method('getFrontEndUser')->willReturn($feUser);
 
-        $this->assertFalse($this->controller->__isAllowed());
+        self::assertFalse($this->controller->__isAllowed());
     }
 
     /**
@@ -100,11 +103,11 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $this->controller->checkAuthentication = true;
 
         $feUser = $this->createMockedFrontEndUser();
-        $feUser->user = array('username' => 'max.mustermann');
-        $this->typo3LoaderMock->expects($this->once())->method('initializeFrontEndUser');
-        $this->typo3LoaderMock->expects($this->once())->method('getFrontEndUser')->will($this->returnValue($feUser));
+        $feUser->user = ['username' => 'max.mustermann'];
+        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontEndUser');
+        $this->typo3LoaderMock->expects(self::once())->method('getFrontEndUser')->willReturn($feUser);
 
-        $this->assertTrue($this->controller->__isAllowed());
+        self::assertTrue($this->controller->__isAllowed());
     }
 
     /**
@@ -112,11 +115,11 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function shouldSetPageIdZeroIfArgumentDoesNotExist()
     {
-        /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
-        $apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
+        /** @var ApiMethodInfo $apiMethodInfoMock */
+        $apiMethodInfoMock = $this->getMockBuilder(ApiMethodInfo::class)->disableOriginalConstructor()->getMock();
 
-        /* @var $restlerMock \Luracast\Restler\Restler */
-        $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        /* @var Restler $restlerMock */
+        $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
         $this->inject($this->controller, 'restler', $restlerMock);
 
@@ -127,7 +130,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $method = $reflection->getMethod('determinePageIdFromArguments');
         $method->setAccessible(true);
 
-        $this->assertEquals(0, $method->invoke($this->controller));
+        self::assertEquals(0, $method->invoke($this->controller));
     }
 
     /**
@@ -136,18 +139,18 @@ class FeUserAuthenticationControllerTest extends BaseTest
     public function shouldSetPageIdIfArgumentDoesExist()
     {
         /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
-        $apiMethodInfoMock = $this->getMockBuilder('Luracast\\Restler\\Data\\ApiMethodInfo')->disableOriginalConstructor()->getMock();
+        $apiMethodInfoMock = $this->getMockBuilder(ApiMethodInfo::class)->disableOriginalConstructor()->getMock();
         $apiMethodInfoMock->arguments = array_merge(
             $apiMethodInfoMock->arguments,
-            array('pid' => 0)
+            ['pid' => 0]
         );
         $apiMethodInfoMock->parameters = array_merge(
             $apiMethodInfoMock->parameters,
-            array(0 => 4711)
+            [0 => 4711]
         );
 
-        /* @var $restlerMock \Luracast\Restler\Restler */
-        $restlerMock = $this->getMockBuilder('Luracast\\Restler\\Restler')->disableOriginalConstructor()->getMock();
+        /* @var Restler $restlerMock */
+        $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
         $this->inject($this->controller, 'restler', $restlerMock);
 
@@ -158,7 +161,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $method = $reflection->getMethod('determinePageIdFromArguments');
         $method->setAccessible(true);
 
-        $this->assertEquals(4711, $method->invoke($this->controller));
+        self::assertEquals(4711, $method->invoke($this->controller));
     }
 
     /**
@@ -166,7 +169,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     private function createMockedFrontEndUser()
     {
-        $feUser = $this->getMockBuilder('TYPO3\\CMS\\Frontend\\Authentication\\FrontendUserAuthentication')
+        $feUser = $this->getMockBuilder(FrontendUserAuthentication::class)
             ->disableOriginalConstructor()->getMock();
         return $feUser;
     }
@@ -176,6 +179,6 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkForCorrectAuthenticationString()
     {
-        $this->assertEquals('', $this->controller->__getWWWAuthenticateString());
+        self::assertEquals('', $this->controller->__getWWWAuthenticateString());
     }
 }

@@ -4,7 +4,7 @@ namespace Aoe\Restler\System\TYPO3;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -25,13 +25,17 @@ namespace Aoe\Restler\System\TYPO3;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\TimeTracker\NullTimeTracker;
+use TYPO3\CMS\Core\Site\Entity\NullSite;
+use TYPO3\CMS\Core\TimeTracker\TimeTracker;
+use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Frontend\Utility\EidUtility;
 use LogicException;
 
@@ -45,28 +49,28 @@ class Loader implements SingletonInterface
      *
      * @var boolean
      */
-    private $isBackEndUserInitialized = false;
+    private $isBackendUserInitialized = false;
     /**
      * defines, if usage of frontend-user is enabled (this is needed, if the eID-script must determine the frontend-user)
      *
      * @var boolean
      */
-    private $isFrontEndUserInitialized = false;
+    private $isFrontendUserInitialized = false;
     /**
      * defines, if frontend-rendering is enabled (this is needed, if the eID-script must render some content-elements or RTE-fields)
      *
      * @var boolean
      */
-    private $isFrontEndRenderingInitialized = false;
+    private $isFrontendRenderingInitialized = false;
 
     /**
      * @return BackendUserAuthentication
      * @throws LogicException
      */
-    public function getBackEndUser()
+    public function getBackendUser()
     {
-        if ($this->isBackEndUserInitialized === false) {
-            throw new LogicException('be-user is not initialized - initialize with BE-user with method \'initializeBackendEndUser\'');
+        if ($this->isBackendUserInitialized === false) {
+            throw new LogicException('be-user is not initialized - initialize with BE-user with method \'initializeBackendUser\'');
         }
         return $GLOBALS['BE_USER'];
     }
@@ -75,10 +79,10 @@ class Loader implements SingletonInterface
      * @return FrontendUserAuthentication
      * @throws LogicException
      */
-    public function getFrontEndUser()
+    public function getFrontendUser()
     {
-        if ($this->isFrontEndUserInitialized === false) {
-            throw new LogicException('fe-user is not initialized - initialize with FE-user with method \'initializeFrontEndUser\'');
+        if ($this->isFrontendUserInitialized === false) {
+            throw new LogicException('fe-user is not initialized - initialize with FE-user with method \'initializeFrontendUser\'');
         }
         return $GLOBALS['TSFE']->fe_user;
     }
@@ -86,21 +90,24 @@ class Loader implements SingletonInterface
     /**
      * enable the usage of backend-user
      */
-    public function initializeBackendEndUser()
+    public function initializeBackendUser()
     {
-        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
-            if ($this->isBackEndUserInitialized === true) {
-                return;
-            }
+        if ($this->isBackendUserInitialized === true) {
+            return;
+        }
 
+        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
             $bootstrapObj = Bootstrap::getInstance();
             $bootstrapObj->loadExtensionTables(true);
             $bootstrapObj->initializeBackendUser();
             $bootstrapObj->initializeBackendAuthentication(true);
             $bootstrapObj->initializeLanguageObject();
-        }
 
-        $this->isBackEndUserInitialized = true;
+            $this->isBackendUserInitialized = true;
+
+        } else if ($this->hasBackendUser()) {
+            $this->isBackendUserInitialized = true;
+        }
     }
 
     /**
@@ -109,14 +116,14 @@ class Loader implements SingletonInterface
      * @param integer $pageId
      * @param integer $type
      */
-    public function initializeFrontEndUser($pageId = 0, $type = 0)
+    public function initializeFrontendUser($pageId = 0, $type = 0)
     {
-        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
-            if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->fe_user)) {
+        if (!class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
+            if ($this->hasActiveFrontendUserSession()) {
                 // FE-user is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
-                $this->isFrontEndUserInitialized = true;
+                $this->isFrontendUserInitialized = true;
             }
-            if ($this->isFrontEndUserInitialized === true) {
+            if ($this->isFrontendUserInitialized === true) {
                 return;
             }
 
@@ -124,7 +131,7 @@ class Loader implements SingletonInterface
             $tsfe->initFEUser();
         }
 
-        $this->isFrontEndUserInitialized = true;
+        $this->isFrontendUserInitialized = true;
     }
 
     /**
@@ -135,21 +142,23 @@ class Loader implements SingletonInterface
      *
      * @return void
      */
-    public function initializeFrontEndRendering($pageId = 0, $type = 0)
+    public function initializeFrontendRendering($pageId = 0, $type = 0)
     {
-        if(!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
-            if (array_key_exists('TSFE', $GLOBALS) && is_object($GLOBALS['TSFE']->tmpl)) {
-                // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
-                $this->isFrontEndRenderingInitialized = true;
-            }
-            if ($this->isFrontEndRenderingInitialized === true) {
-                return;
-            }
+        if ($this->isFrontendInitialized()) {
+            // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+            $this->isFrontendRenderingInitialized = true;
+        }
+        if ($this->isFrontendRenderingInitialized === true) {
+            return;
+        }
 
-            $GLOBALS['TT'] = new NullTimeTracker();
+        if (class_exists(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)) {
+            $this->getTsfe($pageId, $type);
+        } else {
+            $GLOBALS['TT'] = GeneralUtility::makeInstance(TimeTracker::class);
 
-            if ($this->isFrontEndUserInitialized === false) {
-                $this->initializeFrontEndUser($pageId, $type);
+            if ($this->isFrontendUserInitialized === false) {
+                $this->initializeFrontendUser($pageId, $type);
             }
 
             EidUtility::initTCA();
@@ -162,7 +171,40 @@ class Loader implements SingletonInterface
             $tsfe->calculateLinkVars();
         }
 
-        $this->isFrontEndRenderingInitialized = true;
+        $this->isFrontendRenderingInitialized = true;
+    }
+
+    /**
+     * Checks if a frontend user is logged in and the session is active.
+     *
+     * @return bool
+     */
+    protected function isFrontendInitialized()
+    {
+        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
+            $GLOBALS['TSFE']->tmpl instanceof TemplateService;
+    }
+
+    /**
+     * Checks if a frontend user is logged in and the session is active.
+     *
+     * @return bool
+     */
+    protected function hasActiveFrontendUserSession()
+    {
+        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
+            $GLOBALS['TSFE']->fe_user instanceof FrontendUserAuthentication &&
+            isset($GLOBALS['TSFE']->fe_user->user['uid']);
+    }
+
+    /**
+     * Checks if a backend user is logged in.
+     *
+     * @return bool
+     */
+    protected function hasBackendUser()
+    {
+        return ($GLOBALS['BE_USER'] ?? null) instanceof BackendUserAuthentication;
     }
 
     /**
@@ -170,19 +212,37 @@ class Loader implements SingletonInterface
      * @param integer $type
      * @return TypoScriptFrontendController
      */
-    private function getTsfe($pageId, $type = 0)
+    private function getTsfe($pageId = 0, $type = 0)
     {
-        if ($type > 0) {
-            $_GET['type'] = $type;
+        if (false === array_key_exists('TSFE', $GLOBALS) && $GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
+            return $GLOBALS['TSFE'];
         }
-        if (false === array_key_exists('TSFE', $GLOBALS)) {
+
+        if (class_exists(\TYPO3\CMS\Core\Site\Entity\NullSite::class)) {
+            $context = GeneralUtility::makeInstance(Context::class);
+            $nullSite = new NullSite();
             $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-                'TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController',
+                TypoScriptFrontendController::class,
+                $context,
+                $nullSite,
+                $nullSite->getDefaultLanguage()
+            );
+            $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class, $context);
+            $GLOBALS['TSFE']->tmpl = GeneralUtility::makeInstance(TemplateService::class);
+        } else {
+            if ($type > 0) {
+                $_GET['type'] = $type;
+            }
+            $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
+                TypoScriptFrontendController::class,
                 $GLOBALS['TYPO3_CONF_VARS'],
                 $pageId,
                 $type
             );
+            $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class);
+            $GLOBALS['TSFE']->tmpl = GeneralUtility::makeInstance(TemplateService::class);
         }
+
         return $GLOBALS['TSFE'];
     }
 }
