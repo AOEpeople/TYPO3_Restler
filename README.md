@@ -22,5 +22,5 @@ To render the documentation locally, please use the official TYPO3 Documentation
 Copyright: (c) 2015 - 2021, AOE GmbH
 License: GPLv3, <http://www.gnu.org/licenses/gpl-3.0.en.html>  
 
-[1]: http://typo3.org/extensions/repository/view/restler
-[2]: http://docs.typo3.org/typo3cms/extensions/restler/
+[1]: https://extensions.typo3.org/extension/restler
+[2]: https://docs.typo3.org/typo3cms/extensions/restler/stable/
