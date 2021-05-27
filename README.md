@@ -10,6 +10,19 @@ This is a TYPO3-Extension, that integrates the popular [PHP REST-framework Restl
 
 You can download and install this extension from the [TER (TYPO3 Extension Repository)][1] or use composer.
 
+```shell script
+composer require aoe/restler
+```
+
+## Versions and Support
+
+| Release  | TYPO3 | PHP   | Fixes will contain
+|---|---|---|---|
+| 10.x.y | 10.4 | 7.2-7.4 | Features, Bugfixes, Security Updates
+| 9.x.y  | 9.5  | 7.2-7.4 | Security Updates
+| 8.x.y  | 8.7  | 7.2-7.4 | Bugfixes, Security Updates
+| 2.x.y  | 7.6  | 5.5-5.6 | End of life
+
 ## Documentation
 
 The documentation is available online at [docs.typo3.org][2].
