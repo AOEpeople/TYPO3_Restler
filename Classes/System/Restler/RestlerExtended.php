@@ -4,7 +4,7 @@ namespace Aoe\Restler\System\Restler;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2016 AOE GmbH <dev@aoe.com>
+ *  (c) 2021 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -32,6 +32,7 @@ use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Site\Entity\Site;
 
 class RestlerExtended extends Restler
 {
@@ -111,7 +112,7 @@ class RestlerExtended extends Restler
         if ($this->request !== null) {
             // set base path depending on site config
             $site = $this->request->getAttribute('site');
-            if ($site !== null && $site instanceof \TYPO3\CMS\Core\Site\Entity\Site) {
+            if ($site !== null && $site instanceof Site) {
                 $siteBasePath = $this->request->getAttribute('site')->getBase()->getPath();
                 if ($siteBasePath !== '/' && $siteBasePath[-1] !== '/') {
                     $siteBasePath .= '/';
