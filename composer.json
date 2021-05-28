@@ -69,7 +69,7 @@
             "rm -rf Tests/",
             "rm .gitignore",
             "rm .scrutinizer.yml"
-        ],
+        ]
     },
     "extra": {
         "branch-alias": {
