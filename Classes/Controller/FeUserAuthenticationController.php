@@ -114,14 +114,9 @@ class FeUserAuthenticationController implements iAuthenticate
             return false;
         }
 
-        $this->typo3Loader->initializeFrontendUser($this->determinePageIdFromArguments());
+        $this->typo3Loader->initializeFrontendRendering($this->determinePageId());
 
-        $feUser = $this->typo3Loader->getFrontendUser();
-
-        if ($feUser->user === null) {
-            return false;
-        }
-        return true;
+        return $this->typo3Loader->hasActiveFrontendUser();
     }
 
     /**
@@ -133,6 +128,17 @@ class FeUserAuthenticationController implements iAuthenticate
     public function __getWWWAuthenticateString()
     {
         return '';
+    }
+
+    /**
+     * @return integer
+     */
+    private function determinePageId()
+    {
+        if (is_numeric($this->argumentNameOfPageId)) {
+            return (integer)$this->argumentNameOfPageId;
+        }
+        return $this->determinePageIdFromArguments();
     }
 
     /**

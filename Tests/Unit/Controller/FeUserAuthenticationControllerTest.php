@@ -75,8 +75,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
     {
-        $this->typo3LoaderMock->expects(self::never())->method('initializeFrontEndUser');
-        $this->typo3LoaderMock->expects(self::never())->method('getFrontEndUser');
+        $this->typo3LoaderMock->expects(self::never())->method('hasActiveFrontendUser');
         self::assertFalse($this->controller->__isAllowed());
     }
 
@@ -87,10 +86,9 @@ class FeUserAuthenticationControllerTest extends BaseTest
     {
         $this->controller->checkAuthentication = true;
 
-        $feUser = $this->createMockedFrontEndUser();
-        $feUser->user = null;
-        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontEndUser');
-        $this->typo3LoaderMock->expects(self::once())->method('getFrontEndUser')->willReturn($feUser);
+        // determinePageId should determine page id from arguments - default page id 0
+        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontendRendering')->with(0);
+        $this->typo3LoaderMock->expects(self::once())->method('hasActiveFrontendUser')->willReturn(false);
 
         self::assertFalse($this->controller->__isAllowed());
     }
@@ -100,12 +98,12 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillBeSuccessful()
     {
+        $this->controller->argumentNameOfPageId = '5';
         $this->controller->checkAuthentication = true;
 
-        $feUser = $this->createMockedFrontEndUser();
-        $feUser->user = ['username' => 'max.mustermann'];
-        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontEndUser');
-        $this->typo3LoaderMock->expects(self::once())->method('getFrontEndUser')->willReturn($feUser);
+        // determinePageId should determine page id from class var argumentNameOfPageId
+        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontendRendering')->with(5);
+        $this->typo3LoaderMock->expects(self::once())->method('hasActiveFrontendUser')->willReturn(true);
 
         self::assertTrue($this->controller->__isAllowed());
     }
@@ -162,16 +160,6 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $method->setAccessible(true);
 
         self::assertEquals(4711, $method->invoke($this->controller));
-    }
-
-    /**
-     * @return \TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication
-     */
-    private function createMockedFrontEndUser()
-    {
-        $feUser = $this->getMockBuilder(FrontendUserAuthentication::class)
-            ->disableOriginalConstructor()->getMock();
-        return $feUser;
     }
 
     /**

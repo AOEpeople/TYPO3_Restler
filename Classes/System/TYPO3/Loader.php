@@ -63,9 +63,10 @@ class Loader implements SingletonInterface
      *
      * @return bool
      */
-    public function hasBackendUser()
+    public function hasActiveBackendUser()
     {
-        return ($GLOBALS['BE_USER'] ?? null) instanceof BackendUserAuthentication;
+        return ($GLOBALS['BE_USER'] ?? null) instanceof BackendUserAuthentication &&
+            $GLOBALS['BE_USER']->user['uid'] > 0;
     }
 
     /**
@@ -74,10 +75,22 @@ class Loader implements SingletonInterface
      */
     public function getBackendUser()
     {
-        if ($this->hasBackendUser() === false) {
+        if ($this->hasActiveBackendUser() === false) {
             throw new LogicException('be-user is not initialized - initialize with BE-user with method \'initializeBackendUser\'');
         }
         return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * Checks if a frontend user is logged in and the session is active.
+     *
+     * @return bool
+     */
+    public function hasActiveFrontendUser()
+    {
+        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
+            $GLOBALS['TSFE']->fe_user instanceof FrontendUserAuthentication &&
+            isset($GLOBALS['TSFE']->fe_user->user['uid']);
     }
 
     /**
@@ -86,21 +99,10 @@ class Loader implements SingletonInterface
      */
     public function getFrontendUser()
     {
-        if ($this->isFrontendUserInitialized === false) {
-            throw new LogicException('fe-user is not initialized - initialize with FE-user with method \'initializeFrontendUser\'');
+        if ($this->hasActiveFrontendUser() === false) {
+            throw new LogicException('fe-user is not initialized');
         }
         return $GLOBALS['TSFE']->fe_user;
-    }
-
-    /**
-     * enable the usage of frontend-user
-     *
-     * @param integer $pageId
-     * @param integer $type
-     */
-    public function initializeFrontendUser($pageId = 0, $type = 0)
-    {
-        $this->isFrontendUserInitialized = true;
     }
 
     /**
@@ -117,17 +119,17 @@ class Loader implements SingletonInterface
             // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
             $this->isFrontendRenderingInitialized = true;
         }
-        if ($this->isFrontendRenderingInitialized === true) {
+        if ($this->isFrontendRenderingInitialized) {
             return;
         }
 
-        $this->getTsfe($pageId, $type);
+        $this->getTypoScriptFrontendController($pageId, $type);
 
         $this->isFrontendRenderingInitialized = true;
     }
 
     /**
-     * Checks if a frontend user is logged in and the session is active.
+     * Checks if the frontend is initialized.
      *
      * @return bool
      */
@@ -138,25 +140,13 @@ class Loader implements SingletonInterface
     }
 
     /**
-     * Checks if a frontend user is logged in and the session is active.
-     *
-     * @return bool
-     */
-    protected function hasActiveFrontendUserSession()
-    {
-        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
-            $GLOBALS['TSFE']->fe_user instanceof FrontendUserAuthentication &&
-            isset($GLOBALS['TSFE']->fe_user->user['uid']);
-    }
-
-    /**
      * @param integer $pageId
      * @param integer $type
      * @return TypoScriptFrontendController
      */
-    private function getTsfe($pageId = 0, $type = 0)
+    private function getTypoScriptFrontendController($pageId = 0, $type = 0)
     {
-        if (array_key_exists('TSFE', $GLOBALS) && $GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
+        if ($this->isFrontendInitialized()) {
             return $GLOBALS['TSFE'];
         }
 
