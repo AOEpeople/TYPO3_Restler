@@ -25,6 +25,7 @@ namespace Aoe\Restler\Configuration;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration as Typo3ExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -42,9 +43,13 @@ class ExtensionConfiguration implements SingletonInterface
      * constructor - loading the current localconf configuration for restler extension
      *
      */
-    public function __construct()
+    public function __construct(Typo3ExtensionConfiguration $configuration = null)
     {
-        $this->configuration = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('restler');
+        if ($configuration === null) {
+            $configuration = GeneralUtility::makeInstance(TYPO3ExtensionConfiguration::class);
+        }
+
+        $this->configuration = $configuration->get('restler');
     }
 
     /**

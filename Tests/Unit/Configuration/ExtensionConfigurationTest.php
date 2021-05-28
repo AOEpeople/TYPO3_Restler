@@ -40,40 +40,25 @@ class ExtensionConfigurationTest extends BaseTest
      * @var ExtensionConfiguration
      */
     protected $configuration;
-    /**
-     * original config of the restler-Extension
-     */
-    protected $originalExtConfig;
 
     /**
      * setup
      */
     protected function setUp()
     {
-        if (!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
-            parent::setUp();
+        $mockedExtConfig = [
+            'refreshCache' => '0',
+            'productionContext' => '1',
+            'enableOnlineDocumentation' => '1',
+            'pathToOnlineDocumentation' => 'api_explorer'
+        ];
 
-            $this->originalExtConfig = $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'];
-            $modifiedExtConfig = unserialize($this->originalExtConfig);
-            $modifiedExtConfig['refreshCache'] = '0';
-            $modifiedExtConfig['productionContext'] = '1';
-            $modifiedExtConfig['enableOnlineDocumentation'] = '1';
-            $modifiedExtConfig['pathToOnlineDocumentation'] = 'api_explorer';
-            $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['restler'] = serialize($modifiedExtConfig);
+        $typo3ExtensionConfiguration = $this->getMockBuilder(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $typo3ExtensionConfiguration->expects(self::once())->method('get')->with('restler')->willReturn($mockedExtConfig);
 
-            $this->configuration = new ExtensionConfiguration();
-        } else {
-            self::markTestSkipped("We have TYPO3 configuration management (TYPO3 > 8.7)");
-        }
-    }
-
-    /**
-     * Cleans up the environment after running a test.
-     */
-    protected function tearDown()
-    {
-        $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['rester'] = $this->originalExtConfig;
-        parent::tearDown();
+        $this->configuration = new ExtensionConfiguration($typo3ExtensionConfiguration);
     }
 
     /**
