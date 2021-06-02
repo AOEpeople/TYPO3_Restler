@@ -27,9 +27,11 @@ namespace Aoe\Restler\System\TYPO3;
 
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\SingletonInterface;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
@@ -103,6 +105,20 @@ class Loader implements SingletonInterface
     }
 
     /**
+     * Initialize backend user with BackendUserAuthenticator middleware.
+     * @see \TYPO3\CMS\Frontend\Middleware\BackendUserAuthenticator
+     */
+    public function initializeBackendUser()
+    {
+        if ($this->hasActiveBackendUser()) {
+            // Frontend-User is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+            return;
+        }
+
+        $this->backendUserAuthenticator->process($this->getRequest(), $this->mockedRequestHandler);
+    }
+
+    /**
      * Checks if a backend user is logged in.
      *
      * @return bool
@@ -123,6 +139,28 @@ class Loader implements SingletonInterface
             throw new LogicException('be-user is not initialized - initialize with BE-user with method \'initializeBackendUser\'');
         }
         return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * Initialize backend user with FrontendUserAuthenticator middleware.
+     * @param string|int $pid List of page IDs (comma separated) or page ID where to look for frontend user records
+     * @see \TYPO3\CMS\Frontend\Middleware\FrontendUserAuthenticator
+     */
+    public function initializeFrontendUser($pid = 0)
+    {
+        if ($this->hasActiveFrontendUser()) {
+            // Frontend-User is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+            return;
+        }
+
+        /* @var ServerRequestInterface $request */
+        $request = $this->getRequest()
+            ->withQueryParams(array_merge($_GET, ['pid' => $pid]))
+            ->withCookieParams($_COOKIE);
+
+        $this->frontendUserAuthenticator->process($request, $this->mockedRequestHandler);
+
+        self::setRequest($this->mockedRequestHandler->getRequest());
     }
 
     /**
@@ -161,16 +199,21 @@ class Loader implements SingletonInterface
             return;
         }
 
+        /** @var SiteFinder $siteFinder */
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+        /** @var Site $site */
         $site = $siteFinder->getSiteByPageId($pageId);
         $pageArguments = new PageArguments($pageId, $type, [], [], []);
+        $normalizedParams = NormalizedParams::createFromRequest($this->getRequest());
 
         /* @var ServerRequestInterface $request */
         $request = $this->getRequest()
             ->withAttribute('site', $site)
             ->withAttribute('routing', $pageArguments)
             ->withAttribute('language', $site->getDefaultLanguage())
-            ->withQueryParams($_GET)->withCookieParams($_COOKIE);
+            ->withAttribute('normalizedParams', $normalizedParams)
+            ->withQueryParams($_GET)
+            ->withCookieParams($_COOKIE);
 
         $this->backendUserAuthenticator->process($request, $this->mockedRequestHandler);
         $request = $this->mockedRequestHandler->getRequest();

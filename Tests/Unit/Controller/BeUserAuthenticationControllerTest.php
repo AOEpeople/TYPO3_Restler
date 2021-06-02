@@ -73,6 +73,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
     {
+        $this->typo3LoaderMock->expects(self::never())->method('initializeBackendUser');
         $this->typo3LoaderMock->expects(self::never())->method('hasActiveBackendUser');
         self::assertFalse($this->controller->__isAllowed());
     }
@@ -84,6 +85,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
     {
         $this->controller->checkAuthentication = true;
 
+        $this->typo3LoaderMock->expects(self::once())->method('initializeBackendUser');
         $this->typo3LoaderMock->expects(self::once())->method('hasActiveBackendUser')->willReturn(false);
 
         self::assertFalse($this->controller->__isAllowed());
@@ -101,6 +103,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
             'uid' => 1
         ];
 
+        $this->typo3LoaderMock->expects(self::once())->method('initializeBackendUser');
         $this->typo3LoaderMock->expects(self::once())->method('hasActiveBackendUser')->willReturn(true);
 
         self::assertTrue($this->controller->__isAllowed());
