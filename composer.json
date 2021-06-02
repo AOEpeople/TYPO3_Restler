@@ -71,6 +71,9 @@
             "rm .scrutinizer.yml"
         ]
     },
+    "scripts-descriptions": {
+        "test:unit": "Run unit-tests - example to run only SOME unit-tests: composer test:unit -- --filter DispatcherTest"
+    },
     "extra": {
         "branch-alias": {
             "dev-main": "10.1.0-dev"
