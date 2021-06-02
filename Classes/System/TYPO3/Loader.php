@@ -61,9 +61,9 @@ class Loader implements SingletonInterface
     private $frontendUserAuthenticator;
 
     /**
-     * @var MockedRequestHandler
+     * @var MockRequestHandler
      */
-    private $mockedRequestHandler;
+    private $mockRequestHandler;
 
     /**
      * @var RequestHandler
@@ -83,7 +83,7 @@ class Loader implements SingletonInterface
     /**
      * @param BackendUserAuthenticator         $backendUserAuthenticator
      * @param FrontendUserAuthenticator        $frontendUserAuthenticator
-     * @param MockedRequestHandler             $mockedRequestHandler
+     * @param MockRequestHandler               $mockRequestHandler
      * @param RequestHandler                   $requestHandler
      * @param TimeTracker                      $timeTracker
      * @param TypoScriptFrontendInitialization $typoScriptFrontendInitialization
@@ -91,14 +91,14 @@ class Loader implements SingletonInterface
     public function __construct(
         BackendUserAuthenticator $backendUserAuthenticator,
         FrontendUserAuthenticator $frontendUserAuthenticator,
-        MockedRequestHandler $mockedRequestHandler,
+        MockRequestHandler $mockRequestHandler,
         RequestHandler $requestHandler,
         TimeTracker $timeTracker,
         TypoScriptFrontendInitialization $typoScriptFrontendInitialization
     ) {
         $this->backendUserAuthenticator = $backendUserAuthenticator;
         $this->frontendUserAuthenticator = $frontendUserAuthenticator;
-        $this->mockedRequestHandler = $mockedRequestHandler;
+        $this->mockRequestHandler = $mockRequestHandler;
         $this->requestHandler = $requestHandler;
         $this->timeTracker = $timeTracker;
         $this->typoScriptFrontendInitialization = $typoScriptFrontendInitialization;
@@ -115,7 +115,7 @@ class Loader implements SingletonInterface
             return;
         }
 
-        $this->backendUserAuthenticator->process($this->getRequest(), $this->mockedRequestHandler);
+        $this->backendUserAuthenticator->process($this->getRequest(), $this->mockRequestHandler);
     }
 
     /**
@@ -158,9 +158,9 @@ class Loader implements SingletonInterface
             ->withQueryParams(array_merge($_GET, ['pid' => $pid]))
             ->withCookieParams($_COOKIE);
 
-        $this->frontendUserAuthenticator->process($request, $this->mockedRequestHandler);
+        $this->frontendUserAuthenticator->process($request, $this->mockRequestHandler);
 
-        self::setRequest($this->mockedRequestHandler->getRequest());
+        self::setRequest($this->mockRequestHandler->getRequest());
     }
 
     /**
@@ -215,18 +215,18 @@ class Loader implements SingletonInterface
             ->withQueryParams($_GET)
             ->withCookieParams($_COOKIE);
 
-        $this->backendUserAuthenticator->process($request, $this->mockedRequestHandler);
-        $request = $this->mockedRequestHandler->getRequest();
+        $this->backendUserAuthenticator->process($request, $this->mockRequestHandler);
+        $request = $this->mockRequestHandler->getRequest();
 
-        $this->frontendUserAuthenticator->process($request, $this->mockedRequestHandler);
-        $request = $this->mockedRequestHandler->getRequest();
+        $this->frontendUserAuthenticator->process($request, $this->mockRequestHandler);
+        $request = $this->mockRequestHandler->getRequest();
 
-        $this->typoScriptFrontendInitialization->process($request, $this->mockedRequestHandler);
-        $request = $this->mockedRequestHandler->getRequest();
+        $this->typoScriptFrontendInitialization->process($request, $this->mockRequestHandler);
+        $request = $this->mockRequestHandler->getRequest();
 
         $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($GLOBALS['TSFE'], $this->timeTracker);
-        $prepareTypoScriptFrontendRendering->process($request, $this->mockedRequestHandler);
-        Loader::setRequest($this->mockedRequestHandler->getRequest());
+        $prepareTypoScriptFrontendRendering->process($request, $this->mockRequestHandler);
+        Loader::setRequest($this->mockRequestHandler->getRequest());
     }
 
     /**

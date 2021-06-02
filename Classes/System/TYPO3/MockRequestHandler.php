@@ -33,7 +33,7 @@ use TYPO3\CMS\Core\Http\NullResponse;
 /**
  * @package Restler
  */
-class MockedRequestHandler implements RequestHandlerInterface
+class MockRequestHandler implements RequestHandlerInterface
 {
     /**
      * @var ServerRequestInterface
