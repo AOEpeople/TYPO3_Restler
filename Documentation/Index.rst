@@ -33,7 +33,7 @@ EXT: Restler
 		restler, REST, API, RESTful
 
 	:Copyright:
-		2015 - 2018
+		2015 - 2021
 
 	:Author:
 		AOE GmbH
@@ -42,7 +42,7 @@ EXT: Restler
 		dev@aoe.com
 
 	:License:
-		Copyright 2015 - 2018 AOE GmbH
+		Copyright 2015 - 2021 AOE GmbH
 
 		All rights reserved
 
