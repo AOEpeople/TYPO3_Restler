@@ -25,19 +25,22 @@ namespace Aoe\Restler\System\TYPO3;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Core\Core\Bootstrap;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
-use TYPO3\CMS\Frontend\Page\PageRepository;
-use TYPO3\CMS\Frontend\Utility\EidUtility;
+use TYPO3\CMS\Frontend\Http\RequestHandler;
+use TYPO3\CMS\Frontend\Middleware\BackendUserAuthenticator;
+use TYPO3\CMS\Frontend\Middleware\FrontendUserAuthenticator;
+use TYPO3\CMS\Frontend\Middleware\PrepareTypoScriptFrontendRendering;
+use TYPO3\CMS\Frontend\Middleware\TypoScriptFrontendInitialization;
 use LogicException;
 
 /**
@@ -46,17 +49,58 @@ use LogicException;
 class Loader implements SingletonInterface
 {
     /**
-     * defines, if usage of frontend-user is enabled (this is needed, if the eID-script must determine the frontend-user)
-     *
-     * @var boolean
+     * @var BackendUserAuthenticator
      */
-    private $isFrontendUserInitialized = false;
+    private $backendUserAuthenticator;
+
     /**
-     * defines, if frontend-rendering is enabled (this is needed, if the eID-script must render some content-elements or RTE-fields)
-     *
-     * @var boolean
+     * @var FrontendUserAuthenticator
      */
-    private $isFrontendRenderingInitialized = false;
+    private $frontendUserAuthenticator;
+
+    /**
+     * @var MockedRequestHandler
+     */
+    private $mockedRequestHandler;
+
+    /**
+     * @var RequestHandler
+     */
+    private $requestHandler;
+
+    /**
+     * @var TimeTracker
+     */
+    protected $timeTracker;
+
+    /**
+     * @var TypoScriptFrontendInitialization
+     */
+    private $typoScriptFrontendInitialization;
+
+    /**
+     * @param BackendUserAuthenticator         $backendUserAuthenticator
+     * @param FrontendUserAuthenticator        $frontendUserAuthenticator
+     * @param MockedRequestHandler             $mockedRequestHandler
+     * @param RequestHandler                   $requestHandler
+     * @param TimeTracker                      $timeTracker
+     * @param TypoScriptFrontendInitialization $typoScriptFrontendInitialization
+     */
+    public function __construct(
+        BackendUserAuthenticator $backendUserAuthenticator,
+        FrontendUserAuthenticator $frontendUserAuthenticator,
+        MockedRequestHandler $mockedRequestHandler,
+        RequestHandler $requestHandler,
+        TimeTracker $timeTracker,
+        TypoScriptFrontendInitialization $typoScriptFrontendInitialization
+    ) {
+        $this->backendUserAuthenticator = $backendUserAuthenticator;
+        $this->frontendUserAuthenticator = $frontendUserAuthenticator;
+        $this->mockedRequestHandler = $mockedRequestHandler;
+        $this->requestHandler = $requestHandler;
+        $this->timeTracker = $timeTracker;
+        $this->typoScriptFrontendInitialization = $typoScriptFrontendInitialization;
+    }
 
     /**
      * Checks if a backend user is logged in.
@@ -88,9 +132,8 @@ class Loader implements SingletonInterface
      */
     public function hasActiveFrontendUser()
     {
-        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
-            $GLOBALS['TSFE']->fe_user instanceof FrontendUserAuthentication &&
-            isset($GLOBALS['TSFE']->fe_user->user['uid']);
+        $frontendUser = $this->getRequest()->getAttribute('frontend.user');
+        return ($frontendUser instanceof FrontendUserAuthentication && is_array($frontendUser->user) && isset($frontendUser->user['uid']));
     }
 
     /**
@@ -102,12 +145,10 @@ class Loader implements SingletonInterface
         if ($this->hasActiveFrontendUser() === false) {
             throw new LogicException('fe-user is not initialized');
         }
-        return $GLOBALS['TSFE']->fe_user;
+        return $this->getRequest()->getAttribute('frontend.user');
     }
 
     /**
-     * enable the frontend-rendering
-     *
      * @param integer $pageId
      * @param integer $type
      *
@@ -117,53 +158,71 @@ class Loader implements SingletonInterface
     {
         if ($this->isFrontendInitialized()) {
             // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
-            $this->isFrontendRenderingInitialized = true;
-        }
-        if ($this->isFrontendRenderingInitialized) {
             return;
         }
 
-        $this->getTypoScriptFrontendController($pageId, $type);
-
-        $this->isFrontendRenderingInitialized = true;
-    }
-
-    /**
-     * Checks if the frontend is initialized.
-     *
-     * @return bool
-     */
-    protected function isFrontendInitialized()
-    {
-        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
-            $GLOBALS['TSFE']->tmpl instanceof TemplateService;
-    }
-
-    /**
-     * @param integer $pageId
-     * @param integer $type
-     * @return TypoScriptFrontendController
-     */
-    private function getTypoScriptFrontendController($pageId = 0, $type = 0)
-    {
-        if ($this->isFrontendInitialized()) {
-            return $GLOBALS['TSFE'];
-        }
-
-        $context = GeneralUtility::makeInstance(Context::class);
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
         $site = $siteFinder->getSiteByPageId($pageId);
         $pageArguments = new PageArguments($pageId, $type, [], [], []);
-        $GLOBALS['TSFE'] = GeneralUtility::makeInstance(
-            TypoScriptFrontendController::class,
-            $context,
-            $site,
-            $site->getDefaultLanguage(),
-            $pageArguments
-        );
-        $GLOBALS['TSFE']->sys_page = GeneralUtility::makeInstance(PageRepository::class, $context);
-        $GLOBALS['TSFE']->tmpl = GeneralUtility::makeInstance(TemplateService::class);
 
-        return $GLOBALS['TSFE'];
+        /* @var ServerRequestInterface $request */
+        $request = $this->getRequest()
+            ->withAttribute('site', $site)
+            ->withAttribute('routing', $pageArguments)
+            ->withAttribute('language', $site->getDefaultLanguage())
+            ->withQueryParams($_GET)->withCookieParams($_COOKIE);
+
+        $this->backendUserAuthenticator->process($request, $this->mockedRequestHandler);
+        $request = $this->mockedRequestHandler->getRequest();
+
+        $this->frontendUserAuthenticator->process($request, $this->mockedRequestHandler);
+        $request = $this->mockedRequestHandler->getRequest();
+
+        $this->typoScriptFrontendInitialization->process($request, $this->mockedRequestHandler);
+        $request = $this->mockedRequestHandler->getRequest();
+
+        $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($GLOBALS['TSFE'], $this->timeTracker);
+        $prepareTypoScriptFrontendRendering->process($request, $this->mockedRequestHandler);
+        Loader::setRequest($this->mockedRequestHandler->getRequest());
+    }
+
+    /**
+     * @return string
+     * @throws LogicException
+     */
+    public function renderPageContent()
+    {
+        if ($this->isFrontendInitialized() === false) {
+            throw new LogicException('FrontendRendering is not initialized - initialize with method \'initializeFrontendRendering\'');
+        }
+
+        /** @var Response $response */
+        $response = $this->requestHandler->handle($this->getRequest());
+        return $response->getBody()->__toString();
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     */
+    public static function setRequest(ServerRequestInterface $request)
+    {
+        $GLOBALS['RESTLER_TYPO3_REQUEST'] = $request;
+    }
+
+    /**
+     * @return ServerRequestInterface
+     */
+    private function getRequest()
+    {
+        return $GLOBALS['RESTLER_TYPO3_REQUEST'];
+    }
+
+    /**
+     * @return boolean
+     */
+    private function isFrontendInitialized()
+    {
+        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
+            $GLOBALS['TSFE']->tmpl instanceof TemplateService;
     }
 }

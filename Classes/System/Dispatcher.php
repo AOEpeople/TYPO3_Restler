@@ -25,6 +25,7 @@ namespace Aoe\Restler\System;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\System\TYPO3\Loader;
 use Aoe\Restler\System\Restler\Routes;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -44,6 +45,8 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
+        Loader::setRequest($request);
+
         if ($this->isRestlerPrefix($this->extractSiteUrl($request))) {
             $restlerObj = $this->getRestlerBuilder()->build($request);
 
