@@ -11,8 +11,9 @@ return [
                 'typo3/cms-frontend/site',
             ],
             'before' => [
-                'typo3/cms-frontend/base-redirect-resolver',
-                'typo3/cms-frontend/static-route-resolver',
+                'typo3/cms-frontend/authentication',
+                'typo3/cms-frontend/backend-user-authentication',
+                'typo3/cms-frontend/page-resolver'
             ],
         ],
     ],

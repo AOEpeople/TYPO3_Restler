@@ -55,24 +55,15 @@ class DispatcherTest extends BaseTest
      */
     protected function setUp()
     {
-        if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
-            parent::setUp();
+        parent::setUp();
 
-            $this->restlerBuilder = $this->getMockBuilder(Builder::class)
-                ->disableOriginalConstructor()->getMock();
-            $this->objectManager = $this->getMockBuilder(ObjectManager::class)
-                ->disableOriginalConstructor()->getMock();
-            $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->restlerBuilder);
-            GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManager);
+        $this->restlerBuilder = $this->getMockBuilder(Builder::class)->disableOriginalConstructor()->getMock();
+        $this->objectManager = $this->getMockBuilder(ObjectManager::class)->disableOriginalConstructor()->getMock();
+        $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->restlerBuilder);
+        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManager);
 
-            $configurationMock = self::getMockBuilder(ExtensionConfiguration::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-
-            $this->dispatcher = new Dispatcher($configurationMock);
-        } else {
-            $this->markTestSkipped("No MiddlewareInterface available in TYPO3 < 9.5");
-        }
+        $configurationMock = self::getMockBuilder(ExtensionConfiguration::class)->disableOriginalConstructor()->getMock();
+        $this->dispatcher = new Dispatcher($configurationMock);
     }
 
     /**

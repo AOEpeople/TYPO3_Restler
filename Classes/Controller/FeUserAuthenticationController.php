@@ -57,7 +57,7 @@ class FeUserAuthenticationController implements iAuthenticate
      *
      * @see \Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
      *
-     * @var boolean
+     * @var string
      */
     public $argumentNameOfPageId = '';
     /**
@@ -114,7 +114,7 @@ class FeUserAuthenticationController implements iAuthenticate
             return false;
         }
 
-        $this->typo3Loader->initializeFrontendRendering($this->determinePageId());
+        $this->typo3Loader->initializeFrontendUser($this->determinePageId());
 
         return $this->typo3Loader->hasActiveFrontendUser();
     }
@@ -131,13 +131,16 @@ class FeUserAuthenticationController implements iAuthenticate
     }
 
     /**
-     * @return integer
+     * List of page IDs (comma separated) or page ID where to look for frontend user records
+     *
+     * @return string
      */
     private function determinePageId()
     {
-        if (is_numeric($this->argumentNameOfPageId)) {
-            return (integer)$this->argumentNameOfPageId;
+        if (false === empty($this->argumentNameOfPageId)) {
+            return $this->argumentNameOfPageId;
         }
+
         return $this->determinePageIdFromArguments();
     }
 
@@ -145,20 +148,15 @@ class FeUserAuthenticationController implements iAuthenticate
      * determine pageId from arguments, which restler has detected
      * We need the pageId, when we want to render TYPO3-contentElements, after the user is authenticated
      *
-     * @return integer
+     * @return string
      */
     private function determinePageIdFromArguments()
     {
-        if (empty($this->argumentNameOfPageId)) {
-            return 0;
-        }
-
         if (false === array_key_exists($this->argumentNameOfPageId, $this->restler->apiMethodInfo->arguments)) {
-            return 0;
+            return '0';
         }
 
         $index = $this->restler->apiMethodInfo->arguments[$this->argumentNameOfPageId];
-        $pageId = (integer) $this->restler->apiMethodInfo->parameters[$index];
-        return $pageId;
+        return $this->restler->apiMethodInfo->parameters[$index];
     }
 }

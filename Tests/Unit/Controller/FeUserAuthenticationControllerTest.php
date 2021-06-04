@@ -30,7 +30,6 @@ use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\Data\ApiMethodInfo;
 use Luracast\Restler\Restler;
-use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 
 /**
  * @package Restler
@@ -75,6 +74,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
     {
+        $this->typo3LoaderMock->expects(self::never())->method('initializeFrontendUser');
         $this->typo3LoaderMock->expects(self::never())->method('hasActiveFrontendUser');
         self::assertFalse($this->controller->__isAllowed());
     }
@@ -84,10 +84,10 @@ class FeUserAuthenticationControllerTest extends BaseTest
      */
     public function checkThatAuthenticationWillFailWhenFeUserIsNotLoggedIn()
     {
+        $this->controller->argumentNameOfPageId = '5';
         $this->controller->checkAuthentication = true;
 
-        // determinePageId should determine page id from arguments - default page id 0
-        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontendRendering')->with(0);
+        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontendUser')->with('5');
         $this->typo3LoaderMock->expects(self::once())->method('hasActiveFrontendUser')->willReturn(false);
 
         self::assertFalse($this->controller->__isAllowed());
@@ -102,7 +102,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $this->controller->checkAuthentication = true;
 
         // determinePageId should determine page id from class var argumentNameOfPageId
-        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontendRendering')->with(5);
+        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontendUser')->with('5');
         $this->typo3LoaderMock->expects(self::once())->method('hasActiveFrontendUser')->willReturn(true);
 
         self::assertTrue($this->controller->__isAllowed());

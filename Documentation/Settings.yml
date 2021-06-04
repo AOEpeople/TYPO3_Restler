@@ -4,10 +4,10 @@
 
 ---
 conf.py:
-  copyright: 2015 - 2018
+  copyright: 2015 - 2021
   project: TYPO3 Restler
-  version: 2.0
-  release: 2.0.*
+  version: 10.0
+  release: 10.0.*
   latex_documents:
   - - Index
     - TYPO3_Restler.tex

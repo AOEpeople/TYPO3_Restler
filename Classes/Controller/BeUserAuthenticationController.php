@@ -79,6 +79,8 @@ class BeUserAuthenticationController implements iAuthenticate
             return false;
         }
 
+        $this->typo3Loader->initializeBackendUser();
+
         return $this->typo3Loader->hasActiveBackendUser();
     }
 
