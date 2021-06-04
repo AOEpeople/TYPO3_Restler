@@ -105,17 +105,18 @@ class Loader implements SingletonInterface
     }
 
     /**
-     * Initialize backend user with BackendUserAuthenticator middleware.
+     * Initialize backend-user with BackendUserAuthenticator middleware.
      * @see \TYPO3\CMS\Frontend\Middleware\BackendUserAuthenticator
      */
     public function initializeBackendUser()
     {
         if ($this->hasActiveBackendUser()) {
-            // Frontend-User is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+            // Backend-User is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
             return;
         }
 
         $this->backendUserAuthenticator->process($this->getRequest(), $this->mockRequestHandler);
+        self::setRequest($this->mockRequestHandler->getRequest());
     }
 
     /**
@@ -142,7 +143,7 @@ class Loader implements SingletonInterface
     }
 
     /**
-     * Initialize backend user with FrontendUserAuthenticator middleware.
+     * Initialize frontend-user with FrontendUserAuthenticator middleware.
      * @param string|int $pid List of page IDs (comma separated) or page ID where to look for frontend user records
      * @see \TYPO3\CMS\Frontend\Middleware\FrontendUserAuthenticator
      */
@@ -159,7 +160,6 @@ class Loader implements SingletonInterface
             ->withCookieParams($_COOKIE);
 
         $this->frontendUserAuthenticator->process($request, $this->mockRequestHandler);
-
         self::setRequest($this->mockRequestHandler->getRequest());
     }
 
@@ -214,19 +214,17 @@ class Loader implements SingletonInterface
             ->withAttribute('normalizedParams', $normalizedParams)
             ->withQueryParams($_GET)
             ->withCookieParams($_COOKIE);
+        self::setRequest($request);
 
-        $this->backendUserAuthenticator->process($request, $this->mockRequestHandler);
-        $request = $this->mockRequestHandler->getRequest();
+        $this->initializeBackendUser();
+        $this->initializeFrontendUser();
 
-        $this->frontendUserAuthenticator->process($request, $this->mockRequestHandler);
-        $request = $this->mockRequestHandler->getRequest();
-
-        $this->typoScriptFrontendInitialization->process($request, $this->mockRequestHandler);
-        $request = $this->mockRequestHandler->getRequest();
+        $this->typoScriptFrontendInitialization->process($this->getRequest(), $this->mockRequestHandler);
+        self::setRequest($this->mockRequestHandler->getRequest());
 
         $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($GLOBALS['TSFE'], $this->timeTracker);
-        $prepareTypoScriptFrontendRendering->process($request, $this->mockRequestHandler);
-        Loader::setRequest($this->mockRequestHandler->getRequest());
+        $prepareTypoScriptFrontendRendering->process($this->getRequest(), $this->mockRequestHandler);
+        self::setRequest($this->mockRequestHandler->getRequest());
     }
 
     /**
