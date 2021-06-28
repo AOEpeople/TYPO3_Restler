@@ -79,7 +79,7 @@ class Cache implements SingletonInterface
     public function __construct(CacheManager $cacheManager = null)
     {
         $cacheManager = $cacheManager ?? GeneralUtility::makeInstance(ObjectManager::class)->get(CacheManager::class);
-        $this->cache = $cacheManager->getCache('cache_restler');
+        $this->cache = $cacheManager->getCache('restler');
     }
 
     /**
