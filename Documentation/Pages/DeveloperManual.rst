@@ -121,8 +121,8 @@ Example:
      *  - annotation 'restler_typo3cache_tags' (comma-separated list of cache-tags) is set
      *
      * The cache is stored in this TYPO3-tables:
-     *  - cf_cache_restler
-     *  - cf_cache_restler_tags
+     *  - cache_restler
+     *  - cache_restler_tags
      *
      * @url GET my-rest-endpoint-which-should-be-cached
      *

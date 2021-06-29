@@ -58,7 +58,7 @@ class CacheTest extends BaseTest
         $this->frontendCacheMock = $this->getMockBuilder(FrontendInterface::class)
             ->disableOriginalConstructor()->getMock();
         $cacheManagerMock = $this->getMockBuilder(CacheManager::class)->disableOriginalConstructor()->getMock();
-        $cacheManagerMock->expects(self::once())->method('getCache')->with('cache_restler')->willReturn($this->frontendCacheMock);
+        $cacheManagerMock->expects(self::once())->method('getCache')->with('restler')->willReturn($this->frontendCacheMock);
 
         $this->cache = new Cache($cacheManagerMock);
     }

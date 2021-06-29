@@ -1,7 +1,7 @@
 #
-# Table structure for table 'cf_cache_restler'
+# Table structure for table 'cache_restler'
 #
-CREATE TABLE cf_cache_restler (
+CREATE TABLE cache_restler (
   id int(11) NOT NULL auto_increment,
   identifier varchar(250) NOT NULL default '',
   expires int(11) unsigned NOT NULL default '0',
@@ -11,9 +11,9 @@ CREATE TABLE cf_cache_restler (
 ) ENGINE=InnoDB;
 
 #
-# Table structure for table 'cf_cache_restler_tags'
+# Table structure for table 'cache_restler_tags'
 #
-CREATE TABLE cf_cache_restler_tags (
+CREATE TABLE cache_restler_tags (
   id int(11) NOT NULL auto_increment,
   identifier varchar(250) NOT NULL default '',
   tag varchar(250) NOT NULL default '',
