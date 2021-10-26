@@ -48,7 +48,7 @@ class ExtensionConfigurationTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists('\TYPO3\CMS\Core\Configuration\ExtensionConfiguration')) {
             parent::setUp();
@@ -70,7 +70,7 @@ class ExtensionConfigurationTest extends BaseTest
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['rester'] = $this->originalExtConfig;
         parent::tearDown();

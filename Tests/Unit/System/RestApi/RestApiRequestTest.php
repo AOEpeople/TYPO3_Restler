@@ -69,7 +69,7 @@ class RestApiRequestTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -92,7 +92,7 @@ class RestApiRequestTest extends BaseTest
     /**
      * tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // restore the global data ($_GET, $_POST, $_SERVER)
         $_GET = $this->originalGetVars;

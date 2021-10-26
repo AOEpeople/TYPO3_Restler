@@ -58,7 +58,7 @@ class ConfigurationTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -77,21 +77,17 @@ class ConfigurationTest extends BaseTest
         $this->extensionConfigurationMock->expects(self::once())->method('getPathOfOnlineDocumentation')->willReturn('path');
 
         $this->restlerMock
-            ->expects(self::at(0))
+            ->expects(self::once())
             ->method('addAPIClass')
             ->with(Explorer::class, 'path');
         $this->restlerMock
-            ->expects(self::at(1))
+            ->expects(self::exactly(3))
             ->method('addAuthenticationClass')
-            ->with(ExplorerAuthenticationController::class);
-        $this->restlerMock
-            ->expects(self::at(2))
-            ->method('addAuthenticationClass')
-            ->with(BeUserAuthenticationController::class);
-        $this->restlerMock
-            ->expects(self::at(3))
-            ->method('addAuthenticationClass')
-            ->with(FeUserAuthenticationController::class);
+            ->withConsecutive(
+                [ExplorerAuthenticationController::class],
+                [BeUserAuthenticationController::class],
+                [FeUserAuthenticationController::class]
+            );
 
         $this->configuration->configureRestler($this->restlerMock);
     }
@@ -107,14 +103,14 @@ class ConfigurationTest extends BaseTest
         $this->restlerMock
             ->expects(self::never())
             ->method('addAPIClass');
+
         $this->restlerMock
-            ->expects(self::at(0))
+            ->expects(self::exactly(2))
             ->method('addAuthenticationClass')
-            ->with('Aoe\\Restler\\Controller\\BeUserAuthenticationController');
-        $this->restlerMock
-            ->expects(self::at(1))
-            ->method('addAuthenticationClass')
-            ->with('Aoe\\Restler\\Controller\\FeUserAuthenticationController');
+            ->withConsecutive(
+                ['Aoe\\Restler\\Controller\\BeUserAuthenticationController'],
+                ['Aoe\\Restler\\Controller\\FeUserAuthenticationController']
+            );
 
         $this->configuration->configureRestler($this->restlerMock);
     }

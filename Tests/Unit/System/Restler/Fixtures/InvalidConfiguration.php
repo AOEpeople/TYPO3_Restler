@@ -25,6 +25,7 @@ namespace Aoe\Restler\Tests\Unit\System\Restler\Fixtures;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\System\Restler\ConfigurationInterface;
 use Luracast\Restler\Restler;
 
 /**
@@ -33,7 +34,7 @@ use Luracast\Restler\Restler;
  * @package Restler
  * @subpackage Tests
  */
-class InvalidConfiguration
+class InvalidConfiguration implements ConfigurationInterface
 {
     /**
      * @param Restler $restler

@@ -50,7 +50,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -63,7 +63,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

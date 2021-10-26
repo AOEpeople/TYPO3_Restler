@@ -53,7 +53,7 @@ class DispatcherTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
             parent::setUp();

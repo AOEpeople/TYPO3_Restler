@@ -32,6 +32,7 @@ use Aoe\Restler\System\TYPO3\Cache;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\InvalidConfiguration;
 use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\ValidConfiguration;
+use InvalidArgumentException;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Scope;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -81,7 +82,7 @@ class BuilderTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -110,7 +111,7 @@ class BuilderTest extends BaseTest
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = $this->originalRestlerConfigurationClasses;
         $_SERVER = $this->originalServerVars;
@@ -189,10 +190,11 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsNoArray()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = '';
 
@@ -202,10 +204,11 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsEmptyArray()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = [];
 
@@ -215,7 +218,7 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      */
     public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassDoesNotImplementRequiredInterface()
     {
