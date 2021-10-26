@@ -218,10 +218,11 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException InvalidArgumentException
      */
     public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassDoesNotImplementRequiredInterface()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
 
         $configurationClass = InvalidConfiguration::class;
