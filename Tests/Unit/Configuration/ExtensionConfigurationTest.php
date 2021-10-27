@@ -44,7 +44,7 @@ class ExtensionConfigurationTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $mockedExtConfig = [
             'refreshCache' => '0',

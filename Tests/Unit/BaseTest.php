@@ -54,7 +54,7 @@ abstract class BaseTest extends UnitTestCase
     /**
      * Initialization.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

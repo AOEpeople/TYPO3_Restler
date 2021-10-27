@@ -53,7 +53,7 @@ class DispatcherTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

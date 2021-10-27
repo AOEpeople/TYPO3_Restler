@@ -42,6 +42,7 @@ use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
+use InvalidArgumentException;
 
 /**
  * @package Restler
@@ -81,7 +82,7 @@ class BuilderTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -110,7 +111,7 @@ class BuilderTest extends BaseTest
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = $this->originalRestlerConfigurationClasses;
         $_SERVER = $this->originalServerVars;
@@ -189,10 +190,11 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsNoArray()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = '';
 
@@ -202,10 +204,11 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsEmptyArray()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = [];
 
@@ -215,10 +218,11 @@ class BuilderTest extends BaseTest
 
     /**
      * @test
-     * @expectedException \InvalidArgumentException
      */
     public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassDoesNotImplementRequiredInterface()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
 
         $configurationClass = InvalidConfiguration::class;

@@ -28,6 +28,7 @@ namespace Aoe\Restler\Tests\Unit\System\RestApi;
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\RestApi\RestApiClient;
 use Aoe\Restler\System\RestApi\RestApiRequest;
+use Aoe\Restler\System\RestApi\RestApiRequestException;
 use Aoe\Restler\System\RestApi\RestApiRequestScope;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
@@ -71,7 +72,7 @@ class RestApiClientTest extends BaseTest
     /**
      * setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -164,11 +165,12 @@ class RestApiClientTest extends BaseTest
 
     /**
      * @test
-     * @expectedException Aoe\Restler\System\RestApi\RestApiRequestException
-     * @expectedExceptionCode 1446475601
      */
     public function shouldThrowExceptionWhenExecutionOfRequestFails()
     {
+        $this->expectException(RestApiRequestException::class);
+        $this->expectExceptionCode(1446475601);
+
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
         $getData  = ['context' => 'mobile'];
