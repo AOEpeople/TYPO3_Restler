@@ -27,6 +27,7 @@ namespace Aoe\Restler\System\TYPO3;
 
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\Response;
 use TYPO3\CMS\Core\Routing\PageArguments;
@@ -36,6 +37,7 @@ use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
 use TYPO3\CMS\Core\TypoScript\TemplateService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Http\RequestHandler;
@@ -208,6 +210,7 @@ class Loader implements SingletonInterface
 
         /* @var ServerRequestInterface $request */
         $request = $this->getRequest()
+            ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE)
             ->withAttribute('site', $site)
             ->withAttribute('routing', $pageArguments)
             ->withAttribute('language', $site->getDefaultLanguage())
@@ -222,7 +225,13 @@ class Loader implements SingletonInterface
         $this->typoScriptFrontendInitialization->process($this->getRequest(), $this->mockRequestHandler);
         self::setRequest($this->mockRequestHandler->getRequest());
 
-        $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($GLOBALS['TSFE'], $this->timeTracker);
+        if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) > 11005000) {
+            // it's TYPO3v11 or higher
+            $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($this->timeTracker);
+        } else {
+            // it's TYPO3v10 or lower
+            $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($GLOBALS['TSFE'], $this->timeTracker);
+        }
         $prepareTypoScriptFrontendRendering->process($this->getRequest(), $this->mockRequestHandler);
         self::setRequest($this->mockRequestHandler->getRequest());
     }
@@ -247,7 +256,7 @@ class Loader implements SingletonInterface
      */
     public static function setRequest(ServerRequestInterface $request)
     {
-        $GLOBALS['RESTLER_TYPO3_REQUEST'] = $request;
+        $GLOBALS['TYPO3_REQUEST'] = $request;
     }
 
     /**
@@ -255,7 +264,7 @@ class Loader implements SingletonInterface
      */
     private function getRequest()
     {
-        return $GLOBALS['RESTLER_TYPO3_REQUEST'];
+        return $GLOBALS['TYPO3_REQUEST'];
     }
 
     /**
