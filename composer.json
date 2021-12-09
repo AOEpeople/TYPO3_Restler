@@ -22,10 +22,10 @@
         "luracast/restler": "3.0.0.20200415"
     },
     "require-dev": {
-        "nimut/testing-framework": "^6.0",
-        "phpunit/phpcov": "^8.2",
+        "nimut/testing-framework": "^5.2 || ^6.0",
+        "phpunit/phpcov": "^5.0 || ^8.2",
         "squizlabs/php_codesniffer": "^3.6",
-        "sebastian/phpcpd": "^6.0",
+        "sebastian/phpcpd": "^4.1 || ^6.0",
         "phpmd/phpmd": "^2.10"
     },
     "repositories": [
