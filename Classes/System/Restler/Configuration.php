@@ -31,8 +31,6 @@ use Aoe\Restler\Controller\ExplorerAuthenticationController;
 use Aoe\Restler\Controller\FeUserAuthenticationController;
 use Luracast\Restler\Explorer\v2\Explorer;
 use Luracast\Restler\Restler;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Configure restler:
@@ -52,10 +50,9 @@ class Configuration implements ConfigurationInterface
     /**
      * @param ExtensionConfiguration $extensionConfiguration
      */
-    public function __construct(ExtensionConfiguration $extensionConfiguration = null)
+    public function __construct(ExtensionConfiguration $extensionConfiguration)
     {
-        $this->extensionConfiguration = $extensionConfiguration ?? GeneralUtility::makeInstance(ObjectManager::class)
-                ->get(ExtensionConfiguration::class);
+        $this->extensionConfiguration = $extensionConfiguration;
     }
 
     /**

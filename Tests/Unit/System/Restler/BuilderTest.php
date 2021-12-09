@@ -71,10 +71,6 @@ class BuilderTest extends BaseTest
      */
     protected $extensionConfigurationMock;
     /**
-     * @var ObjectManager|MockObject
-     */
-    protected $objectManagerMock;
-    /**
      * @var CacheManager|MockObject
      */
     protected $cacheManagerMock;
@@ -88,12 +84,6 @@ class BuilderTest extends BaseTest
 
         $this->originalRestlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
         $this->originalServerVars = $_SERVER;
-
-        $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMock();
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManagerMock);
 
         $this->extensionConfigurationMock = $this->getMockBuilder(ExtensionConfiguration::class)
             ->disableOriginalConstructor()->getMock();
@@ -131,9 +121,7 @@ class BuilderTest extends BaseTest
             ->willReturn(true);
 
         $typo3CacheMock = $this->getMockBuilder(Cache::class)->disableOriginalConstructor()->getMock();
-        $this->objectManagerMock
-            ->expects(self::once())->method('get')->with(Cache::class)
-            ->willReturn($typo3CacheMock);
+        GeneralUtility::setSingletonInstance(Cache::class, $typo3CacheMock);
 
         $typo3RequestMock = $this->getMockBuilder(ServerRequest::class)->disableOriginalConstructor()->getMock();
 
@@ -159,7 +147,7 @@ class BuilderTest extends BaseTest
         $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
         $configurationMock->expects(self::once())->method('configureRestler')->with($restlerObj);
 
-        $this->objectManagerMock->expects(self::once())->method('get')->with($configurationClass)->willReturn($configurationMock);
+        GeneralUtility::setSingletonInstance(ValidConfiguration::class, $configurationMock);
 
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = [$configurationClass];
@@ -179,7 +167,7 @@ class BuilderTest extends BaseTest
         $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
         $configurationMock->expects(self::exactly(2))->method('configureRestler')->with($restlerObj);
 
-        $this->objectManagerMock->expects(self::exactly(2))->method('get')->with($configurationClass)->willReturn($configurationMock);
+        GeneralUtility::setSingletonInstance(ValidConfiguration::class, $configurationMock);
 
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = [$configurationClass];
@@ -219,37 +207,21 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassDoesNotImplementRequiredInterface()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
-
-        $configurationClass = InvalidConfiguration::class;
-        $configurationMock = $this->getMockBuilder($configurationClass)->disableOriginalConstructor()->getMock();
-
-        // override test-restler-configuration
-        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = [$configurationClass];
-
-        $this->objectManagerMock
-            ->expects(self::once())->method('get')->with($configurationClass)
-            ->willReturn($configurationMock);
-
-        $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', [$restlerObj]);
-    }
-
-    /**
-     * @test
-     */
     public function canSetAutoLoading()
     {
         // set object-property (which the builder should update)
         Scope::$resolver = null;
 
         $requestedClass = ExtensionConfiguration::class;
-        $this->objectManagerMock
+
+        $objectManagerMock = $this->getMockBuilder(ObjectManager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+        $objectManagerMock
             ->expects(self::once())->method('get')->with($requestedClass)
             ->willReturn($this->extensionConfigurationMock);
+        GeneralUtility::setSingletonInstance(ObjectManager::class, $objectManagerMock);
 
         $this->callUnaccessibleMethodOfObject($this->builder, 'setAutoLoading');
 

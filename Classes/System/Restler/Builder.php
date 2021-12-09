@@ -58,14 +58,10 @@ class Builder implements SingletonInterface
      * @param ExtensionConfiguration $extensionConfiguration
      * @param CacheManager $cacheManager
      */
-    public function __construct(
-        ExtensionConfiguration $extensionConfiguration = null,
-        CacheManager $cacheManager = null
-    ) {
-        $this->extensionConfiguration = $extensionConfiguration ?? GeneralUtility::makeInstance(ObjectManager::class)
-                ->get(ExtensionConfiguration::class);
-
-        $this->cacheManager = $cacheManager ?? GeneralUtility::makeInstance(ObjectManager::class)->get(CacheManager::class);
+    public function __construct(ExtensionConfiguration $extensionConfiguration, CacheManager $cacheManager)
+    {
+        $this->extensionConfiguration = $extensionConfiguration;
+        $this->cacheManager = $cacheManager;
     }
 
     /**
@@ -91,7 +87,7 @@ class Builder implements SingletonInterface
     protected function createRestlerObject(ServerRequestInterface $request = null)
     {
         return new RestlerExtended(
-            GeneralUtility::makeInstance(ObjectManager::class)->get(Cache::class),
+            GeneralUtility::makeInstance(Cache::class),
             $this->extensionConfiguration->isProductionContextSet(),
             $this->extensionConfiguration->isCacheRefreshingEnabled(),
             $request
@@ -132,7 +128,7 @@ class Builder implements SingletonInterface
         }
 
         foreach ($restlerConfigurationClasses as $restlerConfigurationClass) {
-            $configurationObj = GeneralUtility::makeInstance(ObjectManager::class)->get($restlerConfigurationClass);
+            $configurationObj = GeneralUtility::makeInstance($restlerConfigurationClass);
 
             /* @var $configurationObj ConfigurationInterface */
             if (false === $configurationObj instanceof ConfigurationInterface) {
@@ -177,6 +173,9 @@ class Builder implements SingletonInterface
 
         // set auto-loading for extBase/TYPO3-classes
         Scope::$resolver = function ($className) {
+            // Using of ObjectManager will be removed in TYPO3v12. Currently, we must use the ObjectManager here,
+            // because it can happen, that e.g. the REST-controllers (which 3rd-party-extensions provide), are not
+            // supporting the new dependency-injection (via symphony) of TYPO3!
             return GeneralUtility::makeInstance(ObjectManager::class)->get($className);
         };
     }

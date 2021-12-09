@@ -33,7 +33,6 @@ use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use stdClass;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package Restler
@@ -152,7 +151,7 @@ class RestApiClient implements SingletonInterface
      */
     protected function getRestlerBuilder()
     {
-        return GeneralUtility::makeInstance(ObjectManager::class)->get(RestlerBuilder::class);
+        return GeneralUtility::makeInstance(RestlerBuilder::class);
     }
 
     /**

@@ -32,7 +32,6 @@ use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * @package Restler
@@ -46,10 +45,12 @@ class DispatcherTest extends BaseTest
      * @var Dispatcher
      */
     protected $dispatcher;
+
     /**
      * @var Builder
      */
     protected $restlerBuilder;
+
     /**
      * setup
      */
@@ -58,9 +59,7 @@ class DispatcherTest extends BaseTest
         parent::setUp();
 
         $this->restlerBuilder = $this->getMockBuilder(Builder::class)->disableOriginalConstructor()->getMock();
-        $this->objectManager = $this->getMockBuilder(ObjectManager::class)->disableOriginalConstructor()->getMock();
-        $this->objectManager->expects(self::atLeastOnce())->method('get')->willReturn($this->restlerBuilder);
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $this->objectManager);
+        GeneralUtility::setSingletonInstance(Builder::class, $this->restlerBuilder);
 
         $configurationMock = self::getMockBuilder(ExtensionConfiguration::class)->disableOriginalConstructor()->getMock();
         $this->dispatcher = new Dispatcher($configurationMock);
