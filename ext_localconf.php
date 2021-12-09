@@ -1,41 +1,46 @@
 <?php
+use Doctrine\Common\Annotations\AnnotationReader;
+use Aoe\Restler\System\Restler\Configuration;
+use Aoe\Restler\System\TYPO3\RestlerEnhancer;
+use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
+use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
+use TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend;
+
 if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-if (class_exists('\Doctrine\Common\Annotations\AnnotationReader')) {
-    // base restler annotations
-    $restlerAnnotations = ['url',
-        'access',
-        'smart-auto-routing',
-        'class',
-        'cache',
-        'expires',
-        'throttle',
-        'status',
-        'header',
-        'param',
-        'throws',
-        'return',
-        'var',
-        'format',
-        'view',
-        'errorView'];
+// base restler annotations
+$restlerAnnotations = ['url',
+    'access',
+    'smart-auto-routing',
+    'class',
+    'cache',
+    'expires',
+    'throttle',
+    'status',
+    'header',
+    'param',
+    'throws',
+    'return',
+    'var',
+    'format',
+    'view',
+    'errorView'];
 
-    foreach ($restlerAnnotations as $ignoreAnnotation) {
-        \Doctrine\Common\Annotations\AnnotationReader::addGlobalIgnoredName($ignoreAnnotation);
-    }
-
-    // restler plugin annotations
-    \Doctrine\Common\Annotations\AnnotationReader::addGlobalIgnoredName('restler_typo3cache_expires');
-    \Doctrine\Common\Annotations\AnnotationReader::addGlobalIgnoredName('restler_typo3cache_tags');
+foreach ($restlerAnnotations as $ignoreAnnotation) {
+    AnnotationReader::addGlobalIgnoredName($ignoreAnnotation);
 }
 
-// add restler-configuration-class
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'][] = 'Aoe\\Restler\\System\\Restler\\Configuration';
+// restler plugin annotations
+AnnotationReader::addGlobalIgnoredName('restler_typo3cache_expires');
+AnnotationReader::addGlobalIgnoredName('restler_typo3cache_tags');
 
-// add restler page routing for system Typo3 V9 and up
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['enhancers']['Restler'] = Aoe\Restler\System\TYPO3\RestlerEnhancer::class;
+// add restler-configuration-class
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'][] = Configuration::class;
+
+// add restler page routing
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['enhancers']['Restler'] = RestlerEnhancer::class;
 
 /**
  * register cache which can cache response of REST-endpoints
@@ -43,8 +48,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['enhancers']['Restler'] = Aoe\Rest
 if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler'])) {
     // only configure cache, when cache is not already configured (e.g. by any other extension which base on this extension)
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler'] = [
-        'frontend' => \TYPO3\CMS\Core\Cache\Frontend\VariableFrontend::class,
-        'backend' => \TYPO3\CMS\Core\Cache\Backend\Typo3DatabaseBackend::class,
+        'frontend' => VariableFrontend::class,
+        'backend' => Typo3DatabaseBackend::class,
         'options' => ['defaultLifetime' => 0]
     ];
 }
@@ -55,7 +60,7 @@ if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigur
 if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_restler_cache'])) {
     // only configure cache, when cache is not already configured (e.g. by any other extension which base on this extension)
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['tx_restler_cache'] = [
-        'backend' => \TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend::class,
+        'backend' => SimpleFileBackend::class,
         'groups' => ['system']
     ];
 }
