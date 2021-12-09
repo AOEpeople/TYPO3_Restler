@@ -173,6 +173,7 @@ class Builder implements SingletonInterface
 
         // set auto-loading for extBase/TYPO3-classes
         Scope::$resolver = function ($className) {
+            // @TODO TYPO3 v12:
             // Using of ObjectManager will be removed in TYPO3v12. Currently, we must use the ObjectManager here,
             // because it can happen, that e.g. the REST-controllers (which 3rd-party-extensions provide), are not
             // supporting the new dependency-injection (via symphony) of TYPO3!

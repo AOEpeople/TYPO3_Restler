@@ -46,6 +46,11 @@ $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['enhancers']['Restler'] = RestlerE
  * register cache which can cache response of REST-endpoints
  */
 if (false === isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler'])) {
+    // @TODO TYPO3 v12:
+    // In TYPO3 v12, it's NOT allowed, that the cache-configuration contains the prefix 'cache_', so we must change
+    // the cache-configuration-name from 'cache_restler' to just 'restler'. We didn't changed this for TYPO3 v10/v11,
+    // because 3rd-party-extensions maybe override the current cache-configuration-name 'cache_restler'.
+
     // only configure cache, when cache is not already configured (e.g. by any other extension which base on this extension)
     $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cache_restler'] = [
         'frontend' => VariableFrontend::class,
