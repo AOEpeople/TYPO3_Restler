@@ -2,10 +2,12 @@
 
 namespace Aoe\Restler\System\TYPO3;
 
+use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\RestlerBuilderAware;
 use TYPO3\CMS\Core\Routing\Aspect\AspectInterface;
 use TYPO3\CMS\Core\Routing\Enhancer\DecoratingEnhancerInterface;
 use TYPO3\CMS\Core\Routing\RouteCollection;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Puts the URLs which should be handled by restler into the current route collection
@@ -21,9 +23,12 @@ class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerI
 {
     private $default;
 
+    /**
+     * @param array $configuration
+     */
     public function __construct(array $configuration)
     {
-        parent::__construct();
+        parent::__construct(GeneralUtility::makeInstance(ExtensionConfiguration::class));
         $default = $configuration['default'] ?? '';
 
         if (!is_string($default)) {
