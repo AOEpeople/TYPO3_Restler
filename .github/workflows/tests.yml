@@ -26,7 +26,7 @@ jobs:
         include:
           - typo3: ^11.5
             php: '8.0'
-            experimental: false
+            experimental: true
         exclude:
           - typo3: ^11.5
             php: '7.2'
