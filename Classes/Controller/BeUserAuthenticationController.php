@@ -27,6 +27,8 @@ namespace Aoe\Restler\Controller;
 
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Luracast\Restler\iAuthenticate;
+use Luracast\Restler\Restler;
+use Luracast\Restler\Scope;
 
 /**
  * This class checks, if client is allowed to access the requested and protected API-class
@@ -60,11 +62,19 @@ class BeUserAuthenticationController implements iAuthenticate
     private $typo3Loader;
 
     /**
+     * Instance of Restler class injected at runtime.
+     *
+     * @var Restler
+     */
+    public $restler;
+
+    /**
      * @param TYPO3Loader $typo3Loader
      */
     public function __construct(TYPO3Loader $typo3Loader)
     {
         $this->typo3Loader = $typo3Loader;
+        $this->restler = Scope::get('Restler');
     }
 
     /**
