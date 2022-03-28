@@ -89,7 +89,8 @@ class BuilderTest extends BaseTest
         ];
 
         $GLOBALS['TYPO3_Restler'] = [
-            'restlerConfigurationClasses' => []
+            'restlerConfigurationClasses' => [],
+            'addApiClass' => null
         ];
 
         $this->originalRestlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
