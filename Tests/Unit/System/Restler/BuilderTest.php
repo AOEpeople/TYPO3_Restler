@@ -88,6 +88,10 @@ class BuilderTest extends BaseTest
             ]
         ];
 
+        $GLOBALS['TYPO3_Restler'] = [
+            'restlerConfigurationClasses' => []
+        ];
+
         $this->originalRestlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
         $this->originalServerVars = $_SERVER;
 
