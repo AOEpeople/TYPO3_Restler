@@ -160,23 +160,16 @@ class Builder implements SingletonInterface
     }
 
     /**
-     * use auto-loading for PHP-classes of restler-framework and extBase/TYPO3 (use dependency-injection of extBase)
+     * use auto-loading for PHP-classes of restler-framework and Extbase/TYPO3 (use dependency-injection of Extbase)
      */
     private function setAutoLoading()
     {
-        // set auto-loading for restler
-        $autoload = Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
-
-        if (file_exists($autoload)) {
-            require_once $autoload;
-        }
-
-        // set auto-loading for extBase/TYPO3-classes
+        // set auto-loading for Extbase/TYPO3-classes
         Scope::$resolver = function ($className) {
             // @TODO TYPO3 v12:
             // Using of ObjectManager will be removed in TYPO3v12. Currently, we must use the ObjectManager here,
             // because it can happen, that e.g. the REST-controllers (which 3rd-party-extensions provide), are not
-            // supporting the new dependency-injection (via symphony) of TYPO3!
+            // supporting the new dependency-injection (via symfony) of TYPO3!
             return GeneralUtility::makeInstance(ObjectManager::class)->get($className);
         };
     }

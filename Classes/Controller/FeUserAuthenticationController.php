@@ -89,9 +89,11 @@ class FeUserAuthenticationController implements iAuthenticate
     private $typo3Loader;
 
     /**
+     * Instance of Restler class injected at runtime.
+     *
      * @var Restler
      */
-    private $restler;
+    public $restler;
 
     /**
      * @param TYPO3Loader $typo3Loader

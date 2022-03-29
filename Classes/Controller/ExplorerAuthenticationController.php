@@ -39,9 +39,11 @@ use Luracast\Restler\Scope;
 class ExplorerAuthenticationController implements iAuthenticate
 {
     /**
+     * Instance of Restler class injected at runtime.
+     *
      * @var Restler
      */
-    private $restler;
+    public $restler;
 
     /**
      * initialize controller

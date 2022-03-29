@@ -14,12 +14,12 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2 || ^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
         "typo3/cms-core": "^10.4 || ^11.5",
-        "luracast/restler": "3.0.0.20200415"
+        "luracast/restler": "5.0.10.20220329"
     },
     "require-dev": {
         "nimut/testing-framework": "^5.2 || ^6.0",
