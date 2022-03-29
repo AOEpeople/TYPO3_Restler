@@ -65,6 +65,7 @@
             "TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit"
         ],
         "extension-release": [
+            "rm -rf .github",
             "rm -rf .Build",
             "rm -rf Tests/",
             "rm .gitignore",
@@ -76,7 +77,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "10.1.0-dev"
+            "dev-main": "10.3.0-dev"
         },
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
