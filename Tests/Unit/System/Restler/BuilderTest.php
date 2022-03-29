@@ -162,7 +162,7 @@ class BuilderTest extends BaseTest
 
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = [$configurationClass];
-        unset($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']);
+        $GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'] = [];
 
         $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', [$restlerObj]);
     }

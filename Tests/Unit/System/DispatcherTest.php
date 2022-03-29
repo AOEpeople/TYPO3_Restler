@@ -30,6 +30,8 @@ use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Dispatcher;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\Tests\Unit\BaseTest;
+use Luracast\Restler\Restler;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -58,7 +60,7 @@ class DispatcherTest extends BaseTest
     {
         parent::setUp();
 
-        $this->restlerBuilder = $this->getMockBuilder(Builder::class)->disableOriginalConstructor()->getMock();
+        $this->restlerBuilder = $this->getMockBuilder(Builder::class)->disableOriginalConstructor()->onlyMethods(['build'])->getMock();
         GeneralUtility::setSingletonInstance(Builder::class, $this->restlerBuilder);
 
         $configurationMock = self::getMockBuilder(ExtensionConfiguration::class)->disableOriginalConstructor()->getMock();
@@ -70,8 +72,13 @@ class DispatcherTest extends BaseTest
      */
     public function canProcessToTypo3()
     {
+        /** @var Restler|MockObject $restlerMock */
+        $restlerMock = $this->createMock(Restler::class);
+        $restlerMock->url = '/no/api/url';
+        $this->restlerBuilder->expects(self::any())->method('build')->willReturn($restlerMock);
+
         $requestUri = $this->getMockBuilder(Uri::class)->getMock();
-        $requestUri->method('getPath')->willReturn("/api/device");
+        $requestUri->method('getPath')->willReturn("/no/api/url");
         $requestUri->method('withQuery')->willReturn($requestUri);
         $requestUri->method('withPath')->willReturn($requestUri);
 
