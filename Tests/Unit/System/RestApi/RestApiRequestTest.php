@@ -227,6 +227,9 @@ class RestApiRequestTest extends BaseTest
 
         $this->restApiRequest->expects(self::once())->method('handle')->willThrowException($exception);
 
+        $originalRestApiRequest = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $this->restApiRequestScopeMock->expects(self::once())->method('getOriginalRestApiRequest')->willReturn($originalRestApiRequest);
+
         self::expectException(RestException::class);
         $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
     }
@@ -243,6 +246,9 @@ class RestApiRequestTest extends BaseTest
         $exception = new RestException(400, 'message');
 
         $this->restApiRequest->expects(self::once())->method('handle')->willThrowException($exception);
+
+        $originalRestApiRequest = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $this->restApiRequestScopeMock->expects(self::once())->method('getOriginalRestApiRequest')->willReturn($originalRestApiRequest);
 
         self::expectException(RestException::class);
         $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
