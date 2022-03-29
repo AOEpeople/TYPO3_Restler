@@ -60,7 +60,7 @@ class DispatcherTest extends BaseTest
     {
         parent::setUp();
 
-        $this->restlerBuilder = $this->getMockBuilder(Builder::class)->disableOriginalConstructor()->onlyMethods(['build'])->getMock();
+        $this->restlerBuilder = $this->getMockBuilder(Builder::class)->disableOriginalConstructor()->setMethods(['build'])->getMock();
         GeneralUtility::setSingletonInstance(Builder::class, $this->restlerBuilder);
 
         $configurationMock = self::getMockBuilder(ExtensionConfiguration::class)->disableOriginalConstructor()->getMock();
