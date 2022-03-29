@@ -227,13 +227,8 @@ class RestApiRequestTest extends BaseTest
 
         $this->restApiRequest->expects(self::once())->method('handle')->willThrowException($exception);
 
-        $thrownException = null;
-        try {
-            $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
-        } catch (Exception $e) {
-            $thrownException = $e;
-        }
-        self::assertInstanceOf(RestException::class, $thrownException);
+        self::expectException(RestException::class);
+        $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
     }
 
     /**
@@ -249,12 +244,7 @@ class RestApiRequestTest extends BaseTest
 
         $this->restApiRequest->expects(self::once())->method('handle')->willThrowException($exception);
 
-        $thrownException = null;
-        try {
-            $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
-        } catch (Exception $e) {
-            $thrownException = $e;
-        }
-        self::assertInstanceOf(RestException::class, $thrownException);
+        self::expectException(RestException::class);
+        $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
     }
 }
