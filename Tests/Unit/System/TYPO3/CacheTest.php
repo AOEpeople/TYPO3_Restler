@@ -97,7 +97,7 @@ class CacheTest extends BaseTest
         $requestMethod = 'GET';
         $apiMethodInfoMetadata = [];
 
-        $this->assertFalse($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
+        self::assertFalse($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
     }
 
     /**

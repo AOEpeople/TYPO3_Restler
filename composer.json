@@ -24,9 +24,11 @@
     "require-dev": {
         "nimut/testing-framework": "^5.2 || ^6.0",
         "phpunit/phpcov": "^5.0 || ^8.2",
-        "squizlabs/php_codesniffer": "^3.6",
-        "sebastian/phpcpd": "^4.1 || ^6.0",
-        "phpmd/phpmd": "^2.10"
+        "phpcompatibility/php-compatibility": "^9.3",
+        "phpstan/phpstan": "0.12.88",
+        "rector/rector": "0.11.20",
+        "symplify/easy-coding-standard": "9.3.26",
+        "symplify/phpstan-rules": "9.3.26"
     },
     "repositories": [
         {
@@ -53,7 +55,11 @@
     },
     "config": {
         "vendor-dir": ".Build/vendor",
-        "bin-dir": ".Build/bin"
+        "bin-dir": ".Build/bin",
+        "allow-plugins": {
+            "typo3/cms-composer-installers": true,
+            "typo3/class-alias-loader": true
+        }
     },
     "scripts": {
         "post-autoload-dump": [
@@ -63,6 +69,29 @@
         "test:unit": [
             "[ -e .Build/bin/phpunit ] || composer update",
             "TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c .Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml Tests/Unit"
+        ],
+        "code-style": [
+            "[ -e ./.Build/bin/rector ] || composer install",
+            "./.Build/bin/ecs check --config .code-quality/ecs.php",
+            "./.Build/bin/rector process --dry-run --config .code-quality/rector.php"
+        ],
+        "code-analysis": [
+            "./.Build/bin/phpstan analyse -c .code-quality/phpstan.neon --memory-limit=1G"
+        ],
+        "code-analysis--baseline": [
+            "./.Build/bin/phpstan analyse -c .code-quality/phpstan.neon --memory-limit=1G --generate-baseline"
+        ],
+        "code-compatibility": [
+            "[ -e ./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs ] || composer install",
+            "[ -d ./reports/php_checkstyle ] || mkdir -p reports/php_checkstyle/",
+            "./.code-quality/configure-checkstyle.sh",
+            "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/* -p . --runtime-set testVersion 7.4",
+            "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/* -p . --runtime-set testVersion 8.0"
+        ],
+        "code-check-pipeline": [
+            "@composer code-style",
+            "@composer code-analysis",
+            "@composer code-compatibility"
         ],
         "extension-release": [
             "rm -rf .github",

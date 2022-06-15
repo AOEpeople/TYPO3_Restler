@@ -160,7 +160,7 @@ class RestApiClientTest extends BaseTest
         $this->restApiRequestMock->expects($this->once())->method('executeRestApiRequest')
             ->with($requestMethod, $requestUri, $getData, $postData)
             ->willReturn($result);
-        $this->assertEquals($result, $this->restApiClient->executeRequest($requestMethod, $requestUri, $getData, $postData));
+        self::assertEquals($result, $this->restApiClient->executeRequest($requestMethod, $requestUri, $getData, $postData));
     }
 
     /**
