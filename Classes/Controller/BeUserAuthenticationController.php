@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Controller;
 
 /***************************************************************
@@ -56,10 +57,6 @@ class BeUserAuthenticationController implements iAuthenticate
      * @var boolean
      */
     public $checkAuthentication = false;
-    /**
-     * @var TYPO3Loader
-     */
-    private $typo3Loader;
 
     /**
      * Instance of Restler class injected at runtime.
@@ -67,6 +64,10 @@ class BeUserAuthenticationController implements iAuthenticate
      * @var Restler
      */
     public $restler;
+    /**
+     * @var TYPO3Loader
+     */
+    private $typo3Loader;
 
     /**
      * @param TYPO3Loader $typo3Loader

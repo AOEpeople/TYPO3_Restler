@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System;
 
 /***************************************************************
@@ -48,7 +49,8 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
         Loader::setRequest($request);
 
         if ($this->isRestlerPrefix($this->extractSiteUrl($request))) {
-            $restlerObj = $this->getRestlerBuilder()->build($request);
+            $restlerObj = $this->getRestlerBuilder()
+                ->build($request);
 
             if ($this->isRestlerUrl('/' . $restlerObj->url)) {
                 // wrap reponse into a stream to pass along to the rest of the Typo3 framework
@@ -63,17 +65,14 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
         return $handler->handle($request);
     }
 
-    private function isRestlerUrl($uri): bool
-    {
-        return Routes::containsUrl($uri);
-    }
-
     protected function extractSiteUrl($request)
     {
         // set base path depending on site config
         $site = $request->getAttribute('site');
         if ($site !== null && $site instanceof \TYPO3\CMS\Core\Site\Entity\Site) {
-            $siteBasePath = $request->getAttribute('site')->getBase()->getPath();
+            $siteBasePath = $request->getAttribute('site')
+                ->getBase()
+                ->getPath();
             if ($siteBasePath !== '/' && $siteBasePath[-1] !== '/') {
                 $siteBasePath .= '/';
             }
@@ -83,5 +82,10 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
 
         // set url with base path removed
         return '/' . rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $request->getUri()->getPath()), '/');
+    }
+
+    private function isRestlerUrl($uri): bool
+    {
+        return Routes::containsUrl($uri);
     }
 }

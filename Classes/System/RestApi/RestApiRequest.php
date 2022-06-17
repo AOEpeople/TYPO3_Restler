@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\RestApi;
 
 /***************************************************************
@@ -110,6 +111,33 @@ class RestApiRequest extends Restler
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
+    /* Block of methods, which MUST be overriden from parent-class (otherwise this class can not work) *************************/
+    /***************************************************************************************************************************/
+    /***************************************************************************************************************************/
+    /**
+     * Override parent method...because we don't want to call it!
+     * The original method would set some properties (e.g. set this object into static properties of global classes)
+     *
+     * @param RestApiRequestScope $restApiRequestScope
+     * @param Typo3Cache $typo3Cache
+     */
+    public function __construct(RestApiRequestScope $restApiRequestScope, Typo3Cache $typo3Cache)
+    {
+        $this->restApiRequestScope = $restApiRequestScope;
+        $this->typo3Cache = $typo3Cache;
+    }
+
+    /**
+     * Override parent method...because we don't want to call it (the original method would cache the determined routes)!
+     */
+    public function __destruct()
+    {
+    }
+
+
+
+    /***************************************************************************************************************************/
+    /***************************************************************************************************************************/
     /* Block of methods, which does NOT override logic from parent-class *******************************************************/
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
@@ -140,148 +168,8 @@ class RestApiRequest extends Restler
             throw $e;
         } catch (Exception $e) {
             $this->restoreOriginalRestApiRequest();
-            throw new RestException(500, $e->getMessage(), array(), $e);
+            throw new RestException(500, $e->getMessage(), [], $e);
         }
-    }
-
-    /**
-     * Return class, which can decode a JSON-string into a stdClass-object (instead of an array)
-     *
-     * @return RestApiJsonFormat
-     */
-    protected function getRestApiJsonFormat()
-    {
-        return GeneralUtility::makeInstance(RestApiJsonFormat::class);
-    }
-
-    /**
-     * @param array|stdClass $data
-     * @return array
-     * @throws RestException
-     */
-    private function convertDataToArray($data)
-    {
-        if ($data === null) {
-            return array();
-        }
-        if (is_array($data)) {
-            return $data;
-        }
-        if ($data instanceof stdClass) {
-            return json_decode(json_encode($data), true); // convert stdClass to array
-        }
-        throw new RestException(500, 'data must be type of null, array or stdClass');
-    }
-
-    /**
-     * @return string
-     */
-    private function handleRequestByTypo3Cache()
-    {
-        $cacheEntry = $this->typo3Cache->getCacheEntry($this->url, $_GET);
-        $this->responseCode = $cacheEntry['responseCode'];
-        $this->responseData = $cacheEntry['responseData'];
-        $this->responseFormat = new $cacheEntry['responseFormatClass']();
-
-        // send data to client
-        if ($this->responseFormat instanceof JsonFormat) {
-            // return stdClass-object (instead of an array)
-            return $this->getRestApiJsonFormat()->decode($this->responseData);
-        }
-        return $this->responseFormat->decode($this->responseData);
-    }
-
-    /**
-     * Override (the stored) data of $_GET, $_POST and $_SERVER (which are used in several restler-PHP-classes) and the original
-     * REST-API-Request-object, because this data/object 'defines' the REST-API-request, which we want to call
-     *
-     * @return void
-     */
-    private function overrideOriginalRestApiRequest()
-    {
-        $_GET = $this->restApiGetData;
-        $_POST = $this->restApiPostData;
-        $_SERVER['REQUEST_METHOD'] = $this->restApiRequestMethod;
-        $_SERVER['REQUEST_URI'] = $this->restApiRequestUri;
-
-        if ($this->restApiRequestMethod !== 'POST' && $this->restApiRequestMethod !== 'PUT') {
-            // content-type and content-length should only exist when request-method is
-            // POST or PUT (because in this case there can be the request-data in the body)
-            if (array_key_exists('CONTENT_TYPE', $_SERVER)) {
-                unset($_SERVER['CONTENT_TYPE']);
-            }
-            if (array_key_exists('HTTP_CONTENT_TYPE', $_SERVER)) {
-                unset($_SERVER['HTTP_CONTENT_TYPE']);
-            }
-            if (array_key_exists('CONTENT_LENGTH', $_SERVER)) {
-                unset($_SERVER['CONTENT_LENGTH']);
-            }
-        }
-
-        $this->restApiRequestScope->overrideOriginalRestApiRequest($this);
-        $this->restApiRequestScope->removeRestApiAuthenticationObjects();
-
-        /**
-         * add all authentication-classes:
-         *  - we must add all authentication-classes, because the authentication-classes are stored in this object
-         *  - we don't must add all REST-API-classes, because the REST-API-classes are not stored in this object
-         */
-        $this->authClasses = $this->restApiRequestScope->getOriginalRestApiRequest()->_authClasses ?? [];
-    }
-
-    /**
-     * Restore (the overridden) data of $_GET, $_POST and $_SERVER and the original REST-API-request-object
-     * @return void
-     */
-    private function restoreOriginalRestApiRequest()
-    {
-        $_GET = self::$originalGetVars;
-        $_POST = self::$originalPostVars;
-        $_SERVER = self::$originalServerSettings;
-        $this->restApiRequestScope->restoreOriginalRestApiRequest();
-        $this->restApiRequestScope->restoreOriginalRestApiAuthenticationObjects();
-    }
-
-    /**
-     * Store (the original) data of $_GET, $_POST and $_SERVER and the original REST-API-request-object
-     * @return void
-     */
-    private function storeOriginalRestApiRequest()
-    {
-        if (false === isset(self::$originalServerSettings)) {
-            self::$originalGetVars = $_GET;
-            self::$originalPostVars = $_POST;
-            self::$originalServerSettings = $_SERVER;
-            $this->restApiRequestScope->storeOriginalRestApiRequest();
-            $this->restApiRequestScope->storeOriginalRestApiAuthenticationObjects();
-        }
-    }
-
-
-
-    /***************************************************************************************************************************/
-    /***************************************************************************************************************************/
-    /* Block of methods, which MUST be overriden from parent-class (otherwise this class can not work) *************************/
-    /***************************************************************************************************************************/
-    /***************************************************************************************************************************/
-    /**
-     * Override parent method...because we don't want to call it!
-     * The original method would set some properties (e.g. set this object into static properties of global classes)
-     *
-     * @param RestApiRequestScope $restApiRequestScope
-     * @param Typo3Cache $typo3Cache
-     */
-    public function __construct(RestApiRequestScope $restApiRequestScope, Typo3Cache $typo3Cache)
-    {
-        $this->restApiRequestScope = $restApiRequestScope;
-        $this->typo3Cache = $typo3Cache;
-    }
-
-    /**
-     * Override parent method...because we don't want to call it (the original method would cache the determined routes)!
-     */
-    public function __destruct()
-    {
     }
 
     /**
@@ -300,9 +188,9 @@ class RestApiRequest extends Restler
      */
     public function getRequestData($includeQueryParameters = true)
     {
-        $requestData = array();
+        $requestData = [];
         if ($this->restApiRequestMethod == 'PUT' || $this->restApiRequestMethod == 'PATCH' || $this->restApiRequestMethod == 'POST') {
-            $requestData = array_merge($this->restApiPostData, array(Defaults::$fullRequestDataName => $this->restApiPostData));
+            $requestData = array_merge($this->restApiPostData, [Defaults::$fullRequestDataName => $this->restApiPostData]);
         }
 
         if ($includeQueryParameters === true) {
@@ -342,9 +230,20 @@ class RestApiRequest extends Restler
 
         if ($this->responseFormat instanceof JsonFormat) {
             // return stdClass-object (instead of an array)
-            return $this->getRestApiJsonFormat()->decode($this->responseData);
+            return $this->getRestApiJsonFormat()
+                ->decode($this->responseData);
         }
         return $this->responseFormat->decode($this->responseData);
+    }
+
+    /**
+     * Return class, which can decode a JSON-string into a stdClass-object (instead of an array)
+     *
+     * @return RestApiJsonFormat
+     */
+    protected function getRestApiJsonFormat()
+    {
+        return GeneralUtility::makeInstance(RestApiJsonFormat::class);
     }
 
     /**
@@ -362,8 +261,109 @@ class RestApiRequest extends Restler
                 $this->apiMethodInfo->metadata,
                 $this->responseData,
                 get_class($this->responseFormat),
-                array() // we don't know which headers would be 'normally' send - because this is an internal REST-API-call
+                [] // we don't know which headers would be 'normally' send - because this is an internal REST-API-call
             );
+        }
+    }
+
+    /**
+     * @param array|stdClass $data
+     * @return array
+     * @throws RestException
+     */
+    private function convertDataToArray($data)
+    {
+        if ($data === null) {
+            return [];
+        }
+        if (is_array($data)) {
+            return $data;
+        }
+        if ($data instanceof stdClass) {
+            return json_decode(json_encode($data), true); // convert stdClass to array
+        }
+        throw new RestException(500, 'data must be type of null, array or stdClass');
+    }
+
+    /**
+     * @return string
+     */
+    private function handleRequestByTypo3Cache()
+    {
+        $cacheEntry = $this->typo3Cache->getCacheEntry($this->url, $_GET);
+        $this->responseCode = $cacheEntry['responseCode'];
+        $this->responseData = $cacheEntry['responseData'];
+        $this->responseFormat = new $cacheEntry['responseFormatClass']();
+
+        // send data to client
+        if ($this->responseFormat instanceof JsonFormat) {
+            // return stdClass-object (instead of an array)
+            return $this->getRestApiJsonFormat()
+                ->decode($this->responseData);
+        }
+        return $this->responseFormat->decode($this->responseData);
+    }
+
+    /**
+     * Override (the stored) data of $_GET, $_POST and $_SERVER (which are used in several restler-PHP-classes) and the original
+     * REST-API-Request-object, because this data/object 'defines' the REST-API-request, which we want to call
+     */
+    private function overrideOriginalRestApiRequest()
+    {
+        $_GET = $this->restApiGetData;
+        $_POST = $this->restApiPostData;
+        $_SERVER['REQUEST_METHOD'] = $this->restApiRequestMethod;
+        $_SERVER['REQUEST_URI'] = $this->restApiRequestUri;
+
+        if ($this->restApiRequestMethod !== 'POST' && $this->restApiRequestMethod !== 'PUT') {
+            // content-type and content-length should only exist when request-method is
+            // POST or PUT (because in this case there can be the request-data in the body)
+            if (array_key_exists('CONTENT_TYPE', $_SERVER)) {
+                unset($_SERVER['CONTENT_TYPE']);
+            }
+            if (array_key_exists('HTTP_CONTENT_TYPE', $_SERVER)) {
+                unset($_SERVER['HTTP_CONTENT_TYPE']);
+            }
+            if (array_key_exists('CONTENT_LENGTH', $_SERVER)) {
+                unset($_SERVER['CONTENT_LENGTH']);
+            }
+        }
+
+        $this->restApiRequestScope->overrideOriginalRestApiRequest($this);
+        $this->restApiRequestScope->removeRestApiAuthenticationObjects();
+
+        /**
+         * add all authentication-classes:
+         *  - we must add all authentication-classes, because the authentication-classes are stored in this object
+         *  - we don't must add all REST-API-classes, because the REST-API-classes are not stored in this object
+         */
+        $this->authClasses = $this->restApiRequestScope->getOriginalRestApiRequest()
+            ->_authClasses ?? [];
+    }
+
+    /**
+     * Restore (the overridden) data of $_GET, $_POST and $_SERVER and the original REST-API-request-object
+     */
+    private function restoreOriginalRestApiRequest()
+    {
+        $_GET = self::$originalGetVars;
+        $_POST = self::$originalPostVars;
+        $_SERVER = self::$originalServerSettings;
+        $this->restApiRequestScope->restoreOriginalRestApiRequest();
+        $this->restApiRequestScope->restoreOriginalRestApiAuthenticationObjects();
+    }
+
+    /**
+     * Store (the original) data of $_GET, $_POST and $_SERVER and the original REST-API-request-object
+     */
+    private function storeOriginalRestApiRequest()
+    {
+        if (isset(self::$originalServerSettings) === false) {
+            self::$originalGetVars = $_GET;
+            self::$originalPostVars = $_POST;
+            self::$originalServerSettings = $_SERVER;
+            $this->restApiRequestScope->storeOriginalRestApiRequest();
+            $this->restApiRequestScope->storeOriginalRestApiAuthenticationObjects();
         }
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\Restler;
 
 /***************************************************************
@@ -37,12 +38,13 @@ use TYPO3\CMS\Core\Site\Entity\Site;
 class RestlerExtended extends Restler
 {
     /**
+     * @var ServerRequestInterface
+     */
+    protected $request;
+    /**
      * @var Typo3Cache
      */
     private $typo3Cache;
-
-    /** @var ServerRequestInterface  */
-    protected $request;
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
@@ -58,9 +60,14 @@ class RestlerExtended extends Restler
      *                                   every time to map it to the URL
      *
      * @param bool $refreshCache      will update the cache when set to true
-     * @param ServerRequestInterface     frontend request
+     * @param ServerRequestInterface $request     frontend request
      */
-    public function __construct(Typo3Cache $typo3Cache, $productionMode = false, $refreshCache = false, ServerRequestInterface $request = null)
+    public function __construct(
+        Typo3Cache $typo3Cache,
+        $productionMode = false,
+        $refreshCache = false,
+        ServerRequestInterface $request = null
+    )
     {
         parent::__construct($productionMode, $refreshCache);
 
@@ -103,6 +110,20 @@ class RestlerExtended extends Restler
     }
 
     /**
+     * Rewrap the not accessible private stream in a new one.
+     *
+     * @return bool|resource
+     */
+    public function getRequestStream()
+    {
+        $stream = fopen('php://temp', 'wb+');
+        fwrite($stream, (string) $this->request->getBody());
+        fseek($stream, 0, SEEK_SET);
+
+        return $stream;
+    }
+
+    /**
      * Determine path (and baseUrl) for current request.
      *
      * @return string|string[]|null
@@ -113,14 +134,18 @@ class RestlerExtended extends Restler
             // set base path depending on site config
             $site = $this->request->getAttribute('site');
             if ($site !== null && $site instanceof Site) {
-                $siteBasePath = $this->request->getAttribute('site')->getBase()->getPath();
+                $siteBasePath = $this->request->getAttribute('site')
+                    ->getBase()
+                    ->getPath();
                 if ($siteBasePath !== '/' && $siteBasePath[-1] !== '/') {
                     $siteBasePath .= '/';
                 }
             } else {
                 $siteBasePath = '/';
             }
-            $this->baseUrl = (string)$this->request->getUri()->withQuery('')->withPath($siteBasePath);
+            $this->baseUrl = (string) $this->request->getUri()
+                ->withQuery('')
+                ->withPath($siteBasePath);
 
             // set url with base path removed
             return rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $this->request->getUri()->getPath()), '/');
@@ -146,20 +171,6 @@ class RestlerExtended extends Restler
                 headers_list()
             );
         }
-    }
-
-    /**
-     * Rewrap the not accessible private stream in a new one.
-     *
-     * @return bool|resource
-     */
-    public function getRequestStream()
-    {
-        $stream = fopen('php://temp', 'wb+');
-        fwrite($stream, (string)$this->request->getBody());
-        fseek($stream, 0, SEEK_SET);
-
-        return $stream;
     }
 
     /***************************************************************************************************************************/

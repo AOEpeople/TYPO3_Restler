@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System;
 
 /***************************************************************
@@ -77,6 +78,9 @@ abstract class RestlerBuilderAware
     protected function isRestlerApiExplorerUrl($prefixedUrlPath)
     {
         $apiExplorerPrefix = '/' . $this->extensionConfiguration->getPathOfOnlineDocumentation();
-        return $this->extensionConfiguration->isOnlineDocumentationEnabled() && ($prefixedUrlPath === $apiExplorerPrefix || strpos($prefixedUrlPath, $apiExplorerPrefix . '/') === 0);
+        return $this->extensionConfiguration->isOnlineDocumentationEnabled() && ($prefixedUrlPath === $apiExplorerPrefix || strpos(
+            $prefixedUrlPath,
+            $apiExplorerPrefix . '/'
+        ) === 0);
     }
 }

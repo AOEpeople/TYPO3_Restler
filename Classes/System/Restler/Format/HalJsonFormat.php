@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\Restler\Format;
 
 use Luracast\Restler\Data\Obj;
@@ -19,6 +20,8 @@ use Luracast\Restler\RestException;
  */
 class HalJsonFormat extends Format
 {
+    public const MIME = 'application/hal+json';
+    public const EXTENSION = 'json';
     /**
      * @var boolean|null  shim for json_encode option JSON_PRETTY_PRINT set
      * it to null to use smart defaults
@@ -51,18 +54,15 @@ class HalJsonFormat extends Format
      */
     public static $numbersAsNumbers = null;
 
-    const MIME = 'application/hal+json';
-    const EXTENSION = 'json';
-
     public function encode($data, $humanReadable = false)
     {
-        if (!is_null(self::$prettyPrint)) {
+        if (self::$prettyPrint !== null) {
             $humanReadable = self::$prettyPrint;
         }
-        if (is_null(self::$unEscapedSlashes)) {
+        if (self::$unEscapedSlashes === null) {
             self::$unEscapedSlashes = $humanReadable;
         }
-        if (is_null(self::$unEscapedUnicode)) {
+        if (self::$unEscapedUnicode === null) {
             self::$unEscapedUnicode = $this->charset == 'utf-8';
         }
 
@@ -110,9 +110,8 @@ class HalJsonFormat extends Format
                 function ($matches) {
                     if (function_exists('mb_convert_encoding')) {
                         return mb_convert_encoding(pack('H*', $matches[1]), 'UTF-8', 'UTF-16BE');
-                    } else {
-                        return iconv('UTF-16BE', 'UTF-8', pack('H*', $matches[1]));
                     }
+                    return iconv('UTF-16BE', 'UTF-8', pack('H*', $matches[1]));
                 },
                 $result
             );
@@ -161,6 +160,48 @@ class HalJsonFormat extends Format
     }
 
     /**
+     * Throws an exception if an error occurred during the last JSON encoding/decoding
+     *
+     * @throws \RuntimeException
+     */
+    protected function handleJsonError()
+    {
+        if (function_exists('json_last_error_msg') && json_last_error() !== JSON_ERROR_NONE) {
+            // PHP >= 5.5.0
+            $message = json_last_error_msg();
+        } elseif (function_exists('json_last_error')) {
+            // PHP >= 5.3.0
+            switch (json_last_error()) {
+                case JSON_ERROR_NONE:
+                    break;
+                case JSON_ERROR_DEPTH:
+                    $message = 'maximum stack depth exceeded';
+                    break;
+                case JSON_ERROR_STATE_MISMATCH:
+                    $message = 'underflow or the modes mismatch';
+                    break;
+                case JSON_ERROR_CTRL_CHAR:
+                    $message = 'unexpected control character found';
+                    break;
+                case JSON_ERROR_SYNTAX:
+                    $message = 'malformed JSON';
+                    break;
+                case JSON_ERROR_UTF8:
+                    $message = 'malformed UTF-8 characters, possibly ' .
+                        'incorrectly encoded';
+                    break;
+                default:
+                    $message = 'unknown error';
+                    break;
+            }
+        }
+
+        if (isset($message)) {
+            throw new \RuntimeException('Error encoding/decoding JSON: ' . $message);
+        }
+    }
+
+    /**
      * Pretty print JSON string
      *
      * @param  string $json
@@ -175,7 +216,7 @@ class HalJsonFormat extends Format
         $inString = false;
         $len = strlen($json);
         for ($c = 0; $c < $len; $c++) {
-            $char = $json [$c];
+            $char = $json[$c];
             switch ($char) {
                 case '{':
                 case '[':
@@ -215,10 +256,11 @@ class HalJsonFormat extends Format
                 case '"':
                     if ($c == 0) {
                         $inString = true;
-                    } elseif ($c > 0 && $json [$c - 1] != '\\') {
+                    } elseif ($c > 0 && $json[$c - 1] != '\\') {
                         $inString = !$inString;
                     }
                     // fall-through
+                    // no break
                 default:
                     $newJson .= $char;
                     break;
@@ -226,49 +268,5 @@ class HalJsonFormat extends Format
         }
 
         return $newJson;
-    }
-
-    /**
-     * Throws an exception if an error occurred during the last JSON encoding/decoding
-     *
-     * @return void
-     * @throws \RuntimeException
-     */
-    protected function handleJsonError()
-    {
-        if (function_exists('json_last_error_msg') && json_last_error() !== JSON_ERROR_NONE) {
-            // PHP >= 5.5.0
-            $message = json_last_error_msg();
-
-        } elseif (function_exists('json_last_error')) {
-            // PHP >= 5.3.0
-            switch (json_last_error()) {
-                case JSON_ERROR_NONE:
-                    break;
-                case JSON_ERROR_DEPTH:
-                    $message = 'maximum stack depth exceeded';
-                    break;
-                case JSON_ERROR_STATE_MISMATCH:
-                    $message = 'underflow or the modes mismatch';
-                    break;
-                case JSON_ERROR_CTRL_CHAR:
-                    $message = 'unexpected control character found';
-                    break;
-                case JSON_ERROR_SYNTAX:
-                    $message = 'malformed JSON';
-                    break;
-                case JSON_ERROR_UTF8:
-                    $message = 'malformed UTF-8 characters, possibly ' .
-                        'incorrectly encoded';
-                    break;
-                default:
-                    $message = 'unknown error';
-                    break;
-            }
-        }
-
-        if (isset($message)) {
-            throw new \RuntimeException('Error encoding/decoding JSON: ' . $message);
-        }
     }
 }

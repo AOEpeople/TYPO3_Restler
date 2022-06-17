@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\Restler;
 
 /***************************************************************
@@ -38,7 +39,6 @@ interface ConfigurationInterface extends SingletonInterface
      * Use this method instead of the index.php-file, which you normally would use, to configuring/using restler!
      *
      * @param Restler $restler
-     * @return void
      */
     public function configureRestler(Restler $restler);
 }

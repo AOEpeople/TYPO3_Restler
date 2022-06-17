@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\RestApi;
 
 /***************************************************************
@@ -32,5 +33,5 @@ class RestApiRequestException extends Exception
     /**
      * @var integer
      */
-    const EXCEPTION_CODE_REQUEST_COULD_NOT_PROCESSED = 1446475601;
+    public const EXCEPTION_CODE_REQUEST_COULD_NOT_PROCESSED = 1446475601;
 }

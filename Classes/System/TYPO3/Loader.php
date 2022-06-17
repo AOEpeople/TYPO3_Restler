@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\TYPO3;
 
 /***************************************************************
@@ -53,6 +54,10 @@ use LogicException;
 class Loader implements SingletonInterface
 {
     /**
+     * @var TimeTracker
+     */
+    protected $timeTracker;
+    /**
      * @var BackendUserAuthenticator
      */
     private $backendUserAuthenticator;
@@ -71,11 +76,6 @@ class Loader implements SingletonInterface
      * @var RequestHandler
      */
     private $requestHandler;
-
-    /**
-     * @var TimeTracker
-     */
-    protected $timeTracker;
 
     /**
      * @var TypoScriptFrontendInitialization
@@ -156,7 +156,7 @@ class Loader implements SingletonInterface
             return;
         }
 
-        /* @var ServerRequestInterface $request */
+        /** @var ServerRequestInterface $request */
         $request = $this->getRequest()
             ->withQueryParams(array_merge($_GET, ['pid' => $pid]))
             ->withCookieParams($_COOKIE);
@@ -172,8 +172,9 @@ class Loader implements SingletonInterface
      */
     public function hasActiveFrontendUser()
     {
-        $frontendUser = $this->getRequest()->getAttribute('frontend.user');
-        return ($frontendUser instanceof FrontendUserAuthentication && is_array($frontendUser->user) && isset($frontendUser->user['uid']));
+        $frontendUser = $this->getRequest()
+            ->getAttribute('frontend.user');
+        return $frontendUser instanceof FrontendUserAuthentication && is_array($frontendUser->user) && isset($frontendUser->user['uid']);
     }
 
     /**
@@ -185,14 +186,13 @@ class Loader implements SingletonInterface
         if ($this->hasActiveFrontendUser() === false) {
             throw new LogicException('fe-user is not initialized');
         }
-        return $this->getRequest()->getAttribute('frontend.user');
+        return $this->getRequest()
+            ->getAttribute('frontend.user');
     }
 
     /**
      * @param integer $pageId
      * @param integer $type
-     *
-     * @return void
      */
     public function initializeFrontendRendering($pageId = 0, $type = 0)
     {
@@ -208,7 +208,7 @@ class Loader implements SingletonInterface
         $pageArguments = new PageArguments($pageId, $type, [], [], []);
         $normalizedParams = NormalizedParams::createFromRequest($this->getRequest());
 
-        /* @var ServerRequestInterface $request */
+        /** @var ServerRequestInterface $request */
         $request = $this->getRequest()
             ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE)
             ->withAttribute('site', $site)
@@ -248,7 +248,8 @@ class Loader implements SingletonInterface
 
         /** @var Response $response */
         $response = $this->requestHandler->handle($this->getRequest());
-        return $response->getBody()->__toString();
+        return $response->getBody()
+            ->__toString();
     }
 
     /**

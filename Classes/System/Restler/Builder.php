@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\Restler;
 
 /***************************************************************
@@ -34,7 +35,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
-use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -109,7 +109,7 @@ class Builder implements SingletonInterface
     {
         $restlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
 
-        if (false === is_array($restlerConfigurationClasses) || count($restlerConfigurationClasses) === 0) {
+        if (is_array($restlerConfigurationClasses) === false || count($restlerConfigurationClasses) === 0) {
             $message = 'No restler-configuration-class found (at least one restler-configuration-class is required)! ';
             $message .= 'The configuration-class must be registered in ext_localconf.php of your TYPO3-extension like this: ';
             $message .= '$GLOBALS[\'TYPO3_CONF_VARS\'][\'SC_OPTIONS\'][\'restler\'][\'restlerConfigurationClasses\'][] =
@@ -130,8 +130,8 @@ class Builder implements SingletonInterface
         foreach ($restlerConfigurationClasses as $restlerConfigurationClass) {
             $configurationObj = GeneralUtility::makeInstance($restlerConfigurationClass);
 
-            /* @var $configurationObj ConfigurationInterface */
-            if (false === $configurationObj instanceof ConfigurationInterface) {
+            /** @var ConfigurationInterface $configurationObj */
+            if ($configurationObj instanceof ConfigurationInterface === false) {
                 $message = 'class "' . $restlerConfigurationClass . '" did not implement the ';
                 $message .= 'interface "Aoe\Restler\System\Restler\ConfigurationInterface"!';
                 throw new InvalidArgumentException($message, 1428562081);
@@ -200,6 +200,7 @@ class Builder implements SingletonInterface
      */
     private function getCache()
     {
-        return $this->cacheManager->getCache('tx_restler_cache')->getBackend();
+        return $this->cacheManager->getCache('tx_restler_cache')
+            ->getBackend();
     }
 }

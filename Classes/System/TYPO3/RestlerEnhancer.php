@@ -68,7 +68,8 @@ class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerI
         $prefixedUrlPath = '/' . trim($routePath, '/');
 
         if ($this->isRestlerPrefix($prefixedUrlPath)) {
-            $this->getRestlerBuilder()->build(null);
+            $this->getRestlerBuilder()
+                ->build(null);
 
             if ($this->isRestlerUrl($prefixedUrlPath)) {
                 $defaultRoute = $collection->get('default');

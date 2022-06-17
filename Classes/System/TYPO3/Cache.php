@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\TYPO3;
 
 /***************************************************************
@@ -49,7 +50,7 @@ class Cache implements SingletonInterface
      *
      * @var string
      */
-    const API_METHOD_TYPO3CACHE_EXPIRES = 'restler_typo3cache_expires';
+    public const API_METHOD_TYPO3CACHE_EXPIRES = 'restler_typo3cache_expires';
 
     /**
      * This is the phpdoc-tag, which defines, that the cached response of API-method should be tagged with given tags
@@ -64,7 +65,7 @@ class Cache implements SingletonInterface
      *
      * @var string
      */
-    const API_METHOD_TYPO3CACHE_TAGS = 'restler_typo3cache_tags';
+    public const API_METHOD_TYPO3CACHE_TAGS = 'restler_typo3cache_tags';
 
     /**
      * @var FrontendInterface
@@ -115,11 +116,11 @@ class Cache implements SingletonInterface
         array $responseHeaders
     ) {
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
-        $frontendCacheExpires = (integer) $apiMethodInfoMetadata['expires'];
-        $typo3CacheExpires = (integer) $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_EXPIRES];
+        $frontendCacheExpires = (int) $apiMethodInfoMetadata['expires'];
+        $typo3CacheExpires = (int) $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_EXPIRES];
         $typo3CacheTags = explode(',', $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_TAGS]);
 
-        $cacheData = array();
+        $cacheData = [];
         $cacheData['responseCode'] = $responseCode;
         $cacheData['requestUri'] = $requestUri;
         $cacheData['requestGetData'] = $requestGetData;
