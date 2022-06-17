@@ -32,7 +32,7 @@ To render the documentation locally, please use the official TYPO3 Documentation
 
 ## Copyright / License
 
-Copyright: (c) 2015 - 2021, AOE GmbH
+Copyright: (c) 2015 - 2022, AOE GmbH
 License: GPLv3, <http://www.gnu.org/licenses/gpl-3.0.en.html>  
 
 [1]: https://extensions.typo3.org/extension/restler

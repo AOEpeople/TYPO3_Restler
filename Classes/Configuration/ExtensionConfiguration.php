@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Configuration;
 
 /***************************************************************
@@ -41,7 +42,6 @@ class ExtensionConfiguration implements SingletonInterface
 
     /**
      * constructor - loading the current localconf configuration for restler extension
-     *
      */
     public function __construct(Typo3ExtensionConfiguration $configuration = null)
     {
@@ -57,7 +57,7 @@ class ExtensionConfiguration implements SingletonInterface
      */
     public function isCacheRefreshingEnabled()
     {
-        return (boolean)$this->get('refreshCache');
+        return (bool) $this->get('refreshCache');
     }
 
     /**
@@ -65,7 +65,7 @@ class ExtensionConfiguration implements SingletonInterface
      */
     public function isProductionContextSet()
     {
-        return (boolean)$this->get('productionContext');
+        return (bool) $this->get('productionContext');
     }
 
     /**
@@ -73,7 +73,7 @@ class ExtensionConfiguration implements SingletonInterface
      */
     public function isOnlineDocumentationEnabled()
     {
-        return (boolean)$this->get('enableOnlineDocumentation');
+        return (bool) $this->get('enableOnlineDocumentation');
     }
 
     /**

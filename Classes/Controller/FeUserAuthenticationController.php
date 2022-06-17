@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Controller;
 
 /***************************************************************
@@ -83,10 +84,6 @@ class FeUserAuthenticationController implements iAuthenticate
      * @var boolean
      */
     public $checkAuthentication = false;
-    /**
-     * @var TYPO3Loader
-     */
-    private $typo3Loader;
 
     /**
      * Instance of Restler class injected at runtime.
@@ -94,6 +91,10 @@ class FeUserAuthenticationController implements iAuthenticate
      * @var Restler
      */
     public $restler;
+    /**
+     * @var TYPO3Loader
+     */
+    private $typo3Loader;
 
     /**
      * @param TYPO3Loader $typo3Loader
@@ -139,7 +140,7 @@ class FeUserAuthenticationController implements iAuthenticate
      */
     private function determinePageId()
     {
-        if (false === empty($this->argumentNameOfPageId)) {
+        if (empty($this->argumentNameOfPageId) === false) {
             return $this->argumentNameOfPageId;
         }
 
@@ -154,7 +155,7 @@ class FeUserAuthenticationController implements iAuthenticate
      */
     private function determinePageIdFromArguments()
     {
-        if (false === array_key_exists($this->argumentNameOfPageId, $this->restler->apiMethodInfo->arguments)) {
+        if (array_key_exists($this->argumentNameOfPageId, $this->restler->apiMethodInfo->arguments) === false) {
             return '0';
         }
 

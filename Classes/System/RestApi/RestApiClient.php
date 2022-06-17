@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\RestApi;
 
 /***************************************************************
@@ -107,7 +108,8 @@ class RestApiClient implements SingletonInterface
 
         try {
             $this->isExecutingRequest = true;
-            $result = $this->createRequest()->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
+            $result = $this->createRequest()
+                ->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
             $this->isExecutingRequest = false;
             return $result;
         } catch (RestException $e) {
@@ -135,9 +137,9 @@ class RestApiClient implements SingletonInterface
      */
     protected function createRequestException(RestException $e, $requestMethod, $requestUri)
     {
-        $errorMessage = 'internal REST-API-request \''.$requestMethod.':'.$requestUri.'\' could not be processed';
-        if (false === $this->isProductionContextSet()) {
-            $errorMessage .= ' (message: '.$e->getMessage().', details: '.json_encode($e->getDetails()).')';
+        $errorMessage = 'internal REST-API-request \'' . $requestMethod . ':' . $requestUri . '\' could not be processed';
+        if ($this->isProductionContextSet() === false) {
+            $errorMessage .= ' (message: ' . $e->getMessage() . ', details: ' . json_encode($e->getDetails()) . ')';
         }
         return new RestApiRequestException(
             $errorMessage,
@@ -176,7 +178,8 @@ class RestApiClient implements SingletonInterface
     private function prepareRequest($requestMethod, $requestUri, $getData = null, $postData = null)
     {
         // TODO: pass along the post data
-        $originalRestApiRequest = $this->getRestlerBuilder()->build(new ServerRequest($requestUri, $requestMethod));
+        $originalRestApiRequest = $this->getRestlerBuilder()
+            ->build(new ServerRequest($requestUri, $requestMethod));
         $this->restApiRequestScope->storeOriginalRestApiRequest($originalRestApiRequest);
         $this->isRequestPrepared = true;
     }

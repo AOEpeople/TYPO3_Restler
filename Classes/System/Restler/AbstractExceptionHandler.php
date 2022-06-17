@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\Restler;
 
 /***************************************************************
@@ -417,6 +418,7 @@ abstract class AbstractExceptionHandler
         if (count($exceptionHandlerArgs) > 0 && $exceptionHandlerArgs[0] instanceof RestException) {
             return $exceptionHandlerArgs[0];
         }
-        return $this->getRestler()->exception;
+        return $this->getRestler()
+            ->exception;
     }
 }

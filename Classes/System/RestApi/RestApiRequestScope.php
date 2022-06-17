@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\System\RestApi;
 
 /***************************************************************
@@ -45,7 +46,7 @@ class RestApiRequestScope extends Scope implements SingletonInterface
      *
      * @var array
      */
-    private $originalRestApiAuthenticationObjects = array();
+    private $originalRestApiAuthenticationObjects = [];
 
     /**
      * @return Restler
