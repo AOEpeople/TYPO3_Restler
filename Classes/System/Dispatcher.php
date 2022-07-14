@@ -69,19 +69,24 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
     {
         // set base path depending on site config
         $site = $request->getAttribute('site');
-        if ($site !== null && $site instanceof \TYPO3\CMS\Core\Site\Entity\Site) {
+        if ($site instanceof \TYPO3\CMS\Core\Site\Entity\Site) {
             $siteBasePath = $request->getAttribute('site')
                 ->getBase()
                 ->getPath();
-            if ($siteBasePath !== '/' && $siteBasePath[-1] !== '/') {
+            if ($siteBasePath === '/' || $siteBasePath === '') {
+                $siteBasePath = null;
+            } else if ($siteBasePath[-1] !== '/') {
                 $siteBasePath .= '/';
             }
         } else {
-            $siteBasePath = '/';
+            $siteBasePath = null;
         }
 
-        // set url with base path removed
-        return '/' . rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $request->getUri()->getPath()), '/');
+        if ($siteBasePath) {
+            return '/' . rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $request->getUri()->getPath()), '/');
+        }
+
+        return $request->getUri()->getPath();
     }
 
     private function isRestlerUrl($uri): bool
