@@ -6,13 +6,15 @@ rules:
     - Symplify\PHPStanRules\Rules\NoDefaultExceptionRule
 
 parameters:
-    level: max
+    level: 6
     paths:
         - "../Classes/"
 
     inferPrivatePropertyTypeFromConstructor: true
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
+    checkAlwaysTrueCheckTypeFunctionCall: false
+    checkAlwaysTrueStrictComparison: false
 
 services:
     - class: Symplify\Astral\Naming\SimpleNameResolver

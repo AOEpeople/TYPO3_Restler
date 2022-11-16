@@ -3,10 +3,13 @@
 declare(strict_types=1);
 
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
+use Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
+use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
 use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
 use Rector\CodeQualityStrict\Rector\If_\MoveOutMethodCallInsideIfConditionRector;
+use Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
@@ -16,6 +19,7 @@ use Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 use Rector\Core\Configuration\Option;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
+use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\Defluent\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector;
 use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
@@ -25,6 +29,8 @@ use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 use Rector\Naming\Rector\Property\MakeBoolPropertyRespectIsHasWasMethodNamingRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
+use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector;
@@ -95,16 +101,33 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ChangeReadOnlyVariableWithDefaultValueToConstantRector::class,
             PrivatizeLocalPropertyToPrivatePropertyRector::class,
             RemoveDelegatingParentCallRector::class,
+            ReturnTypeDeclarationRector::class => [
+                __DIR__ . '/../Classes/System/Restler/Builder.php',
+            ],
+            SimplifyIfReturnBoolRector::class => [
+                __DIR__ . '/../Classes/System/TYPO3/Cache.php',
+            ],
+            RemoveDeadInstanceOfRector::class => [
+                __DIR__ . '/../Classes/System/Restler/Builder.php',
+                __DIR__ . '/../Classes/System/RestApi/RestApiRequest.php'
+            ],
+            ClosureToArrowFunctionRector::class => [
+                __DIR__ . '/../Classes/System/Restler/Builder.php'
+            ],
+            FunctionArgumentDefaultValueReplacerRector::class => [
+                __DIR__ . '/../Classes/System/RestApi/RestApiRequest.php'
+            ],
+            JsonThrowOnErrorRector::class => [
+                __DIR__ . '/../Classes/System/RestApi/RestApiRequest.php',
+                __DIR__ . '/../Classes/System/RestApi/RestApiJsonFormat.php',
+                __DIR__ . '/../Classes/System/Restler/Format/HalJsonFormat.php'
+            ],
+            RemoveDoubleUnderscoreInMethodNameRector::class => [
+                __DIR__ . '/../Classes/Controller/FeUserAuthenticationController.php',
+                __DIR__ . '/../Classes/Controller/ExplorerAuthenticationController.php',
+                __DIR__ . '/../Classes/Controller/BeUserAuthenticationController.php'
+            ],
 
-            // @todo strict php
-            ArgumentAdderRector::class,
-            ParamTypeDeclarationRector::class,
-            ReturnTypeDeclarationRector::class,
-            RemoveExtraParametersRector::class,
-            EncapsedStringsToSprintfRector::class,
-            AddFalseDefaultToBoolPropertyRector::class,
-            WrapEncapsedVariableInCurlyBracesRector::class,
-            UseIdenticalOverEqualWithSameTypeRector::class,
         ]
     );
 
