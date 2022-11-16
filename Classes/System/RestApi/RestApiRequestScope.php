@@ -43,10 +43,8 @@ class RestApiRequestScope extends Scope implements SingletonInterface
     /**
      * This array contains all instanciated REST-API-authentication-objects, which
      * where already initialized before we call the REST-API-request via PHP
-     *
-     * @var array
      */
-    private $originalRestApiAuthenticationObjects = [];
+    private array $originalRestApiAuthenticationObjects = [];
 
     /**
      * @return Restler
@@ -61,8 +59,6 @@ class RestApiRequestScope extends Scope implements SingletonInterface
 
     /**
      * Override (the stored) restler-object, because this restler-object 'defines' the REST-API-request, which we want to call
-     *
-     * @param RestApiRequest $restApiRequest
      */
     public function overrideOriginalRestApiRequest(RestApiRequest $restApiRequest)
     {

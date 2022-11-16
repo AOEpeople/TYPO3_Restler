@@ -44,20 +44,10 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
  */
 class Builder implements SingletonInterface
 {
-    /**
-     * @var ExtensionConfiguration
-     */
-    private $extensionConfiguration;
+    private ExtensionConfiguration $extensionConfiguration;
 
-    /**
-     * @var CacheManager
-     */
-    private $cacheManager;
+    private CacheManager $cacheManager;
 
-    /**
-     * @param ExtensionConfiguration $extensionConfiguration
-     * @param CacheManager $cacheManager
-     */
     public function __construct(ExtensionConfiguration $extensionConfiguration, CacheManager $cacheManager)
     {
         $this->extensionConfiguration = $extensionConfiguration;
@@ -81,10 +71,7 @@ class Builder implements SingletonInterface
         return $restlerObj;
     }
 
-    /**
-     * @return RestlerExtended
-     */
-    protected function createRestlerObject(ServerRequestInterface $request = null)
+    protected function createRestlerObject(ServerRequestInterface $request = null): RestlerExtended
     {
         return new RestlerExtended(
             GeneralUtility::makeInstance(Cache::class),
@@ -102,14 +89,13 @@ class Builder implements SingletonInterface
      *  - configure/set properties of several classes inside the restler-framework
      *  - configure overwriting of several classes inside the restler-framework
      *
-     * @param RestlerExtended $restler
      * @throws InvalidArgumentException
      */
     private function configureRestler(RestlerExtended $restler)
     {
         $restlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
 
-        if (is_array($restlerConfigurationClasses) === false || count($restlerConfigurationClasses) === 0) {
+        if (!is_array($restlerConfigurationClasses) || $restlerConfigurationClasses === []) {
             $message = 'No restler-configuration-class found (at least one restler-configuration-class is required)! ';
             $message .= 'The configuration-class must be registered in ext_localconf.php of your TYPO3-extension like this: ';
             $message .= '$GLOBALS[\'TYPO3_CONF_VARS\'][\'SC_OPTIONS\'][\'restler\'][\'restlerConfigurationClasses\'][] =
@@ -128,10 +114,10 @@ class Builder implements SingletonInterface
         }
 
         foreach ($restlerConfigurationClasses as $restlerConfigurationClass) {
+            /** @var ConfigurationInterface $configurationObj */
             $configurationObj = GeneralUtility::makeInstance($restlerConfigurationClass);
 
-            /** @var ConfigurationInterface $configurationObj */
-            if ($configurationObj instanceof ConfigurationInterface === false) {
+            if (!$configurationObj instanceof ConfigurationInterface) {
                 $message = 'class "' . $restlerConfigurationClass . '" did not implement the ';
                 $message .= 'interface "Aoe\Restler\System\Restler\ConfigurationInterface"!';
                 throw new InvalidArgumentException($message, 1428562081);
@@ -143,8 +129,6 @@ class Builder implements SingletonInterface
 
     /**
      * Add API-Controller-Classes that are registered by global array
-     *
-     * @param RestlerExtended $restler
      */
     private function addApiClassesByGlobalArray(RestlerExtended $restler)
     {

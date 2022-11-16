@@ -26,7 +26,7 @@ namespace Aoe\Restler\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
+use Aoe\Restler\System\TYPO3\Loader;
 use Luracast\Restler\iAuthenticate;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
@@ -57,10 +57,8 @@ class FeUserAuthenticationController implements iAuthenticate
      * @class Aoe\Restler\Controller\FeUserAuthenticationController {@argumentNameOfPageId pageId}
      *
      * @see \Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
-     *
-     * @var string
      */
-    public $argumentNameOfPageId = '';
+    public string $argumentNameOfPageId = '';
     /**
      * This property defines (when it's set), that this controller should check authentication
      * This property will be automatically set by restler, when in the API-class/controller this
@@ -80,10 +78,8 @@ class FeUserAuthenticationController implements iAuthenticate
      *
      * @see \Aoe\RestlerExamples\Controller\FeUserController::getDataOfLoggedInFeUser
      * @see \Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
-     *
-     * @var boolean
      */
-    public $checkAuthentication = false;
+    public bool $checkAuthentication = false;
 
     /**
      * Instance of Restler class injected at runtime.
@@ -91,15 +87,10 @@ class FeUserAuthenticationController implements iAuthenticate
      * @var Restler
      */
     public $restler;
-    /**
-     * @var TYPO3Loader
-     */
-    private $typo3Loader;
 
-    /**
-     * @param TYPO3Loader $typo3Loader
-     */
-    public function __construct(TYPO3Loader $typo3Loader)
+    private Loader $typo3Loader;
+
+    public function __construct(Loader $typo3Loader)
     {
         $this->typo3Loader = $typo3Loader;
         $this->restler = Scope::get('Restler');
@@ -107,12 +98,11 @@ class FeUserAuthenticationController implements iAuthenticate
 
     /**
      * This method checks, if client is allowed to access the requested API-class
-     *
-     * @return boolean
      */
-    public function __isAllowed()
+    // phpcs:ignore
+    public function __isAllowed(): bool
     {
-        if ($this->checkAuthentication !== true) {
+        if (!$this->checkAuthentication) {
             // this controller is not responsible for the authentication
             return false;
         }
@@ -125,22 +115,20 @@ class FeUserAuthenticationController implements iAuthenticate
     /**
      * return dummy string, because we DON'T need that for our case (we use NO base-authentification via REST-API)
      *
-     * @return string
      * @see \Luracast\Restler\iAuthenticate
      */
-    public function __getWWWAuthenticateString()
+    // phpcs:ignore
+    public function __getWWWAuthenticateString(): string
     {
         return '';
     }
 
     /**
      * List of page IDs (comma separated) or page ID where to look for frontend user records
-     *
-     * @return string
      */
-    private function determinePageId()
+    private function determinePageId(): string
     {
-        if (empty($this->argumentNameOfPageId) === false) {
+        if (!empty($this->argumentNameOfPageId)) {
             return $this->argumentNameOfPageId;
         }
 
@@ -150,12 +138,10 @@ class FeUserAuthenticationController implements iAuthenticate
     /**
      * determine pageId from arguments, which restler has detected
      * We need the pageId, when we want to render TYPO3-contentElements, after the user is authenticated
-     *
-     * @return string
      */
-    private function determinePageIdFromArguments()
+    private function determinePageIdFromArguments(): string
     {
-        if (array_key_exists($this->argumentNameOfPageId, $this->restler->apiMethodInfo->arguments) === false) {
+        if (!array_key_exists($this->argumentNameOfPageId, $this->restler->apiMethodInfo->arguments)) {
             return '0';
         }
 

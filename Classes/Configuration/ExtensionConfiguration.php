@@ -38,7 +38,7 @@ class ExtensionConfiguration implements SingletonInterface
     /**
      * @var array
      */
-    private $configuration;
+    private $configuration = [];
 
     /**
      * constructor - loading the current localconf configuration for restler extension
@@ -52,45 +52,30 @@ class ExtensionConfiguration implements SingletonInterface
         $this->configuration = $configuration->get('restler');
     }
 
-    /**
-     * @return boolean
-     */
-    public function isCacheRefreshingEnabled()
+    public function isCacheRefreshingEnabled(): bool
     {
         return (bool) $this->get('refreshCache');
     }
 
-    /**
-     * @return boolean
-     */
-    public function isProductionContextSet()
+    public function isProductionContextSet(): bool
     {
         return (bool) $this->get('productionContext');
     }
 
-    /**
-     * @return boolean
-     */
-    public function isOnlineDocumentationEnabled()
+    public function isOnlineDocumentationEnabled(): bool
     {
         return (bool) $this->get('enableOnlineDocumentation');
     }
 
-    /**
-     * @return string
-     */
-    public function getPathOfOnlineDocumentation()
+    public function getPathOfOnlineDocumentation(): string
     {
         return $this->get('pathToOnlineDocumentation');
     }
 
     /**
      * returns configuration value for the given key
-     *
-     * @param string $key
-     * @return string depending on configuration key
      */
-    private function get($key)
+    private function get(string $key): string
     {
         return $this->configuration[$key];
     }

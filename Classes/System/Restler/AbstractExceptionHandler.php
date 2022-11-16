@@ -39,17 +39,8 @@ use Luracast\Restler\Scope;
  */
 abstract class AbstractExceptionHandler
 {
-    /**
-     * This object can be used, to check the Extension-Configuration (maybe we want to
-     * handle an exception in different ways - based on the Extension-Configuration)
-     *
-     * @var ExtensionConfiguration
-     */
-    protected $extensionConfiguration;
+    protected ExtensionConfiguration $extensionConfiguration;
 
-    /**
-     * @param ExtensionConfiguration $extensionConfiguration
-     */
     public function __construct(ExtensionConfiguration $extensionConfiguration)
     {
         $this->extensionConfiguration = $extensionConfiguration;
@@ -59,15 +50,15 @@ abstract class AbstractExceptionHandler
     /**
      * handle HTTP-Status-Codes of type 1xx
      */
-    public function handle100()
+    public function handle100(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle101()
+    public function handle101(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle102()
+    public function handle102(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
@@ -76,43 +67,43 @@ abstract class AbstractExceptionHandler
     /**
      * handle HTTP-Status-Codes of type 2xx
      */
-    public function handle200()
+    public function handle200(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle201()
+    public function handle201(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle202()
+    public function handle202(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle203()
+    public function handle203(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle204()
+    public function handle204(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle205()
+    public function handle205(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle206()
+    public function handle206(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle207()
+    public function handle207(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle208()
+    public function handle208(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle226()
+    public function handle226(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
@@ -121,39 +112,39 @@ abstract class AbstractExceptionHandler
     /**
      * handle HTTP-Status-Codes of type 3xx
      */
-    public function handle300()
+    public function handle300(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle301()
+    public function handle301(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle302()
+    public function handle302(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle303()
+    public function handle303(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle304()
+    public function handle304(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle305()
+    public function handle305(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle306()
+    public function handle306(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle307()
+    public function handle307(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle308()
+    public function handle308(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
@@ -162,135 +153,135 @@ abstract class AbstractExceptionHandler
     /**
      * handle HTTP-Status-Codes of type 4xx
      */
-    public function handle400()
+    public function handle400(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle401()
+    public function handle401(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle402()
+    public function handle402(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle403()
+    public function handle403(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle404()
+    public function handle404(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle405()
+    public function handle405(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle406()
+    public function handle406(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle407()
+    public function handle407(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle408()
+    public function handle408(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle409()
+    public function handle409(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle410()
+    public function handle410(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle411()
+    public function handle411(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle412()
+    public function handle412(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle413()
+    public function handle413(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle414()
+    public function handle414(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle415()
+    public function handle415(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle416()
+    public function handle416(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle417()
+    public function handle417(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle418()
+    public function handle418(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle420()
+    public function handle420(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle421()
+    public function handle421(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle422()
+    public function handle422(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle423()
+    public function handle423(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle424()
+    public function handle424(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle425()
+    public function handle425(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle426()
+    public function handle426(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle428()
+    public function handle428(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle429()
+    public function handle429(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle430()
+    public function handle430(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle431()
+    public function handle431(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle444()
+    public function handle444(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle449()
+    public function handle449(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle451()
+    public function handle451(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
@@ -298,47 +289,47 @@ abstract class AbstractExceptionHandler
     /**
      * handle HTTP-Status-Codes of type 5xx
      */
-    public function handle500()
+    public function handle500(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle501()
+    public function handle501(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle502()
+    public function handle502(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle503()
+    public function handle503(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle504()
+    public function handle504(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle505()
+    public function handle505(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle506()
+    public function handle506(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle507()
+    public function handle507(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle508()
+    public function handle508(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle509()
+    public function handle509(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle510()
+    public function handle510(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
@@ -347,39 +338,39 @@ abstract class AbstractExceptionHandler
     /**
      * handle HTTP-Status-Codes of type 9xx
      */
-    public function handle900()
+    public function handle900(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle901()
+    public function handle901(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle902()
+    public function handle902(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle903()
+    public function handle903(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle904()
+    public function handle904(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle905()
+    public function handle905(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle906()
+    public function handle906(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle907()
+    public function handle907(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
-    public function handle950()
+    public function handle950(): bool
     {
         return $this->handleException($this->getRestlerException(func_get_args()), $this->getRestler());
     }
@@ -389,33 +380,24 @@ abstract class AbstractExceptionHandler
      *
      * The return value (boolean) describes, if restler should display an error as output:
      * TRUE means:  restler should NOT display an error as output (so, we must do that)
-     * FALSE means: restler should dislay an error as output
-     *
-     * @param RestException $exception
-     * @param Restler $restler
-     * @return boolean
+     * FALSE means: restler should display an error as output
      */
-    abstract protected function handleException(RestException $exception, Restler $restler);
+    abstract protected function handleException(RestException $exception, Restler $restler): bool;
 
     /**
      * This method must be protected - otherwise we can't test this class in unittests
-     *
-     * @return Restler
      */
-    protected function getRestler()
+    protected function getRestler(): Restler
     {
         return Scope::get('Restler');
     }
 
     /**
      * This method must be protected - otherwise we can't test this class in unittests
-     *
-     * @param array $exceptionHandlerArgs
-     * @return RestException
      */
-    protected function getRestlerException(array $exceptionHandlerArgs = [])
+    protected function getRestlerException(array $exceptionHandlerArgs = []): RestException
     {
-        if (count($exceptionHandlerArgs) > 0 && $exceptionHandlerArgs[0] instanceof RestException) {
+        if ($exceptionHandlerArgs !== [] && $exceptionHandlerArgs[0] instanceof RestException) {
             return $exceptionHandlerArgs[0];
         }
         return $this->getRestler()

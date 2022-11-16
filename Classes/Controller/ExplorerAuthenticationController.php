@@ -59,6 +59,7 @@ class ExplorerAuthenticationController implements iAuthenticate
      *
      * @return boolean
      */
+    // phpcs:ignore
     public function __isAllowed()
     {
         if ($this->restler->apiMethodInfo->className !== Explorer::class) {
@@ -72,6 +73,7 @@ class ExplorerAuthenticationController implements iAuthenticate
      * @return string
      * @see \Luracast\Restler\iAuthenticate
      */
+    // phpcs:ignore
     public function __getWWWAuthenticateString()
     {
         return 'Query name="api_key"';

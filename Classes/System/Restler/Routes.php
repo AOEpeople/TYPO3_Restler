@@ -25,10 +25,8 @@ class Routes extends \Luracast\Restler\Routes
 
                         $argumentReplace = '[^\/]+';
 
-                        switch ($metadataType['type']) {
-                            case 'integer':
-                                $argumentReplace = '[\d]+';
-                                break;
+                        if ($metadataType['type'] === 'integer') {
+                            $argumentReplace = '[\d]+';
                         }
 
                         $routeMatcher = str_replace(

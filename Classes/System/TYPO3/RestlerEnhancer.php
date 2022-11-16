@@ -21,11 +21,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerInterface
 {
+    /**
+     * @var string|mixed
+     */
     private $default;
 
-    /**
-     * @param array $configuration
-     */
     public function __construct(array $configuration)
     {
         parent::__construct(GeneralUtility::makeInstance(ExtensionConfiguration::class));
@@ -59,7 +59,6 @@ class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerI
      * Decorates route collection to be processed during URL resolving.
      * Executed before invoking routing enhancers.
      *
-     * @param RouteCollection $collection
      * @param string $routePath URL path
      */
     public function decorateForMatching(RouteCollection $collection, string $routePath): void
@@ -83,7 +82,6 @@ class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerI
      * Decorates route collection during URL URL generation.
      * Executed before invoking routing enhancers.
      *
-     * @param RouteCollection $collection
      * @param array $parameters query parameters
      */
     public function decorateForGeneration(RouteCollection $collection, array $parameters): void
@@ -105,7 +103,7 @@ class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerI
         return [];
     }
 
-    private function isRestlerUrl($uri): bool
+    private function isRestlerUrl(string $uri): bool
     {
         return \Aoe\Restler\System\Restler\Routes::containsUrl($uri);
     }

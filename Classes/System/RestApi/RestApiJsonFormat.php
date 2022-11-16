@@ -29,7 +29,6 @@ namespace Aoe\Restler\System\RestApi;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Format\JsonFormat;
 use TYPO3\CMS\Core\SingletonInterface;
-use stdClass;
 
 /**
  * @package Restler
@@ -38,7 +37,6 @@ class RestApiJsonFormat extends JsonFormat implements SingletonInterface
 {
     /**
      * @param string $data
-     * @return stdClass
      * @throws RestException
      */
     public function decode($data)
@@ -59,14 +57,14 @@ class RestApiJsonFormat extends JsonFormat implements SingletonInterface
         }
 
         try {
-            $decoded = json_decode($data, $options);
+            $decoded = json_decode($data, false, 512, $options);
             $this->handleJsonError();
-        } catch (\RuntimeException $e) {
-            throw new RestException(400, $e->getMessage());
+        } catch (\RuntimeException $runtimeException) {
+            throw new RestException('400', $runtimeException->getMessage());
         }
 
         if (strlen($data) && $decoded === null || $decoded === $data) {
-            throw new RestException(400, 'Error parsing JSON');
+            throw new RestException('400', 'Error parsing JSON');
         }
 
         return $decoded;

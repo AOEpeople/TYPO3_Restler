@@ -26,7 +26,7 @@ namespace Aoe\Restler\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
+use Aoe\Restler\System\TYPO3\Loader;
 use Luracast\Restler\iAuthenticate;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
@@ -53,10 +53,8 @@ class BeUserAuthenticationController implements iAuthenticate
      * Example:
      * When this controller should be used for authentication-checks, than the PHPdoc-comment must look like this:
      * @class Aoe\Restler\Controller\BeUserAuthenticationController {@checkAuthentication true}
-     *
-     * @var boolean
      */
-    public $checkAuthentication = false;
+    public bool $checkAuthentication = false;
 
     /**
      * Instance of Restler class injected at runtime.
@@ -64,15 +62,10 @@ class BeUserAuthenticationController implements iAuthenticate
      * @var Restler
      */
     public $restler;
-    /**
-     * @var TYPO3Loader
-     */
-    private $typo3Loader;
 
-    /**
-     * @param TYPO3Loader $typo3Loader
-     */
-    public function __construct(TYPO3Loader $typo3Loader)
+    private Loader $typo3Loader;
+
+    public function __construct(Loader $typo3Loader)
     {
         $this->typo3Loader = $typo3Loader;
         $this->restler = Scope::get('Restler');
@@ -83,9 +76,10 @@ class BeUserAuthenticationController implements iAuthenticate
      *
      * @return boolean
      */
+    // phpcs:ignore
     public function __isAllowed()
     {
-        if ($this->checkAuthentication !== true) {
+        if (!$this->checkAuthentication) {
             // this controller is not responsible for the authentication
             return false;
         }
@@ -101,6 +95,7 @@ class BeUserAuthenticationController implements iAuthenticate
      * @return string
      * @see \Luracast\Restler\iAuthenticate
      */
+    // phpcs:ignore
     public function __getWWWAuthenticateString()
     {
         return '';

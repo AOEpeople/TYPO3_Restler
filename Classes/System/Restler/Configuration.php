@@ -43,14 +43,8 @@ use Luracast\Restler\Restler;
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * @var ExtensionConfiguration
-     */
-    private $extensionConfiguration;
+    private ExtensionConfiguration $extensionConfiguration;
 
-    /**
-     * @param ExtensionConfiguration $extensionConfiguration
-     */
     public function __construct(ExtensionConfiguration $extensionConfiguration)
     {
         $this->extensionConfiguration = $extensionConfiguration;
@@ -60,10 +54,8 @@ class Configuration implements ConfigurationInterface
      * configure restler:
      *  - add API- and authentication-class, when online documentation is enabled
      *  - add common authentication-class (which can be used for TYPO3-FrontEnd-User-authentication)
-     *
-     * @param Restler $restler
      */
-    public function configureRestler(Restler $restler)
+    public function configureRestler(Restler $restler): void
     {
         if ($this->extensionConfiguration->isOnlineDocumentationEnabled()) {
             $restler->addAPIClass(Explorer::class, $this->extensionConfiguration->getPathOfOnlineDocumentation());

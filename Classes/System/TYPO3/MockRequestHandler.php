@@ -36,13 +36,9 @@ use TYPO3\CMS\Core\Http\NullResponse;
  */
 class MockRequestHandler implements RequestHandlerInterface
 {
-    /**
-     * @var ServerRequestInterface
-     */
-    private $request;
+    private ServerRequestInterface $request;
 
     /**
-     * @param ServerRequestInterface $request
      * @return NullResponse
      */
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -51,10 +47,7 @@ class MockRequestHandler implements RequestHandlerInterface
         return new NullResponse();
     }
 
-    /**
-     * @return ServerRequestInterface
-     */
-    public function getRequest()
+    public function getRequest(): ServerRequestInterface
     {
         return $this->request;
     }

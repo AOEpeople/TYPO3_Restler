@@ -26,6 +26,7 @@ namespace Aoe\Restler\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Aoe\Restler\System\TYPO3\Cache;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Exception;
 use Luracast\Restler\Defaults;
@@ -37,14 +38,9 @@ use TYPO3\CMS\Core\Site\Entity\Site;
 
 class RestlerExtended extends Restler
 {
-    /**
-     * @var ServerRequestInterface
-     */
-    protected $request;
-    /**
-     * @var Typo3Cache
-     */
-    private $typo3Cache;
+    protected ?ServerRequestInterface $request;
+
+    private Typo3Cache $typo3Cache;
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
@@ -54,7 +50,6 @@ class RestlerExtended extends Restler
     /**
      * Constructor
      *
-     * @param Typo3Cache $typo3Cache
      * @param bool $productionMode    When set to false, it will run in
      *                                   debug mode and parse the class files
      *                                   every time to map it to the URL
@@ -63,21 +58,20 @@ class RestlerExtended extends Restler
      * @param ServerRequestInterface $request     frontend request
      */
     public function __construct(
-        Typo3Cache $typo3Cache,
+        Cache $typo3Cache,
         $productionMode = false,
         $refreshCache = false,
         ServerRequestInterface $request = null
-    )
-    {
+    ) {
         parent::__construct($productionMode, $refreshCache);
 
-        if (interface_exists('\Psr\Http\Server\MiddlewareInterface')) {
+        if (interface_exists(\Psr\Http\Server\MiddlewareInterface::class)) {
             // restler uses echo;die otherwise and then Typo3 standard mechanisms will not be called
             Defaults::$returnResponse = true;
         }
 
         // adds format support for application/hal+json
-        Scope::$classAliases['HalJsonFormat'] = 'Aoe\Restler\System\Restler\Format\HalJsonFormat';
+        Scope::$classAliases['HalJsonFormat'] = \Aoe\Restler\System\Restler\Format\HalJsonFormat::class;
         $this->setSupportedFormats('HalJsonFormat');
 
         $this->typo3Cache = $typo3Cache;
@@ -125,10 +119,8 @@ class RestlerExtended extends Restler
 
     /**
      * Determine path (and baseUrl) for current request.
-     *
-     * @return string|string[]|null
      */
-    protected function getPath()
+    protected function getPath(): string
     {
         if ($this->request !== null) {
             // set base path depending on site config
@@ -173,15 +165,7 @@ class RestlerExtended extends Restler
         }
     }
 
-    /***************************************************************************************************************************/
-    /***************************************************************************************************************************/
-    /* Block of methods, which does NOT override logic from parent-class *******************************************************/
-    /***************************************************************************************************************************/
-    /***************************************************************************************************************************/
-    /**
-     * @return string
-     */
-    private function handleRequestByTypo3Cache()
+    private function handleRequestByTypo3Cache(): string
     {
         $cacheEntry = $this->typo3Cache->getCacheEntry($this->url, $_GET);
 

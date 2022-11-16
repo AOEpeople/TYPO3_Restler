@@ -67,25 +67,14 @@ class Cache implements SingletonInterface
      */
     public const API_METHOD_TYPO3CACHE_TAGS = 'restler_typo3cache_tags';
 
-    /**
-     * @var FrontendInterface
-     */
-    private $cache;
+    private FrontendInterface $cache;
 
-    /**
-     * @param CacheManager $cacheManager
-     */
     public function __construct(CacheManager $cacheManager)
     {
         $this->cache = $cacheManager->getCache('restler');
     }
 
-    /**
-     * @param string $requestMethod
-     * @param array $apiMethodInfoMetadata
-     * @return boolean
-     */
-    public function isResponseCacheableByTypo3Cache($requestMethod, array $apiMethodInfoMetadata)
+    public function isResponseCacheableByTypo3Cache(string $requestMethod, array $apiMethodInfoMetadata): bool
     {
         if ($requestMethod === 'GET' &&
             array_key_exists(self::API_METHOD_TYPO3CACHE_EXPIRES, $apiMethodInfoMetadata) &&
@@ -97,22 +86,14 @@ class Cache implements SingletonInterface
 
     /**
      * cache response
-     *
-     * @param int $responseCode
-     * @param string $requestUri
-     * @param array $requestGetData
-     * @param array $apiMethodInfoMetadata
-     * @param string $responseData
-     * @param $responseFormatClass
-     * @param array $responseHeaders
      */
     public function cacheResponseByTypo3Cache(
-        $responseCode,
-        $requestUri,
+        int $responseCode,
+        string $requestUri,
         array $requestGetData,
         array $apiMethodInfoMetadata,
-        $responseData,
-        $responseFormatClass,
+        string $responseData,
+        string $responseFormatClass,
         array $responseHeaders
     ) {
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
@@ -132,42 +113,24 @@ class Cache implements SingletonInterface
         $this->cache->set($identifier, $cacheData, $typo3CacheTags, $typo3CacheExpires);
     }
 
-    /**
-     * @param string $requestUri
-     * @param array $getData
-     * @return array
-     */
-    public function getCacheEntry($requestUri, array $getData)
+    public function getCacheEntry(string $requestUri, array $getData)
     {
         $identifier = $this->buildIdentifier($requestUri, $getData);
         return $this->cache->get($identifier);
     }
 
-    /**
-     * @param string $requestUri
-     * @param array $getData
-     * @return boolean
-     */
-    public function hasCacheEntry($requestUri, array $getData)
+    public function hasCacheEntry(string $requestUri, array $getData): bool
     {
         $identifier = $this->buildIdentifier($requestUri, $getData);
         return $this->cache->has($identifier);
     }
 
-    /**
-     * @param string $tag
-     */
-    public function flushByTag($tag)
+    public function flushByTag(string $tag)
     {
         $this->cache->flushByTag($tag);
     }
 
-    /**
-     * @param string $requestUri
-     * @param array $getData
-     * @return string
-     */
-    private function buildIdentifier($requestUri, array $getData)
+    private function buildIdentifier(string $requestUri, array $getData): string
     {
         return md5($requestUri . serialize($getData));
     }

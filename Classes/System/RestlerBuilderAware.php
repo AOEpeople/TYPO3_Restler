@@ -27,26 +27,21 @@ namespace Aoe\Restler\System;
  ***************************************************************/
 
 use Aoe\Restler\Configuration\ExtensionConfiguration;
+use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 abstract class RestlerBuilderAware
 {
     /**
-     * @var RestlerBuilder
+     * @var string
      */
-    private $restlerBuilder;
+    private const API_PREFIX = '/api';
 
-    /**
-     * @var ExtensionConfiguration
-     */
-    private $extensionConfiguration;
+    private RestlerBuilder $restlerBuilder;
 
-    private $apiPrefix = '/api';
+    private ExtensionConfiguration $extensionConfiguration;
 
-    /**
-     * @param ExtensionConfiguration $extensionConfiguration
-     */
     public function __construct(ExtensionConfiguration $extensionConfiguration)
     {
         $this->extensionConfiguration = $extensionConfiguration;
@@ -54,33 +49,34 @@ abstract class RestlerBuilderAware
 
     /**
      * Get restlerBuilder on demand.
-     *
-     * @return RestlerBuilder
      */
-    protected function getRestlerBuilder()
+    protected function getRestlerBuilder(): Builder
     {
-        if ($this->restlerBuilder === null) {
+        if ($this->restlerBuilder == null) {
             $this->restlerBuilder = GeneralUtility::makeInstance(RestlerBuilder::class);
         }
         return $this->restlerBuilder;
     }
 
-    protected function isRestlerPrefix($prefixedUrlPath)
+    protected function isRestlerPrefix(string $prefixedUrlPath): bool
     {
-        return $this->isRestlerApiUrl($prefixedUrlPath) || $this->isRestlerApiExplorerUrl($prefixedUrlPath);
+        if ($this->isRestlerApiUrl($prefixedUrlPath)) {
+            return true;
+        }
+        return $this->isRestlerApiExplorerUrl($prefixedUrlPath);
     }
 
-    protected function isRestlerApiUrl($prefixedUrlPath)
+    protected function isRestlerApiUrl(string $prefixedUrlPath): bool
     {
-        return $prefixedUrlPath === $this->apiPrefix || strpos($prefixedUrlPath, $this->apiPrefix . '/') === 0;
+        return $prefixedUrlPath === self::API_PREFIX || str_starts_with($prefixedUrlPath, self::API_PREFIX . '/');
     }
 
-    protected function isRestlerApiExplorerUrl($prefixedUrlPath)
+    protected function isRestlerApiExplorerUrl(string $prefixedUrlPath): bool
     {
         $apiExplorerPrefix = '/' . $this->extensionConfiguration->getPathOfOnlineDocumentation();
-        return $this->extensionConfiguration->isOnlineDocumentationEnabled() && ($prefixedUrlPath === $apiExplorerPrefix || strpos(
+        return $this->extensionConfiguration->isOnlineDocumentationEnabled() && ($prefixedUrlPath === $apiExplorerPrefix || str_starts_with(
             $prefixedUrlPath,
             $apiExplorerPrefix . '/'
-        ) === 0);
+        ));
     }
 }

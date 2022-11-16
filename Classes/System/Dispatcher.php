@@ -28,6 +28,7 @@ namespace Aoe\Restler\System;
 
 use Aoe\Restler\System\TYPO3\Loader;
 use Aoe\Restler\System\Restler\Routes;
+use Auth\Server;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -65,7 +66,7 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
         return $handler->handle($request);
     }
 
-    protected function extractSiteUrl($request)
+    protected function extractSiteUrl(ServerRequestInterface $request): string
     {
         // set base path depending on site config
         $site = $request->getAttribute('site');
@@ -84,7 +85,7 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
         return '/' . rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $request->getUri()->getPath()), '/');
     }
 
-    private function isRestlerUrl($uri): bool
+    private function isRestlerUrl(string $uri): bool
     {
         return Routes::containsUrl($uri);
     }

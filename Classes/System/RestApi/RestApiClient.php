@@ -28,7 +28,7 @@ namespace Aoe\Restler\System\RestApi;
 
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
-use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
+use Aoe\Restler\System\TYPO3\Cache;
 use Luracast\Restler\RestException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -40,70 +40,46 @@ use stdClass;
  */
 class RestApiClient implements SingletonInterface
 {
-    /**
-     * @var Typo3Cache
-     */
-    private $typo3Cache;
-    /**
-     * @var ExtensionConfiguration
-     */
-    private $extensionConfiguration;
-    /**
-     * @var boolean
-     */
-    private $isExecutingRequest = false;
-    /**
-     * @var boolean
-     */
-    private $isRequestPrepared = false;
-    /**
-     * @var RestApiRequestScope
-     */
-    private $restApiRequestScope;
+    private Cache $typo3Cache;
 
-    /**
-     * @param ExtensionConfiguration $extensionConfiguration
-     * @param RestApiRequestScope $restApiRequestScope
-     * @param Typo3Cache $typo3Cache
-     */
+    private ExtensionConfiguration $extensionConfiguration;
+
+    private bool $isExecutingRequest = false;
+
+    private bool $isRequestPrepared = false;
+
+    private RestApiRequestScope $restApiRequestScope;
+
     public function __construct(
         ExtensionConfiguration $extensionConfiguration,
         RestApiRequestScope $restApiRequestScope,
-        Typo3Cache $typo3Cache
+        Cache $typo3Cache
     ) {
         $this->extensionConfiguration = $extensionConfiguration;
         $this->restApiRequestScope = $restApiRequestScope;
         $this->typo3Cache = $typo3Cache;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isExecutingRequest()
+    public function isExecutingRequest(): bool
     {
         return $this->isExecutingRequest;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isProductionContextSet()
+    public function isProductionContextSet(): bool
     {
         return $this->extensionConfiguration->isProductionContextSet();
     }
 
     /**
-     * @param string $requestMethod e.g. 'GET', 'POST', 'PUT' or 'DELETE'
-     * @param string $requestUri   e.g. '/api/products/320' (without GET-params)
      * @param array|stdClass $getData
      * @param array|stdClass $postData
      * @return mixed can be a primitive or array or object
      * @throws RestApiRequestException
      */
-    public function executeRequest($requestMethod, $requestUri, $getData = null, $postData = null)
+    public function executeRequest(string $requestMethod, string $requestUri, $getData = null, $postData = null)
     {
         if ($this->isRequestPreparationRequired()) {
-            $this->prepareRequest($requestMethod, $requestUri, $getData, $postData);
+            $this->prepareRequest($requestMethod, $requestUri);
         }
 
         try {
@@ -112,34 +88,26 @@ class RestApiClient implements SingletonInterface
                 ->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
             $this->isExecutingRequest = false;
             return $result;
-        } catch (RestException $e) {
+        } catch (RestException $restException) {
             $this->isExecutingRequest = false;
-            $e = $this->createRequestException($e, $requestMethod, $requestUri);
-            throw $e;
+            $restException = $this->createRequestException($restException, $requestMethod, $requestUri);
+            throw $restException;
         }
     }
 
     /**
      * We must create for every REST-API-request a new object, because the object will contain data, which is related to the request
-     *
-     * @return RestApiRequest
      */
-    protected function createRequest()
+    protected function createRequest(): RestApiRequest
     {
         return new RestApiRequest($this->restApiRequestScope, $this->typo3Cache);
     }
 
-    /**
-     * @param RestException $e
-     * @param string        $requestMethod
-     * @param string        $requestUri
-     * @return RestApiRequestException
-     */
-    protected function createRequestException(RestException $e, $requestMethod, $requestUri)
+    protected function createRequestException(RestException $e, string $requestMethod, string $requestUri): RestApiRequestException
     {
-        $errorMessage = 'internal REST-API-request \'' . $requestMethod . ':' . $requestUri . '\' could not be processed';
-        if ($this->isProductionContextSet() === false) {
-            $errorMessage .= ' (message: ' . $e->getMessage() . ', details: ' . json_encode($e->getDetails()) . ')';
+        $errorMessage = "internal REST-API-request '" . $requestMethod . ':' . $requestUri . "' could not be processed";
+        if (!$this->isProductionContextSet()) {
+            $errorMessage .= ' (message: ' . $e->getMessage() . ', details: ' . json_encode($e->getDetails(), JSON_THROW_ON_ERROR) . ')';
         }
         return new RestApiRequestException(
             $errorMessage,
@@ -148,10 +116,7 @@ class RestApiClient implements SingletonInterface
         );
     }
 
-    /**
-     * @return RestlerBuilder
-     */
-    protected function getRestlerBuilder()
+    protected function getRestlerBuilder(): RestlerBuilder
     {
         return GeneralUtility::makeInstance(RestlerBuilder::class);
     }
@@ -160,22 +125,17 @@ class RestApiClient implements SingletonInterface
      * We must prepare the REST-API-request when we are in the 'normal' TYPO3-context (the client, which called this PHP-request, has
      * NOT requested an REST-API-endpoint). In this case, we must build the 'original' REST-API-Request (aka Restler-object, which is
      * always required), before we can execute any REST-API-request via this PHP-client.
-     *
-     * @return boolean
      */
-    protected function isRequestPreparationRequired()
+    protected function isRequestPreparationRequired(): bool
     {
-        if (defined('REST_API_IS_RUNNING') || $this->isRequestPrepared === true) {
-            return false;
-        }
-        return true;
+        return !defined('REST_API_IS_RUNNING') && !$this->isRequestPrepared;
     }
 
     /**
      * build the 'original' REST-API-Request (aka Restler-object, which is always
      * required) and store it in the REST-API-Request-Scope (aka Scope-object)
      */
-    private function prepareRequest($requestMethod, $requestUri, $getData = null, $postData = null)
+    private function prepareRequest(string $requestMethod, string $requestUri): void
     {
         // TODO: pass along the post data
         $originalRestApiRequest = $this->getRestlerBuilder()

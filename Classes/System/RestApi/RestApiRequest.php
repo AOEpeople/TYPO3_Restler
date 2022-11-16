@@ -26,7 +26,7 @@ namespace Aoe\Restler\System\RestApi;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
+use Aoe\Restler\System\TYPO3\Cache;
 use Luracast\Restler\Restler;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Defaults;
@@ -53,75 +53,52 @@ class RestApiRequest extends Restler
      * Attention:
      * This property must be static, because it can happen, that some REST-API-calls
      * will be called recursive, so we MUST store the 'really original' data
-     *
-     * @var array
      */
-    private static $originalGetVars;
+    private static array $originalGetVars;
     /**
      * store data from $_POST in this property
      *
      * Attention:
      * This property must be static, because it can happen, that some REST-API-calls
      * will be called recursive, so we MUST store the 'really original' data
-     *
-     * @var array
      */
-    private static $originalPostVars;
+    private static array $originalPostVars;
     /**
      * store data from $_SERVER in this property
      *
      * Attention:
      * This property must be static, because it can happen, that some REST-API-calls
      * will be called recursive, so we MUST store the 'really original' data
-     *
-     * @var array
      */
-    private static $originalServerSettings;
+    private static array $originalServerSettings;
 
-    /**
-     * @var array
-     */
-    private $restApiGetData;
-    /**
-     * @var array
-     */
-    private $restApiPostData;
+    private array $restApiGetData;
+    private array $restApiPostData;
     /**
      * This property defines the request-uri (without GET-params, e.g. '/api/products/320'), which should be called
-     *
-     * @var string
      */
-    private $restApiRequestUri;
+    private string $restApiRequestUri;
     /**
      * This property defines the request-method (e.g. 'GET', 'POST', 'PUT' or 'DELETE'), which should be used while calling the rest-api
-     *
-     * @var string
      */
-    private $restApiRequestMethod;
-    /**
-     * @var RestApiRequestScope
-     */
-    private $restApiRequestScope;
-    /**
-     * @var Typo3Cache
-     */
-    private $typo3Cache;
+    private string $restApiRequestMethod;
+
+    private RestApiRequestScope $restApiRequestScope;
+
+    private Cache $typo3Cache;
 
 
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
-    /* Block of methods, which MUST be overriden from parent-class (otherwise this class can not work) *************************/
+    /* Block of methods, which MUST be overridden from parent-class (otherwise this class can not work) *************************/
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
     /**
      * Override parent method...because we don't want to call it!
      * The original method would set some properties (e.g. set this object into static properties of global classes)
-     *
-     * @param RestApiRequestScope $restApiRequestScope
-     * @param Typo3Cache $typo3Cache
      */
-    public function __construct(RestApiRequestScope $restApiRequestScope, Typo3Cache $typo3Cache)
+    public function __construct(RestApiRequestScope $restApiRequestScope, Cache $typo3Cache)
     {
         $this->restApiRequestScope = $restApiRequestScope;
         $this->typo3Cache = $typo3Cache;
@@ -142,14 +119,12 @@ class RestApiRequest extends Restler
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
     /**
-     * @param string $requestMethod
-     * @param string $requestUri
      * @param array|stdClass $getData
      * @param array|stdClass $postData
      * @return mixed can be a primitive or array or object
      * @throws RestException
      */
-    public function executeRestApiRequest($requestMethod, $requestUri, $getData = null, $postData = null)
+    public function executeRestApiRequest(string $requestMethod, string $requestUri, $getData = null, $postData = null)
     {
         $this->restApiRequestMethod = $requestMethod;
         $this->restApiRequestUri = $requestUri;
@@ -163,12 +138,12 @@ class RestApiRequest extends Restler
             $result = $this->handle();
             $this->restoreOriginalRestApiRequest();
             return $result;
-        } catch (RestException $e) {
+        } catch (RestException $restException) {
             $this->restoreOriginalRestApiRequest();
-            throw $e;
-        } catch (Exception $e) {
+            throw $restException;
+        } catch (Exception $exception) {
             $this->restoreOriginalRestApiRequest();
-            throw new RestException(500, $e->getMessage(), [], $e);
+            throw new RestException('500', $exception->getMessage(), [], $exception);
         }
     }
 
@@ -184,16 +159,15 @@ class RestApiRequest extends Restler
      * The original method would return the request-data of the ORIGINAL called REST-API request
      *
      * @param boolean $includeQueryParameters
-     * @return array
      */
-    public function getRequestData($includeQueryParameters = true)
+    public function getRequestData($includeQueryParameters = true): array
     {
         $requestData = [];
         if ($this->restApiRequestMethod == 'PUT' || $this->restApiRequestMethod == 'PATCH' || $this->restApiRequestMethod == 'POST') {
             $requestData = array_merge($this->restApiPostData, [Defaults::$fullRequestDataName => $this->restApiPostData]);
         }
 
-        if ($includeQueryParameters === true) {
+        if ($includeQueryParameters) {
             return $requestData + $this->restApiGetData;
         }
         return $requestData;
@@ -238,10 +212,8 @@ class RestApiRequest extends Restler
 
     /**
      * Return class, which can decode a JSON-string into a stdClass-object (instead of an array)
-     *
-     * @return RestApiJsonFormat
      */
-    protected function getRestApiJsonFormat()
+    protected function getRestApiJsonFormat(): RestApiJsonFormat
     {
         return GeneralUtility::makeInstance(RestApiJsonFormat::class);
     }
@@ -273,7 +245,7 @@ class RestApiRequest extends Restler
      */
     private function convertDataToArray($data)
     {
-        if ($data === null) {
+        if (!$data) {
             return [];
         }
         if (is_array($data)) {
@@ -282,11 +254,11 @@ class RestApiRequest extends Restler
         if ($data instanceof stdClass) {
             return json_decode(json_encode($data), true); // convert stdClass to array
         }
-        throw new RestException(500, 'data must be type of null, array or stdClass');
     }
 
     /**
-     * @return string
+     * @return mixed
+     * @throws RestException
      */
     private function handleRequestByTypo3Cache()
     {
@@ -358,7 +330,7 @@ class RestApiRequest extends Restler
      */
     private function storeOriginalRestApiRequest()
     {
-        if (isset(self::$originalServerSettings) === false) {
+        if (!isset(self::$originalServerSettings)) {
             self::$originalGetVars = $_GET;
             self::$originalPostVars = $_POST;
             self::$originalServerSettings = $_SERVER;

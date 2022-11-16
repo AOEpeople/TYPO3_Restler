@@ -53,43 +53,18 @@ use LogicException;
  */
 class Loader implements SingletonInterface
 {
-    /**
-     * @var TimeTracker
-     */
-    protected $timeTracker;
-    /**
-     * @var BackendUserAuthenticator
-     */
-    private $backendUserAuthenticator;
+    protected TimeTracker $timeTracker;
 
-    /**
-     * @var FrontendUserAuthenticator
-     */
-    private $frontendUserAuthenticator;
+    private BackendUserAuthenticator $backendUserAuthenticator;
 
-    /**
-     * @var MockRequestHandler
-     */
-    private $mockRequestHandler;
+    private FrontendUserAuthenticator $frontendUserAuthenticator;
 
-    /**
-     * @var RequestHandler
-     */
-    private $requestHandler;
+    private MockRequestHandler $mockRequestHandler;
 
-    /**
-     * @var TypoScriptFrontendInitialization
-     */
-    private $typoScriptFrontendInitialization;
+    private RequestHandler $requestHandler;
 
-    /**
-     * @param BackendUserAuthenticator         $backendUserAuthenticator
-     * @param FrontendUserAuthenticator        $frontendUserAuthenticator
-     * @param MockRequestHandler               $mockRequestHandler
-     * @param RequestHandler                   $requestHandler
-     * @param TimeTracker                      $timeTracker
-     * @param TypoScriptFrontendInitialization $typoScriptFrontendInitialization
-     */
+    private TypoScriptFrontendInitialization $typoScriptFrontendInitialization;
+
     public function __construct(
         BackendUserAuthenticator $backendUserAuthenticator,
         FrontendUserAuthenticator $frontendUserAuthenticator,
@@ -123,23 +98,20 @@ class Loader implements SingletonInterface
 
     /**
      * Checks if a backend user is logged in.
-     *
-     * @return bool
      */
-    public function hasActiveBackendUser()
+    public function hasActiveBackendUser(): bool
     {
         return ($GLOBALS['BE_USER'] ?? null) instanceof BackendUserAuthentication &&
             $GLOBALS['BE_USER']->user['uid'] > 0;
     }
 
     /**
-     * @return BackendUserAuthentication
      * @throws LogicException
      */
-    public function getBackendUser()
+    public function getBackendUser(): BackendUserAuthentication
     {
-        if ($this->hasActiveBackendUser() === false) {
-            throw new LogicException('be-user is not initialized - initialize with BE-user with method \'initializeBackendUser\'');
+        if (!$this->hasActiveBackendUser()) {
+            throw new LogicException("be-user is not initialized - initialize with BE-user with method 'initializeBackendUser'");
         }
         return $GLOBALS['BE_USER'];
     }
@@ -167,10 +139,8 @@ class Loader implements SingletonInterface
 
     /**
      * Checks if a frontend user is logged in and the session is active.
-     *
-     * @return bool
      */
-    public function hasActiveFrontendUser()
+    public function hasActiveFrontendUser(): bool
     {
         $frontendUser = $this->getRequest()
             ->getAttribute('frontend.user');
@@ -178,23 +148,18 @@ class Loader implements SingletonInterface
     }
 
     /**
-     * @return FrontendUserAuthentication
      * @throws LogicException
      */
-    public function getFrontendUser()
+    public function getFrontendUser(): FrontendUserAuthentication
     {
-        if ($this->hasActiveFrontendUser() === false) {
+        if (!$this->hasActiveFrontendUser()) {
             throw new LogicException('fe-user is not initialized');
         }
         return $this->getRequest()
             ->getAttribute('frontend.user');
     }
 
-    /**
-     * @param integer $pageId
-     * @param integer $type
-     */
-    public function initializeFrontendRendering($pageId = 0, $type = 0)
+    public function initializeFrontendRendering(int $pageId = 0, int $type = 0)
     {
         if ($this->isFrontendInitialized()) {
             // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
@@ -205,7 +170,7 @@ class Loader implements SingletonInterface
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
         /** @var Site $site */
         $site = $siteFinder->getSiteByPageId($pageId);
-        $pageArguments = new PageArguments($pageId, $type, [], [], []);
+        $pageArguments = new PageArguments($pageId, (string) $type, [], [], []);
         $normalizedParams = NormalizedParams::createFromRequest($this->getRequest());
 
         /** @var ServerRequestInterface $request */
@@ -230,20 +195,19 @@ class Loader implements SingletonInterface
             $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($this->timeTracker);
         } else {
             // it's TYPO3v10 or lower
-            $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($GLOBALS['TSFE'], $this->timeTracker);
+            $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($GLOBALS['TSFE']);
         }
         $prepareTypoScriptFrontendRendering->process($this->getRequest(), $this->mockRequestHandler);
         self::setRequest($this->mockRequestHandler->getRequest());
     }
 
     /**
-     * @return string
      * @throws LogicException
      */
-    public function renderPageContent()
+    public function renderPageContent(): string
     {
-        if ($this->isFrontendInitialized() === false) {
-            throw new LogicException('FrontendRendering is not initialized - initialize with method \'initializeFrontendRendering\'');
+        if (!$this->isFrontendInitialized()) {
+            throw new LogicException("FrontendRendering is not initialized - initialize with method 'initializeFrontendRendering'");
         }
 
         /** @var Response $response */
@@ -252,26 +216,17 @@ class Loader implements SingletonInterface
             ->__toString();
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     */
     public static function setRequest(ServerRequestInterface $request)
     {
         $GLOBALS['TYPO3_REQUEST'] = $request;
     }
 
-    /**
-     * @return ServerRequestInterface
-     */
-    private function getRequest()
+    private function getRequest(): ServerRequestInterface
     {
         return $GLOBALS['TYPO3_REQUEST'];
     }
 
-    /**
-     * @return boolean
-     */
-    private function isFrontendInitialized()
+    private function isFrontendInitialized(): bool
     {
         return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
             $GLOBALS['TSFE']->tmpl instanceof TemplateService;

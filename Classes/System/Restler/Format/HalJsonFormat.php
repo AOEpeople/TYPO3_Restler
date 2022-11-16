@@ -20,46 +20,54 @@ use Luracast\Restler\RestException;
  */
 class HalJsonFormat extends Format
 {
+    /**
+     * @var string
+     */
     public const MIME = 'application/hal+json';
+
+    /**
+     * @var string
+     */
     public const EXTENSION = 'json';
+
     /**
      * @var boolean|null  shim for json_encode option JSON_PRETTY_PRINT set
      * it to null to use smart defaults
      */
-    public static $prettyPrint = null;
+    public static ?bool $prettyPrint = null;
 
     /**
-     * @var boolean|null  shim for json_encode option JSON_UNESCAPED_SLASHES
+     * shim for json_encode option JSON_UNESCAPED_SLASHES
      * set it to null to use smart defaults
      */
-    public static $unEscapedSlashes = false;
+    public static bool $unEscapedSlashes = false;
 
     /**
      * @var boolean|null  shim for json_encode JSON_UNESCAPED_UNICODE set it
      * to null to use smart defaults
      */
-    public static $unEscapedUnicode = null;
+    public static ?bool $unEscapedUnicode = null;
 
     /**
      * @var boolean|null  shim for json_decode JSON_BIGINT_AS_STRING set it to
      * null to
      * use smart defaults
      */
-    public static $bigIntAsString = null;
+    public static ?bool $bigIntAsString = null;
 
     /**
      * @var boolean|null  shim for json_decode JSON_NUMERIC_CHECK set it to
      * null to
      * use smart defaults
      */
-    public static $numbersAsNumbers = null;
+    public static ?bool $numbersAsNumbers = null;
 
     public function encode($data, $humanReadable = false)
     {
         if (self::$prettyPrint !== null) {
             $humanReadable = self::$prettyPrint;
         }
-        if (self::$unEscapedSlashes === null) {
+        if (self::$unEscapedSlashes == null) {
             self::$unEscapedSlashes = $humanReadable;
         }
         if (self::$unEscapedUnicode === null) {
@@ -97,7 +105,7 @@ class HalJsonFormat extends Format
             return $result;
         }
 
-        $result = json_encode(Obj::toArray($data, true));
+        $result = json_encode(Obj::toArray($data, true), JSON_THROW_ON_ERROR);
         $this->handleJsonError();
 
         if ($humanReadable) {
@@ -124,7 +132,7 @@ class HalJsonFormat extends Format
         return $result;
     }
 
-    public function decode($data)
+    public function decode($data): ?array
     {
         if (empty($data)) {
             return null;
@@ -146,14 +154,14 @@ class HalJsonFormat extends Format
         }
 
         try {
-            $decoded = json_decode($data, $options);
+            $decoded = json_decode($data, false, 512, $options);
             $this->handleJsonError();
-        } catch (\RuntimeException $e) {
-            throw new RestException(400, $e->getMessage());
+        } catch (\RuntimeException $runtimeException) {
+            throw new RestException('400', $runtimeException->getMessage());
         }
 
         if (strlen($data) && $decoded === null || $decoded === $data) {
-            throw new RestException(400, 'Error parsing JSON');
+            throw new RestException('400', 'Error parsing JSON');
         }
 
         return Obj::toArray($decoded);
@@ -187,8 +195,7 @@ class HalJsonFormat extends Format
                     $message = 'malformed JSON';
                     break;
                 case JSON_ERROR_UTF8:
-                    $message = 'malformed UTF-8 characters, possibly ' .
-                        'incorrectly encoded';
+                    $message = 'malformed UTF-8 characters, possibly incorrectly encoded';
                     break;
                 default:
                     $message = 'unknown error';
@@ -203,12 +210,8 @@ class HalJsonFormat extends Format
 
     /**
      * Pretty print JSON string
-     *
-     * @param  string $json
-     *
-     * @return string formatted json
      */
-    private function formatJson($json)
+    private function formatJson(string $json): string
     {
         $tab = '  ';
         $newJson = '';
