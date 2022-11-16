@@ -30,7 +30,6 @@ use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\System\Restler\RestlerExtended;
 use Aoe\Restler\System\TYPO3\Cache;
 use Aoe\Restler\Tests\Unit\BaseTest;
-use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\InvalidConfiguration;
 use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\ValidConfiguration;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Scope;

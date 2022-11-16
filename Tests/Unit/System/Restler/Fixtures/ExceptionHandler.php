@@ -38,9 +38,9 @@ class ExceptionHandler extends AbstractExceptionHandler
     /**
      * @param RestException $exception
      * @param Restler       $restler
-     * @return string
+     * @return bool
      */
-    protected function handleException(RestException $exception, Restler $restler)
+    protected function handleException(RestException $exception, Restler $restler): bool
     {
         return $exception->getMessage();
     }
