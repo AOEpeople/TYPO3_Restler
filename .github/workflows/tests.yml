@@ -4,11 +4,13 @@ on:
   push:
     branches:
       - '**'
+      - '!TYPO3_V10'
       - '!TYPO3V8'
       - '!TYPO3V9'
   pull_request:
     branches:
       - '**'
+      - '!TYPO3_V10'
       - '!TYPO3V8'
       - '!TYPO3V9'
 
@@ -20,8 +22,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        typo3: [ ^10.4, ^11.5 ]
-        php: [ '7.3', '7.4' ]
+        typo3: [ ^11.5 ]
+        php: [ '7.4' ]
         experimental: [false]
         include:
           - typo3: ^11.5
@@ -32,7 +34,7 @@ jobs:
             experimental: true
         exclude:
           - typo3: ^11.5
-            php: '7.3'
+            php: '7.4'
             experimental: false
 
     continue-on-error: ${{ matrix.experimental }}
