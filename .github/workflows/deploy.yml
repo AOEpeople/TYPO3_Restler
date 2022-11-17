@@ -22,7 +22,6 @@ jobs:
         with:
           php-version: 7.4
           coverage: none
-
       - name: "Determine tag"
         id: "determine-tag"
         run: "echo \"::set-output name=tag::${GITHUB_REF#refs/tags/}\""
