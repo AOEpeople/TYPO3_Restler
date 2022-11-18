@@ -67,7 +67,7 @@ class HalJsonFormat extends Format
         if (self::$prettyPrint !== null) {
             $humanReadable = self::$prettyPrint;
         }
-        if (self::$unEscapedSlashes == null) {
+        if (self::$unEscapedSlashes === null) {
             self::$unEscapedSlashes = $humanReadable;
         }
         if (self::$unEscapedUnicode === null) {

@@ -27,7 +27,6 @@ namespace Aoe\Restler\System\Restler;
  ***************************************************************/
 
 use Aoe\Restler\System\TYPO3\Cache;
-use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Exception;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\RestException;
@@ -40,7 +39,7 @@ class RestlerExtended extends Restler
 {
     protected ?ServerRequestInterface $request;
 
-    private Typo3Cache $typo3Cache;
+    private Cache $typo3Cache;
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/

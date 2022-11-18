@@ -28,7 +28,6 @@ namespace Aoe\Restler\System;
 
 use Aoe\Restler\System\TYPO3\Loader;
 use Aoe\Restler\System\Restler\Routes;
-use Auth\Server;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

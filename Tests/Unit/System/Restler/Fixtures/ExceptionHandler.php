@@ -35,11 +35,6 @@ use Luracast\Restler\Restler;
  */
 class ExceptionHandler extends AbstractExceptionHandler
 {
-    /**
-     * @param RestException $exception
-     * @param Restler       $restler
-     * @return bool
-     */
     protected function handleException(RestException $exception, Restler $restler): bool
     {
         return $exception->getMessage();

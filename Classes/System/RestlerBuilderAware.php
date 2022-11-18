@@ -28,7 +28,6 @@ namespace Aoe\Restler\System;
 
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Builder;
-use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 abstract class RestlerBuilderAware
@@ -38,7 +37,7 @@ abstract class RestlerBuilderAware
      */
     private const API_PREFIX = '/api';
 
-    private RestlerBuilder $restlerBuilder;
+    private Builder $restlerBuilder;
 
     private ExtensionConfiguration $extensionConfiguration;
 
@@ -52,8 +51,8 @@ abstract class RestlerBuilderAware
      */
     protected function getRestlerBuilder(): Builder
     {
-        if ($this->restlerBuilder == null) {
-            $this->restlerBuilder = GeneralUtility::makeInstance(RestlerBuilder::class);
+        if ($this->restlerBuilder === null) {
+            $this->restlerBuilder = GeneralUtility::makeInstance(Builder::class);
         }
         return $this->restlerBuilder;
     }

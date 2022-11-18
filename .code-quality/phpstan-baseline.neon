@@ -52,3 +52,12 @@ parameters:
 				message: "#^Cognitive complexity for \"Aoe\\\\Restler\\\\System\\\\Restler\\\\Routes\\:\\:containsUrl\\(\\)\" is 16, keep it under 8$#"
 				count: 1
 				path: ../Classes/System/Restler/Routes.php
+			-
+				message: "#^Strict comparison using \\=\\=\\= between bool and null will always evaluate to false\\.$#"
+				count: 1
+				path: ../Classes/System/Restler/Format/HalJsonFormat.php
+
+			-
+				message: "#^Strict comparison using \\=\\=\\= between Aoe\\\\Restler\\\\System\\\\Restler\\\\Builder and null will always evaluate to false\\.$#"
+				count: 1
+				path: ../Classes/System/RestlerBuilderAware.php
