@@ -37,7 +37,7 @@ abstract class RestlerBuilderAware
      */
     private const API_PREFIX = '/api';
 
-    private Builder $restlerBuilder;
+    private ?Builder $restlerBuilder = null;
 
     private ExtensionConfiguration $extensionConfiguration;
 
