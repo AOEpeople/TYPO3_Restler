@@ -75,7 +75,7 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
                 ->getPath();
             if ($siteBasePath === '/' || $siteBasePath === '') {
                 $siteBasePath = null;
-            } else if ($siteBasePath[-1] !== '/') {
+            } elseif ($siteBasePath[-1] !== '/') {
                 $siteBasePath .= '/';
             }
         } else {
@@ -86,7 +86,8 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
             return '/' . rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $request->getUri()->getPath()), '/');
         }
 
-        return $request->getUri()->getPath();
+        return $request->getUri()
+            ->getPath();
     }
 
     private function isRestlerUrl(string $uri): bool
