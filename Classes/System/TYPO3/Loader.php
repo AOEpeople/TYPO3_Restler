@@ -28,6 +28,7 @@ namespace Aoe\Restler\System\TYPO3;
 
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Context\TypoScriptAspect;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Http\Response;
@@ -159,7 +160,7 @@ class Loader implements SingletonInterface
             ->getAttribute('frontend.user');
     }
 
-    public function initializeFrontendRendering(int $pageId = 0, int $type = 0)
+    public function initializeFrontendRendering(int $pageId = 0, int $type = 0, bool $forcedTemplateParsing = true)
     {
         if ($this->isFrontendInitialized()) {
             // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
@@ -189,6 +190,14 @@ class Loader implements SingletonInterface
 
         $this->typoScriptFrontendInitialization->process($this->getRequest(), $this->mockRequestHandler);
         self::setRequest($this->mockRequestHandler->getRequest());
+
+        if ($forcedTemplateParsing === true) {
+            // Force TemplateParsing (will slow down the called REST-endpoint a little bit):
+            // Otherwise we can't render TYPO3-content in REST-endpoints, when TYPO3-cache 'pages' already exists
+            /* @var $controller TypoScriptFrontendController */
+            $controller = $this->getRequest()->getAttribute('frontend.controller');
+            $controller->getContext()->setAspect('typoscript', new TypoScriptAspect($forcedTemplateParsing));
+        }
 
         if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) > 11005000) {
             // it's TYPO3v11 or higher
