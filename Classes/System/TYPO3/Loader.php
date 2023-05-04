@@ -191,10 +191,10 @@ class Loader implements SingletonInterface
         $this->typoScriptFrontendInitialization->process($this->getRequest(), $this->mockRequestHandler);
         self::setRequest($this->mockRequestHandler->getRequest());
 
-        if ($forcedTemplateParsing === true) {
+        if ($forcedTemplateParsing) {
             // Force TemplateParsing (will slow down the called REST-endpoint a little bit):
             // Otherwise we can't render TYPO3-content in REST-endpoints, when TYPO3-cache 'pages' already exists
-            /* @var $controller TypoScriptFrontendController */
+            /** @var TypoScriptFrontendController $controller */
             $controller = $this->getRequest()->getAttribute('frontend.controller');
             $controller->getContext()->setAspect('typoscript', new TypoScriptAspect($forcedTemplateParsing));
         }
