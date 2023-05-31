@@ -106,7 +106,7 @@ class Builder implements SingletonInterface
         }
 
         // append configuration classes from external GLOBAL registration
-        if (is_array($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'])) {
+        if (isset($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']) && is_array($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'])) {
             $externalRestlerConfigurationClasses = array_unique($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']);
             $restlerConfigurationClasses = array_merge(
                 $restlerConfigurationClasses,
