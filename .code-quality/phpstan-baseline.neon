@@ -56,8 +56,3 @@ parameters:
 				message: "#^Strict comparison using \\=\\=\\= between bool and null will always evaluate to false\\.$#"
 				count: 1
 				path: ../Classes/System/Restler/Format/HalJsonFormat.php
-
-			-
-				message: "#^Strict comparison using \\=\\=\\= between Aoe\\\\Restler\\\\System\\\\Restler\\\\Builder and null will always evaluate to false\\.$#"
-				count: 1
-				path: ../Classes/System/RestlerBuilderAware.php

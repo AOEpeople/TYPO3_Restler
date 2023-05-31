@@ -40,7 +40,6 @@ use TYPO3\CMS\Core\Cache\Frontend\PhpFrontend;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use InvalidArgumentException;
 
 /**
@@ -223,15 +222,7 @@ class BuilderTest extends BaseTest
         Scope::$resolver = null;
 
         $requestedClass = ExtensionConfiguration::class;
-
-        $objectManagerMock = $this->getMockBuilder(ObjectManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['get'])
-            ->getMock();
-        $objectManagerMock
-            ->expects(self::once())->method('get')->with($requestedClass)
-            ->willReturn($this->extensionConfigurationMock);
-        GeneralUtility::setSingletonInstance(ObjectManager::class, $objectManagerMock);
+        GeneralUtility::setSingletonInstance($requestedClass, $this->extensionConfigurationMock);
 
         $this->callUnaccessibleMethodOfObject($this->builder, 'setAutoLoading');
 
