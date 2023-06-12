@@ -20,10 +20,10 @@ $EM_CONF['restler'] = [
   'state' => 'stable',
   'uploadfolder' => 0,
   'clearCacheOnLoad' => 0,
-  'version' => '10.5.7',
+  'version' => '11.0.3',
   'constraints' => [
     'depends' => [
-      'typo3' => '10.4.0-11.5.99'
+      'typo3' => '11.0-11.5.99'
     ],
     'conflicts' => [],
     'suggests' => [],
