@@ -10,7 +10,7 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = [
+$EM_CONF['restler'] = [
   'title' => 'restler',
   'description' => 'This extension integrates the REST-API-framework "restler" in TYPO3',
   'category' => 'fe',
@@ -20,7 +20,7 @@ $EM_CONF[$_EXTKEY] = [
   'state' => 'stable',
   'uploadfolder' => 0,
   'clearCacheOnLoad' => 0,
-  'version' => '10.5.3',
+  'version' => '10.5.6',
   'constraints' => [
     'depends' => [
       'typo3' => '10.4.0-11.5.99'
