@@ -23,7 +23,7 @@ $EM_CONF['restler'] = [
   'version' => '11.0.4',
   'constraints' => [
     'depends' => [
-      'typo3' => '11.0-11.5.99'
+      'typo3' => '11.0.0-11.5.99'
     ],
     'conflicts' => [],
     'suggests' => [],
