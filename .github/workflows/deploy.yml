@@ -5,43 +5,14 @@ on:
     tags:
       - "**"
 
+
 jobs:
-  TER:
+  TERUpload:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
     steps:
-      - uses: actions/checkout@v2
-      - id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v1
+      - uses: actions/checkout@v1
+      - uses: tomasnorre/typo3-upload-ter@v2
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-      - uses: shivammathur/setup-php@v2
-        with:
-          php-version: 7.4
-          coverage: none
-
-      - name: "Determine tag"
-        id: "determine-tag"
-        run: "echo \"::set-output name=tag::${GITHUB_REF#refs/tags/}\""
-
-      - name: Deploy to TER
-        run: |
-          if [ -n "${{ secrets.TYPO3_ORG_USERNAME }}" ] && [ -n "${{ secrets.TYPO3_ORG_PASSWORD }}" ]; then
-            echo -e "Preparing upload of release ${{ steps.determine-tag.outputs.tag }} to TER\n";
-
-            # Install ter client
-            composer global require helhum/ter-client
-  
-            # Build extension files
-            composer extension-release
-  
-            # Upload
-            TAG_MESSAGE=`git log -1 --pretty=%B`
-            echo "Tag-Message: ${TAG_MESSAGE}"
-            echo "Uploading release ${{ steps.determine-tag.outputs.tag }} to TER"
-            # $HOME/.composer/./vendor/bin/tailor ter:publish ${{ steps.determine-tag.outputs.tag }} --comment "$TAG_MESSAGE"
-            $HOME/.composer/vendor/helhum/ter-client/ter-client upload feature_flag . -u "${{ secrets.TYPO3_ORG_USERNAME }}" -p "${{ secrets.TYPO3_ORG_PASSWORD }}" -m "$TAG_MESSAGE"
-          fi
+          api-token: ${{ secrets.TYPO3_ORG_API_TOKEN }}
