@@ -1,0 +1,32 @@
+From 33bb45c4132d511b57bb71ec00df51aa08d02427 Mon Sep 17 00:00:00 2001
+From: Felix Semmler <felix.semmler@aoe.com>
+Date: Thu, 24 Mar 2022 16:33:06 +0100
+Subject: [FEATURE] Group endpoints by resource-path or path in api
+ explorer
+
+---
+ src/Explorer/v2/Explorer.php | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/src/Explorer/v2/Explorer.php b/src/Explorer/v2/Explorer.php
+index b830656..0cdd71f 100644
+--- a/src/Explorer/v2/Explorer.php
++++ b/src/Explorer/v2/Explorer.php
+@@ -257,7 +257,13 @@ class Explorer implements iProvideMultiVersionApi
+         if (empty($base)) {
+             $base = 'root';
+         }
+-        $r->tags = array($base);
++        if (isset($route['metadata']['resourcePath']) && !empty($route['metadata']['resourcePath'])) {
++            $r->tags = array($route['metadata']['resourcePath']);
++        } elseif (isset($route['path']) && !empty($route['path'])) {
++            $r->tags = array($route['path']);
++        } else {
++            $r->tags = array($base);
++        }
+         $r->parameters = $this->parameters($route);
+ 
+ 
+-- 
+2.32.0 (Apple Git-132)
+
