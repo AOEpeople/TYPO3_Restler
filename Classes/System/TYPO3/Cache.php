@@ -97,7 +97,7 @@ class Cache implements SingletonInterface
         array $responseHeaders
     ) {
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
-        $frontendCacheExpires = (int) $apiMethodInfoMetadata['expires'];
+        $frontendCacheExpires = (int) ($apiMethodInfoMetadata['expires'] ?? 0);
         $typo3CacheExpires = (int) $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_EXPIRES];
         $typo3CacheTags = explode(',', $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_TAGS]);
 
