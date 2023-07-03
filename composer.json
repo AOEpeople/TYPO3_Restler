@@ -118,8 +118,8 @@
         "enable-patching": true,
         "patches": {
             "luracast/restler": {
-                "BUGFIX Add url annotation for swagger": "patches/0001-BUGFIX-Add-url-annotation-for-swagger-json.patch",
-                "FEATURE Group endpoints by resource path": "patches/0002-FEATURE-Group-endpoints-by-resource-path.patch"
+                "BUGFIX Add url annotation for swagger": "https://raw.githubusercontent.com/AOEpeople/TYPO3_Restler/main/patches/0001-BUGFIX-Add-url-annotation-for-swagger-json.patch",
+                "FEATURE Group endpoints by resource path": "https://raw.githubusercontent.com/AOEpeople/TYPO3_Restler/main/patches/0002-FEATURE-Group-endpoints-by-resource-path.patch"
             }
         }
     }
