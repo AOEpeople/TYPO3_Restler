@@ -35,9 +35,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Http\ServerRequest;
 use stdClass;
 
-/**
- * @package Restler
- */
 class RestApiClient implements SingletonInterface
 {
     private Cache $typo3Cache;

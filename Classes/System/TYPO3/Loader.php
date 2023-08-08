@@ -49,9 +49,6 @@ use TYPO3\CMS\Frontend\Middleware\PrepareTypoScriptFrontendRendering;
 use TYPO3\CMS\Frontend\Middleware\TypoScriptFrontendInitialization;
 use LogicException;
 
-/**
- * @package Restler
- */
 class Loader implements SingletonInterface
 {
     protected TimeTracker $timeTracker;

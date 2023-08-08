@@ -30,9 +30,6 @@ use Luracast\Restler\Restler;
 
 /**
  * This configuration is valid, because class does implement required interface 'Aoe\Restler\System\Restler\ConfigurationInterface'
- *
- * @package Restler
- * @subpackage Tests
  */
 class ValidConfiguration implements ConfigurationInterface
 {

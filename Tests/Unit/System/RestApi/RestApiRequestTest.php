@@ -33,12 +33,6 @@ use Luracast\Restler\RestException;
 use Exception;
 use Luracast\Restler\Restler;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\RestApi\RestApiRequest
- */
 class RestApiRequestTest extends BaseTest
 {
     /**

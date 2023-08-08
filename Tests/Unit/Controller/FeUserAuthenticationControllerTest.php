@@ -31,12 +31,6 @@ use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\Data\ApiMethodInfo;
 use Luracast\Restler\Restler;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\Controller\FeUserAuthenticationController
- */
 class FeUserAuthenticationControllerTest extends BaseTest
 {
     /**

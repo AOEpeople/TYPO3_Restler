@@ -36,12 +36,6 @@ use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\RestApi\RestApiClient
- */
 class RestApiClientTest extends BaseTest
 {
     /**

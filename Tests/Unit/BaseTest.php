@@ -28,11 +28,6 @@ namespace Aoe\Restler\Tests\Unit;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 use TYPO3\CMS\Core\Core\Environment;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- */
 abstract class BaseTest extends UnitTestCase
 {
     /**

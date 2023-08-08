@@ -30,9 +30,6 @@ use Luracast\Restler\RestException;
 use Luracast\Restler\Format\JsonFormat;
 use TYPO3\CMS\Core\SingletonInterface;
 
-/**
- * @package Restler
- */
 class RestApiJsonFormat extends JsonFormat implements SingletonInterface
 {
     /**

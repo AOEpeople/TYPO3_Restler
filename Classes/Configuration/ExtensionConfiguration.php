@@ -30,9 +30,6 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration as Typo3ExtensionConfigu
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * @package Restler
- */
 class ExtensionConfiguration implements SingletonInterface
 {
     /**

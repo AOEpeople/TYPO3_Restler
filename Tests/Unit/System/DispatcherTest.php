@@ -35,12 +35,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\Dispatcher
- */
 class DispatcherTest extends BaseTest
 {
     /**

@@ -30,12 +30,6 @@ use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\Controller\BeUserAuthenticationController
- */
 class BeUserAuthenticationControllerTest extends BaseTest
 {
     /**

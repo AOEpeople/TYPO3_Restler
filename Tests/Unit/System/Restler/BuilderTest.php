@@ -42,12 +42,6 @@ use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use InvalidArgumentException;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\Restler\Builder
- */
 class BuilderTest extends BaseTest
 {
     /**

@@ -31,12 +31,6 @@ use Luracast\Restler\Data\ApiMethodInfo;
 use Luracast\Restler\Explorer\v2\Explorer;
 use Luracast\Restler\Restler;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\Controller\ExplorerAuthenticationController
- */
 class ExplorerAuthenticationControllerTest extends BaseTest
 {
     /**
