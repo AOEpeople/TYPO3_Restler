@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\System\TYPO3;
 
 use Aoe\Restler\Configuration\ExtensionConfiguration;

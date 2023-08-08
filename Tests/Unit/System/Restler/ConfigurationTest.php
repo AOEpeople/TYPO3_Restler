@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Aoe\Restler\Tests\Unit\System\Restler;
 
 /***************************************************************

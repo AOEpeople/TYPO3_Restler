@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\System\Restler\Format;
 
 use Luracast\Restler\Data\Obj;
