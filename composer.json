@@ -14,7 +14,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.0",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
@@ -26,10 +26,10 @@
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpcov": "*",
         "phpcompatibility/php-compatibility": "^9.3",
-        "phpstan/phpstan": "0.12.88",
-        "rector/rector": "0.11.20",
-        "symplify/easy-coding-standard": "9.3.26",
-        "symplify/phpstan-rules": "9.3.26"
+        "phpstan/phpstan": "^1.10.22",
+        "rector/rector": "^0.17.2",
+        "symplify/easy-coding-standard": "^11.5",
+        "symplify/phpstan-rules": "12.0.4.72"
     },
     "repositories": [
         {
@@ -78,7 +78,8 @@
         ],
         "code-style-upgrade": [
             "[ -e ./.Build/bin/rector ] || composer install",
-            "./.Build/bin/rector process --dry-run --config .code-quality/rector-8_0.php"
+            "./.Build/bin/rector process --dry-run --config .code-quality/rector-8_1.php",
+            "./.Build/bin/rector process --dry-run --config .code-quality/rector-8_2.php"
         ],
         "code-analysis": [
             "./.Build/bin/phpstan analyse -c .code-quality/phpstan.neon --memory-limit=1G"
@@ -90,11 +91,13 @@
             "[ -e ./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs ] || composer install",
             "[ -d ./reports/php_checkstyle ] || mkdir -p reports/php_checkstyle/",
             "./.code-quality/configure-checkstyle.sh",
-            "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/* -p . --runtime-set testVersion 7.4",
-            "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/* -p . --runtime-set testVersion 8.0"
+            "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/* -p . --runtime-set testVersion 8.0",
+            "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/* -p . --runtime-set testVersion 8.1",
+            "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/* -p . --runtime-set testVersion 8.2"
         ],
         "code-check-pipeline": [
             "@composer code-style",
+            "@composer code-style-upgrade",
             "@composer code-analysis",
             "@composer code-compatibility"
         ],
