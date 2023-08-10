@@ -23,15 +23,8 @@ jobs:
       fail-fast: false
       matrix:
         typo3: [ ^11.5 ]
-        php: [ '7.4' ]
+        php: [ '8.0', '8.1', '8.2' ]
         experimental: [false]
-        include:
-          - typo3: ^11.5
-            php: '8.0'
-            experimental: true
-          - typo3: ^11.5
-            php: '8.1'
-            experimental: true
 
     continue-on-error: ${{ matrix.experimental }}
 
@@ -66,19 +59,19 @@ jobs:
         run: find . -name \*.php ! -path "./.Build/*" ! -path "./scripts/*" ! -path "./typo3_src/*" | parallel --gnu php -d display_errors=stderr -l {} > /dev/null \;
 
       - name: Unit Tests without coverage
-        if: matrix.typo3 != '^11.5' || matrix.php != '7.4'
+        if: matrix.typo3 != '^11.5' || matrix.php != '8.0'
         run: |
           export "UNIT_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml
           .Build/bin/phpunit --colors -c $UNIT_XML Tests/Unit
 
       - name: Unit Tests with coverage
-        if: matrix.typo3 == '^11.5' && matrix.php == '7.4'
+        if: matrix.typo3 == '^11.5' && matrix.php == '8.0'
         run: |
           export "UNIT_XML"=.Build/vendor/nimut/testing-framework/res/Configuration/UnitTests.xml
           .Build/bin/phpunit --whitelist Classes --coverage-clover=unittest-coverage.clover --colors -c $UNIT_XML Tests/Unit/
 
       - name: Upload coverage results to Scrutinizer
-        if: matrix.typo3 == '^11.5' && matrix.php == '7.4'
+        if: matrix.typo3 == '^11.5' && matrix.php == '8.0'
         run: |
           wget https://scrutinizer-ci.com/ocular.phar
           php ocular.phar code-coverage:upload --format=php-clover unittest-coverage.clover
