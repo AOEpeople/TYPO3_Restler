@@ -25,7 +25,7 @@ return static function (RectorConfig $rectorConfig): void {
         ]
     );
 
-    $rectorConfig->import(SetList::PHP_82);
+    $rectorConfig->import(SetList::PHP_81);
 
     $rectorConfig->rule(TypedPropertyFromStrictConstructorRector::class);
 
