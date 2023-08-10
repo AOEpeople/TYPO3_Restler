@@ -37,12 +37,6 @@ use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\Explorer\v2\Explorer;
 use Luracast\Restler\Restler;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\Restler\Configuration
- */
 class ConfigurationTest extends BaseTest
 {
     /**

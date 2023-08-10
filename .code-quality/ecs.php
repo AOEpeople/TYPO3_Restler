@@ -7,6 +7,7 @@ use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\StringNotation\ExplicitStringVariableFixer;
 use PhpCsFixer\Fixer\Whitespace\ArrayIndentationFixer;
+use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
@@ -44,6 +45,9 @@ return static function (ECSConfig $ecsConfig): void {
             // Default Skips
             Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer::class => [
                 __DIR__ . '/ecs.php',
+            ],
+            GeneralPhpdocAnnotationRemoveFixer::class => [
+                __DIR__ . '/../Classes/System/Restler/Format/HalJsonFormat.php',
             ],
             ArrayListItemNewlineFixer::class => null,
             ArrayOpenerAndCloserNewlineFixer::class => null,

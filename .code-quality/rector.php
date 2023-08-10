@@ -11,6 +11,7 @@ use Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRect
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
+use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
@@ -32,6 +33,7 @@ use Rector\Privatization\Rector\Property\PrivatizeLocalPropertyToPrivateProperty
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
+use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths(
@@ -103,5 +105,5 @@ return static function (RectorConfig $rectorConfig): void {
         ]
     );
 
-    $rectorConfig->set(RemoveUnusedPrivatePropertyRector::class);
+    $rectorConfig->rule(RemoveUnusedPrivatePropertyRector::class);
 };

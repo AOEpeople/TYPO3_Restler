@@ -31,12 +31,6 @@ namespace Aoe\Restler\Tests\Unit\Configuration;
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\Tests\Unit\BaseTest;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\Configuration\ExtensionConfiguration
- */
 class ExtensionConfigurationTest extends BaseTest
 {
     /**

@@ -105,9 +105,6 @@ class Loader implements SingletonInterface
             $GLOBALS['BE_USER']->user['uid'] > 0;
     }
 
-    /**
-     * @throws LogicException
-     */
     public function getBackendUser(): BackendUserAuthentication
     {
         if (!$this->hasActiveBackendUser()) {
@@ -147,9 +144,6 @@ class Loader implements SingletonInterface
         return $frontendUser instanceof FrontendUserAuthentication && is_array($frontendUser->user) && isset($frontendUser->user['uid']);
     }
 
-    /**
-     * @throws LogicException
-     */
     public function getFrontendUser(): FrontendUserAuthentication
     {
         if (!$this->hasActiveFrontendUser()) {
@@ -194,8 +188,10 @@ class Loader implements SingletonInterface
             // Force TemplateParsing (will slow down the called REST-endpoint a little bit):
             // Otherwise we can't render TYPO3-content in REST-endpoints, when TYPO3-cache 'pages' already exists
             /** @var TypoScriptFrontendController $controller */
-            $controller = $this->getRequest()->getAttribute('frontend.controller');
-            $controller->getContext()->setAspect('typoscript', new TypoScriptAspect($forcedTemplateParsing));
+            $controller = $this->getRequest()
+                ->getAttribute('frontend.controller');
+            $controller->getContext()
+                ->setAspect('typoscript', new TypoScriptAspect($forcedTemplateParsing));
         }
 
         if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) > 11005000) {
@@ -209,9 +205,6 @@ class Loader implements SingletonInterface
         self::setRequest($this->mockRequestHandler->getRequest());
     }
 
-    /**
-     * @throws LogicException
-     */
     public function renderPageContent(): string
     {
         if (!$this->isFrontendInitialized()) {

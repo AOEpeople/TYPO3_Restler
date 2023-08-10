@@ -37,7 +37,6 @@ use Luracast\Restler\Scope;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
@@ -88,8 +87,6 @@ class Builder implements SingletonInterface
      *  - add authentication-classes
      *  - configure/set properties of several classes inside the restler-framework
      *  - configure overwriting of several classes inside the restler-framework
-     *
-     * @throws InvalidArgumentException
      */
     private function configureRestler(RestlerExtended $restler)
     {
@@ -194,7 +191,6 @@ class Builder implements SingletonInterface
 
     /**
      * @return SimpleFileBackend
-     * @throws NoSuchCacheException
      */
     private function getCache()
     {

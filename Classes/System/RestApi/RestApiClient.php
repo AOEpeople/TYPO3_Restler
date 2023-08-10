@@ -73,7 +73,6 @@ class RestApiClient implements SingletonInterface
      * @param array|stdClass $getData
      * @param array|stdClass $postData
      * @return mixed can be a primitive or array or object
-     * @throws RestApiRequestException
      */
     public function executeRequest(string $requestMethod, string $requestUri, $getData = null, $postData = null)
     {

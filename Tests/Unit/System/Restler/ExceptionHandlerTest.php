@@ -33,19 +33,13 @@ use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\ExceptionHandler;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
 
-/**
- * @package Restler
- * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\Restler\AbstractExceptionHandler
- */
 class ExceptionHandlerTest extends BaseTest
 {
     /**
      * @dataProvider statusCodes
      * @test
      */
-    public function canHandleAllExceptions($statusCode, $statusName)
+    public function canHandleAllExceptions(int $statusCode, string $statusName): void
     {
         if ($statusName) {
             $message = $statusName;
@@ -69,7 +63,7 @@ class ExceptionHandlerTest extends BaseTest
         self::assertEquals($message, $exceptionHandler->$functionName());
     }
 
-    public function statusCodes()
+    public function statusCodes(): array
     {
         return [
             [100, 'Continue'],

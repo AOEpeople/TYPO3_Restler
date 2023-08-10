@@ -124,7 +124,6 @@ class RestApiRequest extends Restler
      * @param array|stdClass $getData
      * @param array|stdClass $postData
      * @return mixed can be a primitive or array or object
-     * @throws RestException
      */
     public function executeRestApiRequest(string $requestMethod, string $requestUri, $getData = null, $postData = null)
     {
@@ -165,7 +164,7 @@ class RestApiRequest extends Restler
     public function getRequestData($includeQueryParameters = true): array
     {
         $requestData = [];
-        if ($this->restApiRequestMethod == 'PUT' || $this->restApiRequestMethod == 'PATCH' || $this->restApiRequestMethod == 'POST') {
+        if ($this->restApiRequestMethod === 'PUT' || $this->restApiRequestMethod === 'PATCH' || $this->restApiRequestMethod === 'POST') {
             $requestData = array_merge($this->restApiPostData, [Defaults::$fullRequestDataName => $this->restApiPostData]);
         }
 
@@ -243,7 +242,6 @@ class RestApiRequest extends Restler
     /**
      * @param array|stdClass $data
      * @return array
-     * @throws RestException
      */
     private function convertDataToArray($data)
     {
@@ -260,7 +258,6 @@ class RestApiRequest extends Restler
 
     /**
      * @return mixed
-     * @throws RestException
      */
     private function handleRequestByTypo3Cache()
     {

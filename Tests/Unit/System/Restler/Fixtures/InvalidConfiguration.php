@@ -32,9 +32,6 @@ use Luracast\Restler\Restler;
 
 /**
  * This configuration is invalid, because class does not implement required interface 'Aoe\Restler\System\Restler\ConfigurationInterface'
- *
- * @package Restler
- * @subpackage Tests
  */
 class InvalidConfiguration
 {

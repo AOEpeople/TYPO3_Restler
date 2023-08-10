@@ -32,9 +32,6 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 
-/**
- * @package Restler
- */
 class Cache implements SingletonInterface
 {
     /**

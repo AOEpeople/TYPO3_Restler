@@ -29,9 +29,7 @@ namespace Aoe\Restler\System\Restler;
  ***************************************************************/
 
 use Aoe\Restler\System\TYPO3\Cache;
-use Exception;
 use Luracast\Restler\Defaults;
-use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
 use Psr\Http\Message\ServerRequestInterface;
@@ -87,9 +85,6 @@ class RestlerExtended extends Restler
     /**
      * Main function for processing the api request
      * and return the response
-     *
-     * @throws Exception     when the api service class is missing
-     * @throws RestException to send error response
      */
     public function handle()
     {

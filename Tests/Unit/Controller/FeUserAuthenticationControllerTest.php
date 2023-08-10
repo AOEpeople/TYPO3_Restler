@@ -141,7 +141,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
         );
         $apiMethodInfoMock->parameters = array_merge(
             $apiMethodInfoMock->parameters,
-            [0 => 4711]
+            [0 => '4711']
         );
 
         /* @var Restler $restlerMock */

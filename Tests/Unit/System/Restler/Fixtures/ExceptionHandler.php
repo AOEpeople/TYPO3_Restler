@@ -32,13 +32,9 @@ use Aoe\Restler\System\Restler\AbstractExceptionHandler;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
 
-/**
- * @package Restler
- * @subpackage Tests
- */
 class ExceptionHandler extends AbstractExceptionHandler
 {
-    protected function handleException(RestException $exception, Restler $restler): bool
+    protected function handleException(RestException $exception, Restler $restler): string
     {
         return $exception->getMessage();
     }
