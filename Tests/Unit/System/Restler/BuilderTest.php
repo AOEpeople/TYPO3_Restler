@@ -117,7 +117,7 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canCreateRestlerObject()
+    public function canCreateRestlerObject(): void
     {
         $this->extensionConfigurationMock
             ->expects(self::once())->method('isProductionContextSet')
@@ -145,7 +145,7 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canConfigureRestlerObject()
+    public function canConfigureRestlerObject(): void
     {
         $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
 
@@ -165,7 +165,7 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canConfigureRestlerWithExternalConfigurationClassObject()
+    public function canConfigureRestlerWithExternalConfigurationClassObject(): void
     {
         $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
 
@@ -185,7 +185,7 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsNoArray()
+    public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsNoArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -199,7 +199,7 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsEmptyArray()
+    public function canNotConfigureRestlerObjectWhenConfigurationOfRestlerClassesIsEmptyArray(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -213,7 +213,7 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canSetAutoLoading()
+    public function canSetAutoLoading(): void
     {
         // set object-property (which the builder should update)
         Scope::$resolver = null;
@@ -232,7 +232,7 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canSetCacheDirectory()
+    public function canSetCacheDirectory(): void
     {
         // set object-property (which the builder should update)
         Defaults::$cacheDirectory = '';
@@ -262,7 +262,7 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function canSetServerConfiguration()
+    public function canSetServerConfiguration(): void
     {
         // set variables (which the builder should use/update)
         $_SERVER['HTTPS'] = 'on';
@@ -275,7 +275,7 @@ class BuilderTest extends BaseTest
     /**
      * @test
      */
-    public function addApiControllerClassesFromLocalConf()
+    public function addApiControllerClassesFromLocalConf(): void
     {
         // setup
         $backupGlobals = $GLOBALS['TYPO3_Restler']['addApiClass'];

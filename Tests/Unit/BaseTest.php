@@ -34,13 +34,9 @@ use TYPO3\CMS\Core\Core\Environment;
 abstract class BaseTest extends UnitTestCase
 {
     /**
-     * call unaccessible method of an object (to test it)
-     * @param  object $object
-     * @param  string $methodName
-     * @param  array $methodParams
      * @return mixed
      */
-    protected function callUnaccessibleMethodOfObject($object, $methodName, array $methodParams = [])
+    protected function callUnaccessibleMethodOfObject(object $object, string $methodName, array $methodParams = [])
     {
         $class = new \ReflectionClass(get_class($object));
         $method = $class->getMethod($methodName);
@@ -62,7 +58,7 @@ abstract class BaseTest extends UnitTestCase
     /**
      * use auto-loading for PHP-classes of restler-framework
      */
-    private function setAutoLoadingForRestler()
+    private function setAutoLoadingForRestler(): void
     {
         // set auto-loading for restler
         if (class_exists('\TYPO3\CMS\Core\Core\Environment')) {

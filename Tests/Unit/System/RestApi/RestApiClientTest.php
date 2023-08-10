@@ -34,6 +34,7 @@ use Aoe\Restler\System\RestApi\RestApiRequest;
 use Aoe\Restler\System\RestApi\RestApiRequestException;
 use Aoe\Restler\System\RestApi\RestApiRequestScope;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
+use Aoe\Restler\System\Restler\RestlerExtended;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\RestException;
@@ -95,7 +96,7 @@ class RestApiClientTest extends BaseTest
     /**
      * @test
      */
-    public function canCheckIfProductionContextIsSet()
+    public function canCheckIfProductionContextIsSet(): void
     {
         $this->extensionConfigurationMock->expects(self::once())->method('isProductionContextSet')->willReturn(true);
         self::assertTrue($this->restApiClient->isProductionContextSet());
@@ -104,7 +105,7 @@ class RestApiClientTest extends BaseTest
     /**
      * @test
      */
-    public function canCheckIfRequestIsBeingExecuted()
+    public function canCheckIfRequestIsBeingExecuted(): void
     {
         self::assertFalse($this->restApiClient->isExecutingRequest());
     }
@@ -114,7 +115,7 @@ class RestApiClientTest extends BaseTest
      *
      * @test
      */
-    public function canExecuteRequestInRestApiContext()
+    public function canExecuteRequestInRestApiContext(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
@@ -139,7 +140,7 @@ class RestApiClientTest extends BaseTest
      *
      * @test
      */
-    public function canExecuteRequestInTypo3Context()
+    public function canExecuteRequestInTypo3Context(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
@@ -148,7 +149,7 @@ class RestApiClientTest extends BaseTest
         $result = ['id' => 1, 'name' => 'Test-Product'];
 
         // Test, that we must create the 'original' REST-API-Request (aka Restler-object) before we can execute the REST-API-request
-        $originalRestApiRequestMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $originalRestApiRequestMock = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
         $this->restApiClient->expects($this->once())->method('isRequestPreparationRequired')->willReturn(true);
         $this->restlerBuilderMock->expects($this->once())->method('build')->willReturn($originalRestApiRequestMock);
         $this->restApiRequestScopeMock->expects($this->once())->method('storeOriginalRestApiRequest')->with($originalRestApiRequestMock);
@@ -163,7 +164,7 @@ class RestApiClientTest extends BaseTest
     /**
      * @test
      */
-    public function shouldThrowExceptionWhenExecutionOfRequestFails()
+    public function shouldThrowExceptionWhenExecutionOfRequestFails(): void
     {
         $this->expectException(RestApiRequestException::class);
         $this->expectExceptionCode(1446475601);
@@ -172,7 +173,7 @@ class RestApiClientTest extends BaseTest
         $requestUri = '/api/products/1';
         $getData  = ['context' => 'mobile'];
         $postData = [];
-        $exception = new RestException(400, 'message');
+        $exception = new RestException("400", 'message');
 
         $this->restApiClient->expects($this->once())->method('isRequestPreparationRequired')->willReturn(false);
         $this->restApiRequestMock->expects($this->once())->method('executeRestApiRequest')

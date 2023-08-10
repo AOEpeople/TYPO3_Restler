@@ -61,7 +61,7 @@ class ExtensionConfigurationTest extends BaseTest
     /**
      * @test
      */
-    public function canCheckThatCacheRefreshingIsNotEnabled()
+    public function canCheckThatCacheRefreshingIsNotEnabled(): void
     {
         self::assertFalse($this->configuration->isCacheRefreshingEnabled());
     }
@@ -69,7 +69,7 @@ class ExtensionConfigurationTest extends BaseTest
     /**
      * @test
      */
-    public function canCheckThatProductionContextIsSet()
+    public function canCheckThatProductionContextIsSet(): void
     {
         self::assertTrue($this->configuration->isProductionContextSet());
     }
@@ -77,7 +77,7 @@ class ExtensionConfigurationTest extends BaseTest
     /**
      * @test
      */
-    public function canCheckThatOnlineDocumentationIsEnabled()
+    public function canCheckThatOnlineDocumentationIsEnabled(): void
     {
         self::assertTrue($this->configuration->isOnlineDocumentationEnabled());
     }
@@ -85,7 +85,7 @@ class ExtensionConfigurationTest extends BaseTest
     /**
      * @test
      */
-    public function canGetPathOfOnlineDocumentation()
+    public function canGetPathOfOnlineDocumentation(): void
     {
         self::assertEquals('api_explorer', $this->configuration->getPathOfOnlineDocumentation());
     }

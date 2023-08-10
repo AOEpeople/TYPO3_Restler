@@ -83,9 +83,9 @@ class Loader implements SingletonInterface
 
     /**
      * Initialize backend-user with BackendUserAuthenticator middleware.
-     * @see \TYPO3\CMS\Frontend\Middleware\BackendUserAuthenticator
+     * @see BackendUserAuthenticator
      */
-    public function initializeBackendUser()
+    public function initializeBackendUser(): void
     {
         if ($this->hasActiveBackendUser()) {
             // Backend-User is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
@@ -118,7 +118,7 @@ class Loader implements SingletonInterface
      * @param string|int $pid List of page IDs (comma separated) or page ID where to look for frontend user records
      * @see \TYPO3\CMS\Frontend\Middleware\FrontendUserAuthenticator
      */
-    public function initializeFrontendUser($pid = 0)
+    public function initializeFrontendUser($pid = 0): void
     {
         if ($this->hasActiveFrontendUser()) {
             // Frontend-User is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
@@ -153,10 +153,10 @@ class Loader implements SingletonInterface
             ->getAttribute('frontend.user');
     }
 
-    public function initializeFrontendRendering(int $pageId = 0, int $type = 0, bool $forcedTemplateParsing = true)
+    public function initializeFrontendRendering(int $pageId = 0, int $type = 0, bool $forcedTemplateParsing = true): void
     {
         if ($this->isFrontendInitialized()) {
-            // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
+            // FE is already initialized - this can happen when we use/call internal REST-endpoints inside a normal TYPO3-page
             return;
         }
 
@@ -217,7 +217,7 @@ class Loader implements SingletonInterface
             ->__toString();
     }
 
-    public static function setRequest(ServerRequestInterface $request)
+    public static function setRequest(ServerRequestInterface $request): void
     {
         $GLOBALS['TYPO3_REQUEST'] = $request;
     }

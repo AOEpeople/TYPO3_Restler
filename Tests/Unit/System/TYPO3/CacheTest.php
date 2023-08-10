@@ -63,7 +63,7 @@ class CacheTest extends BaseTest
     /**
      * @test
      */
-    public function responseShouldBeCacheableWhenRestEndpointUseGetMethodAndTypo3CacheIsConfigured()
+    public function responseShouldBeCacheableWhenRestEndpointUseGetMethodAndTypo3CacheIsConfigured(): void
     {
         $requestMethod = 'GET';
         $apiMethodInfoMetadata = [];
@@ -76,7 +76,7 @@ class CacheTest extends BaseTest
     /**
      * @test
      */
-    public function responseShouldNotBeCacheableWhenRestEndpointUseNoGetMethod()
+    public function responseShouldNotBeCacheableWhenRestEndpointUseNoGetMethod(): void
     {
         $requestMethod = 'POST';
         $apiMethodInfoMetadata = [];
@@ -89,7 +89,7 @@ class CacheTest extends BaseTest
     /**
      * @test
      */
-    public function responseShouldNotBeCacheableWhenTypo3CacheIsNotConfigured()
+    public function responseShouldNotBeCacheableWhenTypo3CacheIsNotConfigured(): void
     {
         $requestMethod = 'GET';
         $apiMethodInfoMetadata = [];
@@ -100,7 +100,7 @@ class CacheTest extends BaseTest
     /**
      * @test
      */
-    public function responseShouldBeCached()
+    public function responseShouldBeCached(): void
     {
         $responseCode = 123;
         $requestUri = 'api/shop/devices';
@@ -141,11 +141,11 @@ class CacheTest extends BaseTest
     /**
      * @test
      */
-    public function shouldGetCacheEntry()
+    public function shouldGetCacheEntry(): void
     {
         $requestUri = 'api/shop/devices';
         $requestGetData = ['limit' => 10];
-        $response = 'this-would-be-the-json-response-from-cache';
+        $response = ['this-would-be-the-json-response-from-cache'];
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
 
         $this->frontendCacheMock->expects(self::once())->method('get')->with($identifier)->willReturn($response);
@@ -155,7 +155,7 @@ class CacheTest extends BaseTest
     /**
      * @test
      */
-    public function shouldHaveCacheEntry()
+    public function shouldHaveCacheEntry(): void
     {
         $requestUri = 'api/shop/devices';
         $requestGetData = ['limit' => 10];
@@ -168,7 +168,7 @@ class CacheTest extends BaseTest
     /**
      * @test
      */
-    public function shouldHaveNoCacheEntry()
+    public function shouldHaveNoCacheEntry(): void
     {
         $requestUri = 'api/shop/devices';
         $requestGetData = ['limit' => 10];
@@ -181,7 +181,7 @@ class CacheTest extends BaseTest
     /**
      * @test
      */
-    public function shouldFlushCacheByTag()
+    public function shouldFlushCacheByTag(): void
     {
         $tag = 'tag_a';
 
@@ -189,12 +189,7 @@ class CacheTest extends BaseTest
         $this->cache->flushByTag($tag);
     }
 
-    /**
-     * @param string $requestUri
-     * @param array $getData
-     * @return string
-     */
-    private function buildIdentifier($requestUri, array $getData)
+    private function buildIdentifier(string $requestUri, array $getData): string
     {
         return md5($requestUri . serialize($getData));
     }

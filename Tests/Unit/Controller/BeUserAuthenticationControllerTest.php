@@ -68,7 +68,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
+    public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck(): void
     {
         $this->typo3LoaderMock->expects(self::never())->method('initializeBackendUser');
         $this->typo3LoaderMock->expects(self::never())->method('hasActiveBackendUser');
@@ -78,7 +78,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatAuthenticationWillFailWhenBackendUserIsNotLoggedIn()
+    public function checkThatAuthenticationWillFailWhenBackendUserIsNotLoggedIn(): void
     {
         $this->controller->checkAuthentication = true;
 
@@ -91,7 +91,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatAuthenticationWillBeSuccessful()
+    public function checkThatAuthenticationWillBeSuccessful(): void
     {
         $this->controller->checkAuthentication = true;
 
@@ -109,7 +109,7 @@ class BeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkForCorrectAuthenticationString()
+    public function checkForCorrectAuthenticationString(): void
     {
         self::assertEquals('', $this->controller->__getWWWAuthenticateString());
     }

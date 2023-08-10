@@ -55,7 +55,7 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
                 ->build($request);
 
             if ($this->isRestlerUrl('/' . $restlerObj->url)) {
-                // wrap reponse into a stream to pass along to the rest of the Typo3 framework
+                // wrap response into a stream to pass along to the rest of the Typo3 framework
                 $body = new Stream('php://temp', 'wb+');
                 $body->write($restlerObj->handle());
                 $body->rewind();

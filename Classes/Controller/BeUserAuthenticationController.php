@@ -75,13 +75,12 @@ class BeUserAuthenticationController implements iAuthenticate
 
     /**
      * This method checks, if client is allowed to access the requested API-class
-     *
-     * @return boolean
      */
     // phpcs:ignore
-    public function __isAllowed()
+    public function __isAllowed(): bool
     {
         if (!$this->checkAuthentication) {
+            // this controller is not responsible for the authentication
             // this controller is not responsible for the authentication
             return false;
         }
@@ -93,9 +92,7 @@ class BeUserAuthenticationController implements iAuthenticate
 
     /**
      * return dummy string, because we DON'T need that for our case (we use NO base-authentification via REST-API)
-     *
-     * @return string
-     * @see \Luracast\Restler\iAuthenticate
+     * @see iAuthenticate
      */
     // phpcs:ignore
     public function __getWWWAuthenticateString()

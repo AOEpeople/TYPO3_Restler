@@ -43,7 +43,7 @@ class RestlerExtended extends Restler
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
-    /* Block of methods, which MUST be overriden from parent-class (otherwise we can't use the TYPO3-caching-framework) ********/
+    /* Block of methods, which MUST be overridden from parent-class (otherwise we can't use the TYPO3-caching-framework) ********/
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
     /**
@@ -85,6 +85,7 @@ class RestlerExtended extends Restler
     /**
      * Main function for processing the api request
      * and return the response
+     * @return string
      */
     public function handle()
     {
@@ -121,7 +122,7 @@ class RestlerExtended extends Restler
         if ($this->request !== null) {
             // set base path depending on site config
             $site = $this->request->getAttribute('site');
-            if ($site !== null && $site instanceof Site) {
+            if ($site instanceof Site) {
                 $siteBasePath = $this->request->getAttribute('site')
                     ->getBase()
                     ->getPath();
@@ -144,7 +145,7 @@ class RestlerExtended extends Restler
     /**
      * override postCall so that we can cache response via TYPO3-caching-framework - if it's possible
      */
-    protected function postCall()
+    protected function postCall(): void
     {
         parent::postCall();
 
@@ -172,7 +173,7 @@ class RestlerExtended extends Restler
         } else {
             // set/manipulate headers
             foreach ($cacheEntry['responseHeaders'] as $responseHeader) {
-                if (substr($responseHeader, 0, 8) === 'Expires:') {
+                if (str_starts_with($responseHeader, 'Expires:')) {
                     if ($cacheEntry['frontendCacheExpires'] === 0) {
                         $expires = $cacheEntry['frontendCacheExpires'];
                     } else {

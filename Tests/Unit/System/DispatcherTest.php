@@ -31,6 +31,7 @@ namespace Aoe\Restler\Tests\Unit\System;
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Dispatcher;
 use Aoe\Restler\System\Restler\Builder;
+use Aoe\Restler\System\Restler\RestlerExtended;
 use Aoe\Restler\Tests\Unit\BaseTest;
 use Luracast\Restler\Restler;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -66,10 +67,10 @@ class DispatcherTest extends BaseTest
     /**
      * @test
      */
-    public function canProcessToTypo3()
+    public function canProcessToTypo3(): void
     {
-        /** @var Restler|MockObject $restlerMock */
-        $restlerMock = $this->createMock(Restler::class);
+        /** @var RestlerExtended|MockObject $restlerMock */
+        $restlerMock = $this->createMock(RestlerExtended::class);
         $restlerMock->url = '/no/api/url';
         $this->restlerBuilder->expects(self::any())->method('build')->willReturn($restlerMock);
 

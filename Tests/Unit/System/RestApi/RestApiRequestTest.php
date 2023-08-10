@@ -38,30 +38,17 @@ use Luracast\Restler\Restler;
 
 class RestApiRequestTest extends BaseTest
 {
-    /**
-     * @var array
-     */
-    protected $originalGetVars;
-    /**
-     * @var array
-     */
-    protected $originalPostVars;
-    /**
-     * @var array
-     */
-    protected $originalServerSettings;
-    /**
-     * @var RestApiRequest
-     */
-    protected $restApiRequest;
-    /**
-     * @var RestApiRequestScope
-     */
-    protected $restApiRequestScopeMock;
-    /**
-     * @var Typo3Cache
-     */
-    protected $typo3CacheMock;
+    protected array $originalGetVars;
+
+    protected array $originalPostVars;
+
+    protected array $originalServerSettings;
+
+    protected RestApiRequest $restApiRequest;
+
+    protected RestApiRequestScope$restApiRequestScopeMock;
+
+    protected Typo3Cache $typo3CacheMock;
 
     /**
      * setup
@@ -102,7 +89,7 @@ class RestApiRequestTest extends BaseTest
     /**
      * @test
      */
-    public function canExecuteRestApiRequest()
+    public function canExecuteRestApiRequest(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
@@ -127,7 +114,7 @@ class RestApiRequestTest extends BaseTest
      *
      * @test
      */
-    public function shouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestIsDone()
+    public function shouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestIsDone(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
@@ -135,7 +122,7 @@ class RestApiRequestTest extends BaseTest
 
         $originalRestApiRequest = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         // DO NOT check, if method 'storeOriginalRestApiRequest' of object 'restApiRequestScopeMock' was called:
-        // This method is ONLY called ONCE A TIME (to be sure, that REALY only the 'original' data will be stored)!
+        // This method is ONLY called ONCE A TIME (to be sure, that REALLY only the 'original' data will be stored)!
         $this->restApiRequestScopeMock->expects(self::once())->method('overrideOriginalRestApiRequest')->with($this->restApiRequest);
         $this->restApiRequestScopeMock->expects(self::once())->method('removeRestApiAuthenticationObjects');
         $this->restApiRequestScopeMock->expects(self::once())->method('getOriginalRestApiRequest')->willReturn($originalRestApiRequest);
@@ -154,7 +141,7 @@ class RestApiRequestTest extends BaseTest
      *
      * @test
      */
-    public function shouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestFailsWithException()
+    public function shouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestFailsWithException(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
@@ -162,7 +149,7 @@ class RestApiRequestTest extends BaseTest
 
         $originalRestApiRequest = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         // DO NOT check, if method 'storeOriginalRestApiRequest' of object 'restApiRequestScopeMock' was called:
-        // This method is ONLY called ONCE A TIME (to be sure, that REALY only the 'original' data will be stored)!
+        // This method is ONLY called ONCE A TIME (to be sure, that REALLY only the 'original' data will be stored)!
         $this->restApiRequestScopeMock->expects(self::once())->method('overrideOriginalRestApiRequest')->with($this->restApiRequest);
         $this->restApiRequestScopeMock->expects(self::once())->method('removeRestApiAuthenticationObjects');
         $this->restApiRequestScopeMock->expects(self::once())->method('getOriginalRestApiRequest')->willReturn($originalRestApiRequest);
@@ -185,15 +172,15 @@ class RestApiRequestTest extends BaseTest
      *
      * @test
      */
-    public function shouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestFailsWithRestException()
+    public function shouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestFailsWithRestException(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
-        $exception = new RestException(400, 'message');
+        $exception = new RestException("400", 'message');
 
         $originalRestApiRequest = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         // DO NOT check, if method 'storeOriginalRestApiRequest' of object 'restApiRequestScopeMock' was called:
-        // This method is ONLY called ONCE A TIME (to be sure, that REALY only the 'original' data will be stored)!
+        // This method is ONLY called ONCE A TIME (to be sure, that REALLY only the 'original' data will be stored)!
         $this->restApiRequestScopeMock->expects(self::once())->method('overrideOriginalRestApiRequest')->with($this->restApiRequest);
         $this->restApiRequestScopeMock->expects(self::once())->method('removeRestApiAuthenticationObjects');
         $this->restApiRequestScopeMock->expects(self::once())->method('getOriginalRestApiRequest')->willReturn($originalRestApiRequest);
@@ -214,7 +201,7 @@ class RestApiRequestTest extends BaseTest
     /**
      * @test
      */
-    public function shouldThrowRestExceptionWhenExecutionOfRestApiRequestFailsWithException()
+    public function shouldThrowRestExceptionWhenExecutionOfRestApiRequestFailsWithException(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
@@ -234,13 +221,13 @@ class RestApiRequestTest extends BaseTest
     /**
      * @test
      */
-    public function shouldThrowRestExceptionWhenExecutionOfRestApiRequestFailsWithRestException()
+    public function shouldThrowRestExceptionWhenExecutionOfRestApiRequestFailsWithRestException(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
         $getData  = ['context' => 'mobile'];
         $postData = [];
-        $exception = new RestException(400, 'message');
+        $exception = new RestException("400", 'message');
 
         $this->restApiRequest->expects(self::once())->method('handle')->willThrowException($exception);
 

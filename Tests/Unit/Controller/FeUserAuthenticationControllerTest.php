@@ -69,7 +69,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck()
+    public function checkThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck(): void
     {
         $this->typo3LoaderMock->expects(self::never())->method('initializeFrontendUser');
         $this->typo3LoaderMock->expects(self::never())->method('hasActiveFrontendUser');
@@ -79,7 +79,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatAuthenticationWillFailWhenFeUserIsNotLoggedIn()
+    public function checkThatAuthenticationWillFailWhenFeUserIsNotLoggedIn(): void
     {
         $this->controller->argumentNameOfPageId = '5';
         $this->controller->checkAuthentication = true;
@@ -93,7 +93,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatAuthenticationWillBeSuccessful()
+    public function checkThatAuthenticationWillBeSuccessful(): void
     {
         $this->controller->argumentNameOfPageId = '5';
         $this->controller->checkAuthentication = true;
@@ -108,7 +108,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function shouldSetPageIdZeroIfArgumentDoesNotExist()
+    public function shouldSetPageIdZeroIfArgumentDoesNotExist(): void
     {
         /** @var ApiMethodInfo $apiMethodInfoMock */
         $apiMethodInfoMock = $this->getMockBuilder(ApiMethodInfo::class)->disableOriginalConstructor()->getMock();
@@ -131,7 +131,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function shouldSetPageIdIfArgumentDoesExist()
+    public function shouldSetPageIdIfArgumentDoesExist(): void
     {
         /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
         $apiMethodInfoMock = $this->getMockBuilder(ApiMethodInfo::class)->disableOriginalConstructor()->getMock();
@@ -162,7 +162,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkForCorrectAuthenticationString()
+    public function checkForCorrectAuthenticationString(): void
     {
         self::assertEquals('', $this->controller->__getWWWAuthenticateString());
     }

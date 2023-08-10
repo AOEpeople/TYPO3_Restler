@@ -34,10 +34,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class ExtensionConfiguration implements SingletonInterface
 {
-    /**
-     * @var array
-     */
-    private $configuration = [];
+    private array $configuration;
 
     /**
      * constructor - loading the current localconf configuration for restler extension

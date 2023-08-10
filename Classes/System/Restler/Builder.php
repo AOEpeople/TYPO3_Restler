@@ -35,6 +35,7 @@ use InvalidArgumentException;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Scope;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Cache\Backend\BackendInterface;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -53,12 +54,7 @@ class Builder implements SingletonInterface
         $this->cacheManager = $cacheManager;
     }
 
-    /**
-     * initialize and configure restler-framework and return restler-object
-     *
-     * @return RestlerExtended
-     */
-    public function build(ServerRequestInterface $request = null)
+    public function build(ServerRequestInterface $request = null): RestlerExtended
     {
         $this->setAutoLoading();
         $this->setCacheDirectory();
@@ -88,7 +84,7 @@ class Builder implements SingletonInterface
      *  - configure/set properties of several classes inside the restler-framework
      *  - configure overwriting of several classes inside the restler-framework
      */
-    private function configureRestler(RestlerExtended $restler)
+    private function configureRestler(RestlerExtended $restler): void
     {
         $restlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
 
@@ -127,7 +123,7 @@ class Builder implements SingletonInterface
     /**
      * Add API-Controller-Classes that are registered by global array
      */
-    private function addApiClassesByGlobalArray(RestlerExtended $restler)
+    private function addApiClassesByGlobalArray(RestlerExtended $restler): void
     {
         $addApiController = $GLOBALS['TYPO3_Restler']['addApiClass'];
         if (is_array($addApiController)) {
@@ -143,7 +139,7 @@ class Builder implements SingletonInterface
     /**
      * use auto-loading for PHP-classes of restler-framework and Extbase/TYPO3 (use dependency-injection of Extbase)
      */
-    private function setAutoLoading()
+    private function setAutoLoading(): void
     {
         // set auto-loading for Extbase/TYPO3-classes
         Scope::$resolver = function ($className) {
@@ -172,7 +168,7 @@ class Builder implements SingletonInterface
     /**
      * configure cache-directory (where restler can write cache-files)
      */
-    private function setCacheDirectory()
+    private function setCacheDirectory(): void
     {
         Defaults::$cacheDirectory = $this->getCache()->getCacheDirectory();
     }
@@ -180,7 +176,7 @@ class Builder implements SingletonInterface
     /**
      * fix server-port (if not correct set)
      */
-    private function setServerConfiguration()
+    private function setServerConfiguration(): void
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' && $_SERVER['SERVER_PORT'] === '80') {
             // Fix port for HTTPS
@@ -191,6 +187,7 @@ class Builder implements SingletonInterface
 
     /**
      * @return SimpleFileBackend
+     * // TODO
      */
     private function getCache()
     {

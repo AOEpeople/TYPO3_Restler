@@ -171,7 +171,7 @@ class HalJsonFormat extends Format
     /**
      * Throws an exception if an error occurred during the last JSON encoding/decoding
      */
-    protected function handleJsonError()
+    protected function handleJsonError(): void
     {
         if (function_exists('json_last_error_msg') && json_last_error() !== JSON_ERROR_NONE) {
             // PHP >= 5.5.0

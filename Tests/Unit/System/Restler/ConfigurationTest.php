@@ -39,22 +39,12 @@ use Luracast\Restler\Restler;
 
 class ConfigurationTest extends BaseTest
 {
-    /**
-     * @var ExtensionConfiguration
-     */
-    protected $extensionConfigurationMock;
-    /**
-     * @var Restler
-     */
-    protected $restlerMock;
-    /**
-     * @var Configuration
-     */
-    protected $configuration;
+    protected ExtensionConfiguration $extensionConfigurationMock;
 
-    /**
-     * setup
-     */
+    protected Restler $restlerMock;
+
+    protected Configuration $configuration;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -68,7 +58,7 @@ class ConfigurationTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatCorrectClassesWillAddedWhenOnlineDocumentationIsEnabled()
+    public function checkThatCorrectClassesWillAddedWhenOnlineDocumentationIsEnabled(): void
     {
         $this->extensionConfigurationMock->expects(self::once())->method('isOnlineDocumentationEnabled')->willReturn(true);
         $this->extensionConfigurationMock->expects(self::once())->method('getPathOfOnlineDocumentation')->willReturn('path');
@@ -93,7 +83,7 @@ class ConfigurationTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatCorrectClassesWillAddedWhenOnlineDocumentationIsNotEnabled()
+    public function checkThatCorrectClassesWillAddedWhenOnlineDocumentationIsNotEnabled(): void
     {
         $this->extensionConfigurationMock->expects(self::once())->method('isOnlineDocumentationEnabled')->willReturn(false);
         $this->extensionConfigurationMock->expects(self::never())->method('getPathOfOnlineDocumentation');

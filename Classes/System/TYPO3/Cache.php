@@ -46,8 +46,6 @@ class Cache implements SingletonInterface
      * @restler_typo3cache_expires 600
      * When API-method should be cacheable in TYPO3 for endless time, than the PHPdoc-comment must look like this:
      * @restler_typo3cache_expires 0
-     *
-     * @var string
      */
     public const API_METHOD_TYPO3CACHE_EXPIRES = 'restler_typo3cache_expires';
 
@@ -61,8 +59,6 @@ class Cache implements SingletonInterface
      * Example:
      * When response of API-method should be tagged with 'tag_a' and 'tag_b', than the PHPdoc-comment must look like this:
      * @restler_typo3cache_tags tag_a,tag_b
-     *
-     * @var string
      */
     public const API_METHOD_TYPO3CACHE_TAGS = 'restler_typo3cache_tags';
 
@@ -94,7 +90,7 @@ class Cache implements SingletonInterface
         string $responseData,
         string $responseFormatClass,
         array $responseHeaders
-    ) {
+    ): void {
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
         $frontendCacheExpires = (int) $apiMethodInfoMetadata['expires'];
         $typo3CacheExpires = (int) $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_EXPIRES];
@@ -112,7 +108,7 @@ class Cache implements SingletonInterface
         $this->cache->set($identifier, $cacheData, $typo3CacheTags, $typo3CacheExpires);
     }
 
-    public function getCacheEntry(string $requestUri, array $getData)
+    public function getCacheEntry(string $requestUri, array $getData): array
     {
         $identifier = $this->buildIdentifier($requestUri, $getData);
         return $this->cache->get($identifier);
@@ -124,7 +120,7 @@ class Cache implements SingletonInterface
         return $this->cache->has($identifier);
     }
 
-    public function flushByTag(string $tag)
+    public function flushByTag(string $tag): void
     {
         $this->cache->flushByTag($tag);
     }

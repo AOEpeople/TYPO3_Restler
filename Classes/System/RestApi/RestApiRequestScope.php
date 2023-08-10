@@ -38,22 +38,16 @@ use TYPO3\CMS\Core\SingletonInterface;
  */
 class RestApiRequestScope extends Scope implements SingletonInterface
 {
-    /**
-     * @var Scope
-     */
-    private $originalRestApiRequest;
+    private ?Scope $originalRestApiRequest = null;
     /**
      * This array contains all instanciated REST-API-authentication-objects, which
      * where already initialized before we call the REST-API-request via PHP
      */
     private array $originalRestApiAuthenticationObjects = [];
 
-    /**
-     * @return Restler
-     */
-    public function getOriginalRestApiRequest()
+    public function getOriginalRestApiRequest(): Scope|Restler
     {
-        if (isset($this->originalRestApiRequest)) {
+        if ($this->originalRestApiRequest !== null) {
             return $this->originalRestApiRequest;
         }
         return static::get('Restler');
@@ -62,7 +56,7 @@ class RestApiRequestScope extends Scope implements SingletonInterface
     /**
      * Override (the stored) restler-object, because this restler-object 'defines' the REST-API-request, which we want to call
      */
-    public function overrideOriginalRestApiRequest(RestApiRequest $restApiRequest)
+    public function overrideOriginalRestApiRequest(RestApiRequest $restApiRequest): void
     {
         static::set('Restler', $restApiRequest);
     }
@@ -75,7 +69,7 @@ class RestApiRequestScope extends Scope implements SingletonInterface
      * @class [authentication-class] {@[property-of-authentication-class] [property-value]}
      * @class Aoe\MyRestApiExtension\Controller\MyAuthenticationController {@checkAuthentication true}
      */
-    public function removeRestApiAuthenticationObjects()
+    public function removeRestApiAuthenticationObjects(): void
     {
         foreach ($this->getOriginalRestApiRequest()->_authClasses as $className) {
             if (array_key_exists($className, static::$instances)) {
@@ -87,7 +81,7 @@ class RestApiRequestScope extends Scope implements SingletonInterface
     /**
      * Restore (the overridden) restler-object
      */
-    public function restoreOriginalRestApiRequest()
+    public function restoreOriginalRestApiRequest(): void
     {
         static::set('Restler', $this->originalRestApiRequest);
     }
@@ -96,7 +90,7 @@ class RestApiRequestScope extends Scope implements SingletonInterface
      * Restore all initialized REST-API-authentication-objects, which
      * were already initialized before we call the REST-API-request via PHP
      */
-    public function restoreOriginalRestApiAuthenticationObjects()
+    public function restoreOriginalRestApiAuthenticationObjects(): void
     {
         $this->removeRestApiAuthenticationObjects();
 
@@ -110,7 +104,7 @@ class RestApiRequestScope extends Scope implements SingletonInterface
      *
      * @param Restler $originalRestApiRequest optional, default is null (normally, the object already exists in the 'Scope-Repository')
      */
-    public function storeOriginalRestApiRequest(Restler $originalRestApiRequest = null)
+    public function storeOriginalRestApiRequest(Restler $originalRestApiRequest = null): void
     {
         if ($originalRestApiRequest instanceof Restler) {
             static::set('Restler', $originalRestApiRequest);
@@ -121,7 +115,7 @@ class RestApiRequestScope extends Scope implements SingletonInterface
     /**
      * store all REST-API-authentication-objects, which where already initialized before we call the REST-API-request via PHP
      */
-    public function storeOriginalRestApiAuthenticationObjects()
+    public function storeOriginalRestApiAuthenticationObjects(): void
     {
         foreach ($this->getOriginalRestApiRequest()->_authClasses as $className) {
             if (array_key_exists($className, static::$instances)) {

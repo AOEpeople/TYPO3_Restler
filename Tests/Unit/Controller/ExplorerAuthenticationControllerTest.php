@@ -67,7 +67,7 @@ class ExplorerAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatAuthenticationWillFail()
+    public function checkThatAuthenticationWillFail(): void
     {
         $this->apiMethodInfoMock->className = 'NoneExplorerClass';
         self::assertFalse($this->controller->__isAllowed());
@@ -76,7 +76,7 @@ class ExplorerAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkThatAuthenticationWillBeSuccessful()
+    public function checkThatAuthenticationWillBeSuccessful(): void
     {
         $this->apiMethodInfoMock->className = Explorer::class;
         self::assertTrue($this->controller->__isAllowed());
@@ -85,7 +85,7 @@ class ExplorerAuthenticationControllerTest extends BaseTest
     /**
      * @test
      */
-    public function checkForCorrectAuthenticationString()
+    public function checkForCorrectAuthenticationString(): void
     {
         $this->apiMethodInfoMock->className = Explorer::class;
         self::assertEquals('Query name="api_key"', $this->controller->__getWWWAuthenticateString());

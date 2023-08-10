@@ -36,11 +36,7 @@ use Luracast\Restler\Restler;
  */
 class ValidConfiguration implements ConfigurationInterface
 {
-    /**
-     * @param Restler $restler
-     * @return void
-     */
-    public function configureRestler(Restler $restler)
+    public function configureRestler(Restler $restler): void
     {
         $restler->addAPIClass('Test-API-Class', 'Test-ResourcePath');
         $restler->addAuthenticationClass('Test-Authentication-Class');
