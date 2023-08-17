@@ -72,6 +72,9 @@ jobs:
 
       - name: Upload coverage results to Scrutinizer
         if: matrix.typo3 == '^11.5' && matrix.php == '8.0'
-        run: |
-          wget https://scrutinizer-ci.com/ocular.phar
-          php ocular.phar code-coverage:upload --format=php-clover unittest-coverage.clover
+        uses: sudo-bot/action-scrutinizer@latest
+        with:
+          cli-args: "--format=php-clover unittest-coverage.clover --revision=${{ github.event.pull_request.head.sha || github.sha }}"
+        #run: |
+        #  wget https://scrutinizer-ci.com/ocular.phar
+        #  php ocular.phar code-coverage:upload --format=php-clover unittest-coverage.clover
