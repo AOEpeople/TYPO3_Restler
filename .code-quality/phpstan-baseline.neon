@@ -68,3 +68,8 @@ parameters:
         -
             message: "#^Dead catch - Error is never thrown in the try block\\.$#"
             path: ../Classes/System/Restler/Builder.php
+
+        -
+            message: "#^Method Aoe\\\\Restler\\\\System\\\\Restler\\\\Builder\\:\\:getCache\\(\\) should return TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Backend\\\\SimpleFileBackend but returns TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Backend\\\\BackendInterface\\.$#"
+            count: 1
+            path: ../Classes/System/Restler/Builder.php
