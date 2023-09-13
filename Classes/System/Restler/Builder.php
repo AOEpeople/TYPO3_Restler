@@ -133,9 +133,11 @@ class Builder implements SingletonInterface
      */
     private function addApiClassesByGlobalArray(RestlerExtended $restler)
     {
-        $addApiController = $GLOBALS['TYPO3_Restler']['addApiClass'];
-        if (is_array($addApiController)) {
-            foreach ($addApiController as $apiEndpoint => $apiControllers) {
+        if (array_key_exists('TYPO3_Restler', $GLOBALS) &&
+            is_array($GLOBALS['TYPO3_Restler']) &&
+            array_key_exists('addApiClass', $GLOBALS['TYPO3_Restler']) &&
+            is_array($GLOBALS['TYPO3_Restler']['addApiClass'])) {
+            foreach ($GLOBALS['TYPO3_Restler']['addApiClass'] as $apiEndpoint => $apiControllers) {
                 $uniqueApiControllers = array_unique($apiControllers);
                 foreach ($uniqueApiControllers as $apiController) {
                     $restler->addAPIClass($apiController, $apiEndpoint);
