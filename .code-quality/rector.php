@@ -127,7 +127,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 __DIR__ . '/../Classes/Controller/ExplorerAuthenticationController.php',
                 __DIR__ . '/../Classes/Controller/BeUserAuthenticationController.php'
             ],
-
+            // We can't fix this, because our code must support PHP v7.x
+            Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector::class => [
+                __DIR__ . '/../Classes/System/Restler/RestlerExtended.php',
+            ],
+            // We can't fix this, because our code must support PHP v7.x
+            Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector::class => [
+                __DIR__ . '/../Classes/System/Restler/RestlerExtended.php',
+            ],
         ]
     );
 

@@ -91,8 +91,14 @@ class RestlerExtended extends Restler
      */
     public function handle()
     {
-        // get information about the REST-request
-        $this->get();
+        try {
+            // get information about the REST-request (this is required to check, if we can handle the REST-request by TYPO3-cache)
+            $this->get();
+        } catch (RestException $exception) {
+            // Exception occurred (e.g. 'Error encoding/decoding JSON') during getting information about REST-request:
+            // Let restler handle the error (e.g. that JSON could not be read) - and NOT the TYPO3-exception-handling!
+            return parent::handle();
+        }
 
         if ($this->requestMethod === 'GET' && $this->typo3Cache->hasCacheEntry($this->url, $_GET)) {
             return $this->handleRequestByTypo3Cache();
