@@ -65,7 +65,11 @@
         ],
         "test:unit": [
             "[ -e .Build/bin/phpunit ] || composer update",
-            "TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml Tests/Unit"
+            "TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests-v10.xml Tests/Unit"
+        ],
+        "test:unit-filter": [
+            "[ -e .Build/bin/phpunit ] || composer update",
+            "TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests-v10.xml Tests/Unit --filter=ExceptionHandlerTest"
         ],
         "code-style": [
             "[ -e ./.Build/bin/rector ] || composer install",

@@ -90,9 +90,7 @@ class Builder implements SingletonInterface
     {
         $restlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
 
-        if (isset($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']) && is_array(
-            $GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']
-        )) {
+        if (!is_array($restlerConfigurationClasses) || $restlerConfigurationClasses === []) {
             $message = 'No restler-configuration-class found (at least one restler-configuration-class is required)! ';
             $message .= 'The configuration-class must be registered in ext_localconf.php of your TYPO3-extension like this: ';
             $message .= '$GLOBALS[\'TYPO3_CONF_VARS\'][\'SC_OPTIONS\'][\'restler\'][\'restlerConfigurationClasses\'][] =

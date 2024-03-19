@@ -7,6 +7,7 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 use Rector\EarlyReturn\Rector\If_\ChangeAndIfToEarlyReturnRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector;
+use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEqualsToSameRector;
 use Rector\Set\ValueObject\SetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
@@ -40,6 +41,9 @@ return RectorConfig::configure()
         AddMethodCallBasedStrictParamTypeRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
         YieldDataProviderRector::class,
+        AssertEqualsToSameRector::class => [
+            __DIR__ . '/../Tests/Unit/System/Restler/ExceptionHandlerTest.php',
+        ],
     ])
     ->withAutoloadPaths([__DIR__ . '/../Classes'])
     ->registerService(RemoveUnusedPrivatePropertyRector::class);

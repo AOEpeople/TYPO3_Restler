@@ -59,7 +59,7 @@ class ExceptionHandlerTest extends BaseTest
         $exceptionHandler->expects(self::any())->method('getRestlerException')->willReturn($restlerException);
 
         $functionName = 'handle' . $statusCode;
-        $this->assertEquals($message, $exceptionHandler->$functionName());
+        $this->assertEquals($message, $exceptionHandler->{$functionName}());
     }
 
     public static function statusCodes(): array

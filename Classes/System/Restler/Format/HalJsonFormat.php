@@ -170,7 +170,7 @@ class HalJsonFormat extends Format
     /**
      * Throws an exception if an error occurred during the last JSON encoding/decoding
      */
-    protected function handleJsonError()
+    protected function handleJsonError(): void
     {
         if (function_exists('json_last_error_msg') && json_last_error() !== JSON_ERROR_NONE) {
             // PHP >= 5.5.0
@@ -261,7 +261,7 @@ class HalJsonFormat extends Format
                 case '"':
                     if ($c == 0) {
                         $inString = true;
-                    } elseif ($c > 0 && $json[$c - 1] != '\\') {
+                    } elseif ($c > 0 && $json[$c - 1] !== '\\') {
                         $inString = !$inString;
                     }
                     // fall-through

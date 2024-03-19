@@ -1,9 +1,7 @@
 includes:
     - phpstan-baseline.neon
-    - ../.Build/vendor/symplify/phpstan-rules/packages/cognitive-complexity/config/cognitive-complexity-rules.neon
-
-rules:
-    - Symplify\PHPStanRules\Rules\NoDefaultExceptionRule
+    - ../.Build/vendor/symplify/phpstan-rules/config/code-complexity-rules.neon
+    - ../.Build/vendor/symplify/phpstan-rules/config/services/services.neon
 
 parameters:
     level: 6
@@ -17,17 +15,6 @@ parameters:
     checkAlwaysTrueStrictComparison: false
 
 services:
-    - class: Symplify\Astral\Naming\SimpleNameResolver
-    - class: Symplify\PHPStanRules\CognitiveComplexity\AstCognitiveComplexityAnalyzer
-    - class: Symplify\PHPStanRules\CognitiveComplexity\NodeTraverser\ComplexityNodeTraverserFactory
-    - class: Symplify\PHPStanRules\CognitiveComplexity\DataCollector\CognitiveComplexityDataCollector
-    - class: Symplify\PHPStanRules\CognitiveComplexity\NodeVisitor\NestingNodeVisitor
-    - class: Symplify\PHPStanRules\CognitiveComplexity\NodeVisitor\ComplexityNodeVisitor
-    - class: Symplify\PHPStanRules\CognitiveComplexity\NodeAnalyzer\ComplexityAffectingNodeFinder
-    - class: Symplify\PackageBuilder\Php\TypeChecker
-    - class: Symplify\PackageBuilder\Matcher\ArrayStringAndFnMatcher
-    - class: Symplify\PHPStanRules\TypeAnalyzer\ObjectTypeAnalyzer
-    - class: Symplify\PHPStanRules\TypeAnalyzer\TypeUnwrapper
     -
         class: Symplify\PHPStanRules\Rules\ForbiddenFuncCallRule
         tags: [phpstan.rules.rule]

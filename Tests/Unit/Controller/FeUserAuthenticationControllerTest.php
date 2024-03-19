@@ -63,14 +63,6 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $this->controller = new FeUserAuthenticationController($this->typo3LoaderMock);
     }
 
-    /**
-     * Cleans up the environment after running a test.
-     */
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-    }
-
     public function testCheckThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck(): void
     {
         $this->typo3LoaderMock->expects(self::never())->method('initializeFrontendUser');
@@ -109,7 +101,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
         /** @var Restler $restlerMock */
         $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
-        $this->inject($this->controller, 'restler', $restlerMock);
+        $this->controller->restler = $restlerMock;
 
         $this->controller->checkAuthentication = true;
         $this->controller->argumentNameOfPageId = 'pid';
@@ -118,7 +110,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $method = $reflection->getMethod('determinePageIdFromArguments');
         $method->setAccessible(true);
 
-        $this->assertSame(0, $method->invoke($this->controller));
+        $this->assertSame('0', $method->invoke($this->controller));
     }
 
     public function testShouldSetPageIdIfArgumentDoesExist(): void
@@ -137,7 +129,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
         /** @var Restler $restlerMock */
         $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
-        $this->inject($this->controller, 'restler', $restlerMock);
+        $this->controller->restler = $restlerMock;
 
         $this->controller->checkAuthentication = true;
         $this->controller->argumentNameOfPageId = 'pid';
@@ -146,7 +138,7 @@ class FeUserAuthenticationControllerTest extends BaseTest
         $method = $reflection->getMethod('determinePageIdFromArguments');
         $method->setAccessible(true);
 
-        $this->assertSame(4711, $method->invoke($this->controller));
+        $this->assertSame('4711', $method->invoke($this->controller));
     }
 
     public function testCheckForCorrectAuthenticationString(): void
