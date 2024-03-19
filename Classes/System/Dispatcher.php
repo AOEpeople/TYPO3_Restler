@@ -26,8 +26,8 @@ namespace Aoe\Restler\System;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\System\TYPO3\Loader;
 use Aoe\Restler\System\Restler\Routes;
+use Aoe\Restler\System\TYPO3\Loader;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit\System\Restler;
 
 /***************************************************************
@@ -46,10 +47,12 @@ class ConfigurationTest extends BaseTest
      * @var ExtensionConfiguration
      */
     protected $extensionConfigurationMock;
+
     /**
      * @var Restler
      */
     protected $restlerMock;
+
     /**
      * @var Configuration
      */
@@ -63,15 +66,13 @@ class ConfigurationTest extends BaseTest
         parent::setUp();
 
         $this->extensionConfigurationMock = $this->getMockBuilder(ExtensionConfiguration::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         $this->configuration = new Configuration($this->extensionConfigurationMock);
     }
 
-    /**
-     * @test
-     */
-    public function checkThatCorrectClassesWillAddedWhenOnlineDocumentationIsEnabled()
+    public function testCheckThatCorrectClassesWillAddedWhenOnlineDocumentationIsEnabled(): void
     {
         $this->extensionConfigurationMock->expects(self::once())->method('isOnlineDocumentationEnabled')->willReturn(true);
         $this->extensionConfigurationMock->expects(self::once())->method('getPathOfOnlineDocumentation')->willReturn('path');
@@ -84,7 +85,7 @@ class ConfigurationTest extends BaseTest
         $this->restlerMock
             ->expects(self::exactly(3))
             ->method('addAuthenticationClass')
-            ->withConsecutive(
+            ->willReturnOnConsecutiveCalls(
                 [ExplorerAuthenticationController::class],
                 [BeUserAuthenticationController::class],
                 [FeUserAuthenticationController::class]
@@ -93,10 +94,7 @@ class ConfigurationTest extends BaseTest
         $this->configuration->configureRestler($this->restlerMock);
     }
 
-    /**
-     * @test
-     */
-    public function checkThatCorrectClassesWillAddedWhenOnlineDocumentationIsNotEnabled()
+    public function testCheckThatCorrectClassesWillAddedWhenOnlineDocumentationIsNotEnabled(): void
     {
         $this->extensionConfigurationMock->expects(self::once())->method('isOnlineDocumentationEnabled')->willReturn(false);
         $this->extensionConfigurationMock->expects(self::never())->method('getPathOfOnlineDocumentation');
@@ -108,7 +106,7 @@ class ConfigurationTest extends BaseTest
         $this->restlerMock
             ->expects(self::exactly(2))
             ->method('addAuthenticationClass')
-            ->withConsecutive(
+            ->willReturnOnConsecutiveCalls(
                 [BeUserAuthenticationController::class],
                 [FeUserAuthenticationController::class]
             );

@@ -59,6 +59,7 @@ class FeUserAuthenticationController implements iAuthenticate
      * @see \Aoe\RestlerExamples\Controller\ContentController::getContentElementByUidForLoggedInFeUser
      */
     public string $argumentNameOfPageId = '';
+
     /**
      * This property defines (when it's set), that this controller should check authentication
      * This property will be automatically set by restler, when in the API-class/controller this
@@ -128,7 +129,7 @@ class FeUserAuthenticationController implements iAuthenticate
      */
     private function determinePageId(): string
     {
-        if (!empty($this->argumentNameOfPageId)) {
+        if ($this->argumentNameOfPageId !== '' && $this->argumentNameOfPageId !== '0') {
             return $this->argumentNameOfPageId;
         }
 

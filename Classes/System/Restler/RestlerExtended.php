@@ -85,16 +85,13 @@ class RestlerExtended extends Restler
     /**
      * Main function for processing the api request
      * and return the response
-     *
-     * @throws Exception     when the api service class is missing
-     * @throws RestException to send error response
      */
     public function handle()
     {
         try {
             // get information about the REST-request (this is required to check, if we can handle the REST-request by TYPO3-cache)
             $this->get();
-        } catch (RestException $exception) {
+        } catch (RestException $restException) {
             // Exception occurred (e.g. 'Error encoding/decoding JSON') during getting information about REST-request:
             // Let restler handle the error (e.g. that JSON could not be read) - and NOT the TYPO3-exception-handling!
             return parent::handle();
@@ -140,6 +137,7 @@ class RestlerExtended extends Restler
             } else {
                 $siteBasePath = '/';
             }
+
             $this->baseUrl = (string) $this->request->getUri()
                 ->withQuery('')
                 ->withPath($siteBasePath);
@@ -147,6 +145,7 @@ class RestlerExtended extends Restler
             // set url with base path removed
             return rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $this->request->getUri()->getPath()), '/');
         }
+
         return parent::getPath();
     }
 
@@ -187,12 +186,14 @@ class RestlerExtended extends Restler
                     } else {
                         $expires = gmdate('D, d M Y H:i:s \G\M\T', time() + $cacheEntry['frontendCacheExpires']);
                     }
+
                     @header('Expires: ' . $expires);
                 } else {
                     @header($responseHeader);
                 }
             }
         }
+
         @header('X-Cached-By-Typo3: 1');
 
         // send data to client

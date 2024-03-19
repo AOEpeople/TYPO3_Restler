@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit\System\Restler\Fixtures;
 
 /***************************************************************
@@ -35,11 +36,7 @@ use Luracast\Restler\Restler;
  */
 class InvalidConfiguration
 {
-    /**
-     * @param Restler $restler
-     * @return void
-     */
-    public function configureRestler(Restler $restler)
+    public function configureRestler(Restler $restler): void
     {
         $restler->addAPIClass('Test-API-Class', 'Test-ResourcePath');
         $restler->addAuthenticationClass('Test-Authentication-Class');

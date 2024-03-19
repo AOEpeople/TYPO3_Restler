@@ -30,14 +30,11 @@ use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use Aoe\Restler\System\TYPO3\Cache;
 use Luracast\Restler\RestException;
+use stdClass;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Http\ServerRequest;
-use stdClass;
 
-/**
- * @package Restler
- */
 class RestApiClient implements SingletonInterface
 {
     private Cache $typo3Cache;
@@ -74,7 +71,6 @@ class RestApiClient implements SingletonInterface
      * @param array|stdClass $getData
      * @param array|stdClass $postData
      * @return mixed can be a primitive or array or object
-     * @throws RestApiRequestException
      */
     public function executeRequest(string $requestMethod, string $requestUri, $getData = null, $postData = null)
     {
@@ -109,6 +105,7 @@ class RestApiClient implements SingletonInterface
         if (!$this->isProductionContextSet()) {
             $errorMessage .= ' (message: ' . $e->getMessage() . ', details: ' . json_encode($e->getDetails(), JSON_THROW_ON_ERROR) . ')';
         }
+
         return new RestApiRequestException(
             $errorMessage,
             RestApiRequestException::EXCEPTION_CODE_REQUEST_COULD_NOT_PROCESSED,

@@ -26,18 +26,14 @@ namespace Aoe\Restler\System\RestApi;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Luracast\Restler\RestException;
 use Luracast\Restler\Format\JsonFormat;
+use Luracast\Restler\RestException;
 use TYPO3\CMS\Core\SingletonInterface;
 
-/**
- * @package Restler
- */
 class RestApiJsonFormat extends JsonFormat implements SingletonInterface
 {
     /**
      * @param string $data
-     * @throws RestException
      */
     public function decode($data)
     {

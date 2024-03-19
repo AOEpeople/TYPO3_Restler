@@ -29,9 +29,6 @@ namespace Aoe\Restler\System\Restler;
 use Luracast\Restler\Restler;
 use TYPO3\CMS\Core\SingletonInterface;
 
-/**
- * @package Restler
- */
 interface ConfigurationInterface extends SingletonInterface
 {
     /**

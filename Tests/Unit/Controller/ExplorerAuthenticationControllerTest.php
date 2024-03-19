@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit\Controller;
 
 /***************************************************************
@@ -43,6 +44,7 @@ class ExplorerAuthenticationControllerTest extends BaseTest
      * @var ApiMethodInfo
      */
     protected $apiMethodInfoMock;
+
     /**
      * @var ExplorerAuthenticationController
      */
@@ -59,7 +61,7 @@ class ExplorerAuthenticationControllerTest extends BaseTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        /* @var $restlerMock \Luracast\Restler\Restler */
+        /** @var \Luracast\Restler\Restler $restlerMock */
         $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $this->apiMethodInfoMock;
 
@@ -67,30 +69,21 @@ class ExplorerAuthenticationControllerTest extends BaseTest
         $this->inject($this->controller, 'restler', $restlerMock);
     }
 
-    /**
-     * @test
-     */
-    public function checkThatAuthenticationWillFail()
+    public function testCheckThatAuthenticationWillFail(): void
     {
         $this->apiMethodInfoMock->className = 'NoneExplorerClass';
-        self::assertFalse($this->controller->__isAllowed());
+        $this->assertFalse($this->controller->__isAllowed());
     }
 
-    /**
-     * @test
-     */
-    public function checkThatAuthenticationWillBeSuccessful()
+    public function testCheckThatAuthenticationWillBeSuccessful(): void
     {
         $this->apiMethodInfoMock->className = Explorer::class;
-        self::assertTrue($this->controller->__isAllowed());
+        $this->assertTrue($this->controller->__isAllowed());
     }
 
-    /**
-     * @test
-     */
-    public function checkForCorrectAuthenticationString()
+    public function testCheckForCorrectAuthenticationString(): void
     {
         $this->apiMethodInfoMock->className = Explorer::class;
-        self::assertEquals('Query name="api_key"', $this->controller->__getWWWAuthenticateString());
+        $this->assertSame('Query name="api_key"', $this->controller->__getWWWAuthenticateString());
     }
 }

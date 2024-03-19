@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit\Configuration;
 
 /***************************************************************
@@ -29,9 +30,6 @@ use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\Tests\Unit\BaseTest;
 
 /**
- * @package Restler
- * @subpackage Tests
- *
  * @covers \Aoe\Restler\Configuration\ExtensionConfiguration
  */
 class ExtensionConfigurationTest extends BaseTest
@@ -50,7 +48,7 @@ class ExtensionConfigurationTest extends BaseTest
             'refreshCache' => '0',
             'productionContext' => '1',
             'enableOnlineDocumentation' => '1',
-            'pathToOnlineDocumentation' => 'api_explorer'
+            'pathToOnlineDocumentation' => 'api_explorer',
         ];
 
         $typo3ExtensionConfiguration = $this->getMockBuilder(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)
@@ -61,35 +59,23 @@ class ExtensionConfigurationTest extends BaseTest
         $this->configuration = new ExtensionConfiguration($typo3ExtensionConfiguration);
     }
 
-    /**
-     * @test
-     */
-    public function canCheckThatCacheRefreshingIsNotEnabled()
+    public function testCanCheckThatCacheRefreshingIsNotEnabled(): void
     {
-        self::assertFalse($this->configuration->isCacheRefreshingEnabled());
+        $this->assertFalse($this->configuration->isCacheRefreshingEnabled());
     }
 
-    /**
-     * @test
-     */
-    public function canCheckThatProductionContextIsSet()
+    public function testCanCheckThatProductionContextIsSet(): void
     {
-        self::assertTrue($this->configuration->isProductionContextSet());
+        $this->assertTrue($this->configuration->isProductionContextSet());
     }
 
-    /**
-     * @test
-     */
-    public function canCheckThatOnlineDocumentationIsEnabled()
+    public function canCheckThatOnlineDocumentationIsEnabled(): void
     {
-        self::assertTrue($this->configuration->isOnlineDocumentationEnabled());
+        $this->assertTrue($this->configuration->isOnlineDocumentationEnabled());
     }
 
-    /**
-     * @test
-     */
-    public function canGetPathOfOnlineDocumentation()
+    public function testCanGetPathOfOnlineDocumentation(): void
     {
-        self::assertEquals('api_explorer', $this->configuration->getPathOfOnlineDocumentation());
+        $this->assertSame('api_explorer', $this->configuration->getPathOfOnlineDocumentation());
     }
 }

@@ -30,9 +30,6 @@ use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 use TYPO3\CMS\Core\SingletonInterface;
 
-/**
- * @package Restler
- */
 class Cache implements SingletonInterface
 {
     /**
@@ -76,12 +73,9 @@ class Cache implements SingletonInterface
 
     public function isResponseCacheableByTypo3Cache(string $requestMethod, array $apiMethodInfoMetadata): bool
     {
-        if ($requestMethod === 'GET' &&
+        return $requestMethod === 'GET' &&
             array_key_exists(self::API_METHOD_TYPO3CACHE_EXPIRES, $apiMethodInfoMetadata) &&
-            array_key_exists(self::API_METHOD_TYPO3CACHE_TAGS, $apiMethodInfoMetadata)) {
-            return true;
-        }
-        return false;
+            array_key_exists(self::API_METHOD_TYPO3CACHE_TAGS, $apiMethodInfoMetadata);
     }
 
     /**
@@ -95,7 +89,7 @@ class Cache implements SingletonInterface
         string $responseData,
         string $responseFormatClass,
         array $responseHeaders
-    ) {
+    ): void {
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
         $frontendCacheExpires = (int) ($apiMethodInfoMetadata['expires'] ?? 0);
         $typo3CacheExpires = (int) $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_EXPIRES];
@@ -125,7 +119,7 @@ class Cache implements SingletonInterface
         return $this->cache->has($identifier);
     }
 
-    public function flushByTag(string $tag)
+    public function flushByTag(string $tag): void
     {
         $this->cache->flushByTag($tag);
     }

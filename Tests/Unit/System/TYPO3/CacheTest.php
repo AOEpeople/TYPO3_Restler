@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit\System\TYPO3;
 
 /***************************************************************
@@ -42,11 +43,11 @@ class CacheTest extends BaseTest
      * @var Cache
      */
     protected $cache;
+
     /**
      * @var FrontendInterface
      */
     protected $frontendCacheMock;
-
 
     /**
      * setup
@@ -56,54 +57,43 @@ class CacheTest extends BaseTest
         parent::setUp();
 
         $this->frontendCacheMock = $this->getMockBuilder(FrontendInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $cacheManagerMock = $this->getMockBuilder(CacheManager::class)->disableOriginalConstructor()->getMock();
         $cacheManagerMock->expects(self::once())->method('getCache')->with('restler')->willReturn($this->frontendCacheMock);
 
         $this->cache = new Cache($cacheManagerMock);
     }
 
-    /**
-     * @test
-     */
-    public function responseShouldBeCacheableWhenRestEndpointUseGetMethodAndTypo3CacheIsConfigured()
+    public function testResponseShouldBeCacheableWhenRestEndpointUseGetMethodAndTypo3CacheIsConfigured(): void
     {
         $requestMethod = 'GET';
         $apiMethodInfoMetadata = [];
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_EXPIRES] = 0;
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_TAGS] = 'tag_a';
 
-        self::assertTrue($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
+        $this->assertTrue($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
     }
 
-    /**
-     * @test
-     */
-    public function responseShouldNotBeCacheableWhenRestEndpointUseNoGetMethod()
+    public function testResponseShouldNotBeCacheableWhenRestEndpointUseNoGetMethod(): void
     {
         $requestMethod = 'POST';
         $apiMethodInfoMetadata = [];
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_EXPIRES] = 0;
         $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_TAGS] = 'tag_a';
 
-        self::assertFalse($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
+        $this->assertFalse($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
     }
 
-    /**
-     * @test
-     */
-    public function responseShouldNotBeCacheableWhenTypo3CacheIsNotConfigured()
+    public function testResponseShouldNotBeCacheableWhenTypo3CacheIsNotConfigured(): void
     {
         $requestMethod = 'GET';
         $apiMethodInfoMetadata = [];
 
-        self::assertFalse($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
+        $this->assertFalse($this->cache->isResponseCacheableByTypo3Cache($requestMethod, $apiMethodInfoMetadata));
     }
 
-    /**
-     * @test
-     */
-    public function responseShouldBeCached()
+    public function testResponseShouldBeCached(): void
     {
         $responseCode = 123;
         $requestUri = 'api/shop/devices';
@@ -141,10 +131,7 @@ class CacheTest extends BaseTest
         );
     }
 
-    /**
-     * @test
-     */
-    public function shouldGetCacheEntry()
+    public function testShouldGetCacheEntry(): void
     {
         $requestUri = 'api/shop/devices';
         $requestGetData = ['limit' => 10];
@@ -152,52 +139,43 @@ class CacheTest extends BaseTest
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
 
         $this->frontendCacheMock->expects(self::once())->method('get')->with($identifier)->willReturn($response);
-        self::assertEquals($response, $this->cache->getCacheEntry($requestUri, $requestGetData));
+        $this->assertSame($response, $this->cache->getCacheEntry($requestUri, $requestGetData));
     }
 
-    /**
-     * @test
-     */
-    public function shouldHaveCacheEntry()
+    public function testShouldHaveCacheEntry(): void
     {
         $requestUri = 'api/shop/devices';
         $requestGetData = ['limit' => 10];
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
 
         $this->frontendCacheMock->expects(self::once())->method('has')->with($identifier)->willReturn(true);
-        self::assertTrue($this->cache->hasCacheEntry($requestUri, $requestGetData));
+        $this->assertTrue($this->cache->hasCacheEntry($requestUri, $requestGetData));
     }
 
-    /**
-     * @test
-     */
-    public function shouldHaveNoCacheEntry()
+    public function testShouldHaveNoCacheEntry(): void
     {
         $requestUri = 'api/shop/devices';
         $requestGetData = ['limit' => 10];
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
 
-        $this->frontendCacheMock->expects($this->once())->method('has')->with($identifier)->willReturn(false);
-        self::assertFalse($this->cache->hasCacheEntry($requestUri, $requestGetData));
+        $this->frontendCacheMock->expects($this->once())
+            ->method('has')
+            ->with($identifier)
+            ->willReturn(false);
+        $this->assertFalse($this->cache->hasCacheEntry($requestUri, $requestGetData));
     }
 
-    /**
-     * @test
-     */
-    public function shouldFlushCacheByTag()
+    public function testShouldFlushCacheByTag(): void
     {
         $tag = 'tag_a';
 
-        $this->frontendCacheMock->expects($this->once())->method('flushByTag')->with($tag);
+        $this->frontendCacheMock->expects($this->once())
+            ->method('flushByTag')
+            ->with($tag);
         $this->cache->flushByTag($tag);
     }
 
-    /**
-     * @param string $requestUri
-     * @param array $getData
-     * @return string
-     */
-    private function buildIdentifier($requestUri, array $getData)
+    private function buildIdentifier(string $requestUri, array $getData): string
     {
         return md5($requestUri . serialize($getData));
     }

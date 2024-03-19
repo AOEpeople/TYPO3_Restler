@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit\System\Restler\Fixtures;
 
 /***************************************************************

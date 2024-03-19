@@ -47,11 +47,7 @@ use TYPO3\CMS\Frontend\Middleware\BackendUserAuthenticator;
 use TYPO3\CMS\Frontend\Middleware\FrontendUserAuthenticator;
 use TYPO3\CMS\Frontend\Middleware\PrepareTypoScriptFrontendRendering;
 use TYPO3\CMS\Frontend\Middleware\TypoScriptFrontendInitialization;
-use LogicException;
 
-/**
- * @package Restler
- */
 class Loader implements SingletonInterface
 {
     protected TimeTracker $timeTracker;
@@ -86,7 +82,7 @@ class Loader implements SingletonInterface
      * Initialize backend-user with BackendUserAuthenticator middleware.
      * @see \TYPO3\CMS\Frontend\Middleware\BackendUserAuthenticator
      */
-    public function initializeBackendUser()
+    public function initializeBackendUser(): void
     {
         if ($this->hasActiveBackendUser()) {
             // Backend-User is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
@@ -106,14 +102,12 @@ class Loader implements SingletonInterface
             $GLOBALS['BE_USER']->user['uid'] > 0;
     }
 
-    /**
-     * @throws LogicException
-     */
     public function getBackendUser(): BackendUserAuthentication
     {
         if (!$this->hasActiveBackendUser()) {
             throw new LogicException("be-user is not initialized - initialize with BE-user with method 'initializeBackendUser'");
         }
+
         return $GLOBALS['BE_USER'];
     }
 
@@ -122,7 +116,7 @@ class Loader implements SingletonInterface
      * @param string|int $pid List of page IDs (comma separated) or page ID where to look for frontend user records
      * @see \TYPO3\CMS\Frontend\Middleware\FrontendUserAuthenticator
      */
-    public function initializeFrontendUser($pid = 0)
+    public function initializeFrontendUser($pid = 0): void
     {
         if ($this->hasActiveFrontendUser()) {
             // Frontend-User is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
@@ -148,19 +142,17 @@ class Loader implements SingletonInterface
         return $frontendUser instanceof FrontendUserAuthentication && is_array($frontendUser->user) && isset($frontendUser->user['uid']);
     }
 
-    /**
-     * @throws LogicException
-     */
     public function getFrontendUser(): FrontendUserAuthentication
     {
         if (!$this->hasActiveFrontendUser()) {
             throw new LogicException('fe-user is not initialized');
         }
+
         return $this->getRequest()
             ->getAttribute('frontend.user');
     }
 
-    public function initializeFrontendRendering(int $pageId = 0, int $type = 0, bool $forcedTemplateParsing = true)
+    public function initializeFrontendRendering(int $pageId = 0, int $type = 0, bool $forcedTemplateParsing = true): void
     {
         if ($this->isFrontendInitialized()) {
             // FE is already initialized - this can happen when we use/call internal REST-endpoints inside of a normal TYPO3-page
@@ -195,8 +187,10 @@ class Loader implements SingletonInterface
             // Force TemplateParsing (will slow down the called REST-endpoint a little bit):
             // Otherwise we can't render TYPO3-content in REST-endpoints, when TYPO3-cache 'pages' already exists
             /** @var TypoScriptFrontendController $controller */
-            $controller = $this->getRequest()->getAttribute('frontend.controller');
-            $controller->getContext()->setAspect('typoscript', new TypoScriptAspect($forcedTemplateParsing));
+            $controller = $this->getRequest()
+                ->getAttribute('frontend.controller');
+            $controller->getContext()
+                ->setAspect('typoscript', new TypoScriptAspect($forcedTemplateParsing));
         }
 
         if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) > 11005000) {
@@ -206,13 +200,11 @@ class Loader implements SingletonInterface
             // it's TYPO3v10 or lower
             $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($GLOBALS['TSFE']);
         }
+
         $prepareTypoScriptFrontendRendering->process($this->getRequest(), $this->mockRequestHandler);
         self::setRequest($this->mockRequestHandler->getRequest());
     }
 
-    /**
-     * @throws LogicException
-     */
     public function renderPageContent(): string
     {
         if (!$this->isFrontendInitialized()) {
@@ -225,7 +217,7 @@ class Loader implements SingletonInterface
             ->__toString();
     }
 
-    public static function setRequest(ServerRequestInterface $request)
+    public static function setRequest(ServerRequestInterface $request): void
     {
         $GLOBALS['TYPO3_REQUEST'] = $request;
     }

@@ -24,7 +24,7 @@ class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerI
     /**
      * @var string|mixed
      */
-    private $default;
+    private string $default;
 
     public function __construct(array $configuration)
     {

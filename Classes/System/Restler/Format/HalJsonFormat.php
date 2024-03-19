@@ -9,10 +9,7 @@ use Luracast\Restler\RestException;
 /**
  * Javascript Object Notation Format
  *
- * @category   Framework
- * @package    Restler
  * @subpackage format
- * @author     R.Arul Kumaran <arul@luracast.com>
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
@@ -67,9 +64,11 @@ class HalJsonFormat extends Format
         if (self::$prettyPrint !== null) {
             $humanReadable = self::$prettyPrint;
         }
+
         if (self::$unEscapedSlashes === null) {
             self::$unEscapedSlashes = $humanReadable;
         }
+
         if (self::$unEscapedUnicode === null) {
             self::$unEscapedUnicode = $this->charset == 'utf-8';
         }
@@ -87,7 +86,7 @@ class HalJsonFormat extends Format
                 $options |= JSON_UNESCAPED_SLASHES;
             }
 
-            if (self::$bigIntAsString) {
+            if (self::$bigIntAsString === true) {
                 $options |= JSON_BIGINT_AS_STRING;
             }
 
@@ -95,7 +94,7 @@ class HalJsonFormat extends Format
                 $options |= JSON_UNESCAPED_UNICODE;
             }
 
-            if (self::$numbersAsNumbers) {
+            if (self::$numbersAsNumbers === true) {
                 $options |= JSON_NUMERIC_CHECK;
             }
 
@@ -115,10 +114,11 @@ class HalJsonFormat extends Format
         if (self::$unEscapedUnicode) {
             $result = preg_replace_callback(
                 '/\\\u(\w\w\w\w)/',
-                function ($matches) {
+                static function (array $matches) {
                     if (function_exists('mb_convert_encoding')) {
                         return mb_convert_encoding(pack('H*', $matches[1]), 'UTF-8', 'UTF-16BE');
                     }
+
                     return iconv('UTF-16BE', 'UTF-8', pack('H*', $matches[1]));
                 },
                 $result
@@ -126,7 +126,7 @@ class HalJsonFormat extends Format
         }
 
         if (self::$unEscapedSlashes) {
-            $result = str_replace('\/', '/', $result);
+            return str_replace('\/', '/', $result);
         }
 
         return $result;
@@ -139,7 +139,7 @@ class HalJsonFormat extends Format
         }
 
         $options = 0;
-        if (self::$bigIntAsString) {
+        if (self::$bigIntAsString === true) {
             if ((PHP_MAJOR_VERSION == 5 && PHP_MINOR_VERSION >= 4) // PHP >= 5.4
                 || PHP_MAJOR_VERSION > 5 // PHP >= 6.0
             ) {
@@ -169,8 +169,6 @@ class HalJsonFormat extends Format
 
     /**
      * Throws an exception if an error occurred during the last JSON encoding/decoding
-     *
-     * @throws \RuntimeException
      */
     protected function handleJsonError()
     {
@@ -218,7 +216,7 @@ class HalJsonFormat extends Format
         $indentLevel = 0;
         $inString = false;
         $len = strlen($json);
-        for ($c = 0; $c < $len; $c++) {
+        for ($c = 0; $c < $len; ++$c) {
             $char = $json[$c];
             switch ($char) {
                 case '{':
@@ -226,20 +224,22 @@ class HalJsonFormat extends Format
                     if (!$inString) {
                         $newJson .= $char . "\n" .
                             str_repeat($tab, $indentLevel + 1);
-                        $indentLevel++;
+                        ++$indentLevel;
                     } else {
                         $newJson .= $char;
                     }
+
                     break;
                 case '}':
                 case ']':
                     if (!$inString) {
-                        $indentLevel--;
+                        --$indentLevel;
                         $newJson .= "\n" .
                             str_repeat($tab, $indentLevel) . $char;
                     } else {
                         $newJson .= $char;
                     }
+
                     break;
                 case ',':
                     if (!$inString) {
@@ -248,6 +248,7 @@ class HalJsonFormat extends Format
                     } else {
                         $newJson .= $char;
                     }
+
                     break;
                 case ':':
                     if (!$inString) {
@@ -255,6 +256,7 @@ class HalJsonFormat extends Format
                     } else {
                         $newJson .= $char;
                     }
+
                     break;
                 case '"':
                     if ($c == 0) {

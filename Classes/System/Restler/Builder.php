@@ -35,14 +35,10 @@ use Luracast\Restler\Scope;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
-use TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 
-/**
- * @package Restler
- */
 class Builder implements SingletonInterface
 {
     private ExtensionConfiguration $extensionConfiguration;
@@ -89,14 +85,14 @@ class Builder implements SingletonInterface
      *  - add authentication-classes
      *  - configure/set properties of several classes inside the restler-framework
      *  - configure overwriting of several classes inside the restler-framework
-     *
-     * @throws InvalidArgumentException
      */
-    private function configureRestler(RestlerExtended $restler)
+    private function configureRestler(RestlerExtended $restler): void
     {
         $restlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
 
-        if (!is_array($restlerConfigurationClasses) || $restlerConfigurationClasses === []) {
+        if (isset($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']) && is_array(
+            $GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']
+        )) {
             $message = 'No restler-configuration-class found (at least one restler-configuration-class is required)! ';
             $message .= 'The configuration-class must be registered in ext_localconf.php of your TYPO3-extension like this: ';
             $message .= '$GLOBALS[\'TYPO3_CONF_VARS\'][\'SC_OPTIONS\'][\'restler\'][\'restlerConfigurationClasses\'][] =
@@ -106,7 +102,9 @@ class Builder implements SingletonInterface
         }
 
         // append configuration classes from external GLOBAL registration
-        if (isset($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']) && is_array($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'])) {
+        if (isset($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']) && is_array(
+            $GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']
+        )) {
             $externalRestlerConfigurationClasses = array_unique($GLOBALS['TYPO3_Restler']['restlerConfigurationClasses']);
             $restlerConfigurationClasses = array_merge(
                 $restlerConfigurationClasses,
@@ -131,7 +129,7 @@ class Builder implements SingletonInterface
     /**
      * Add API-Controller-Classes that are registered by global array
      */
-    private function addApiClassesByGlobalArray(RestlerExtended $restler)
+    private function addApiClassesByGlobalArray(RestlerExtended $restler): void
     {
         if (array_key_exists('TYPO3_Restler', $GLOBALS) &&
             is_array($GLOBALS['TYPO3_Restler']) &&
@@ -149,10 +147,10 @@ class Builder implements SingletonInterface
     /**
      * use auto-loading for PHP-classes of restler-framework and Extbase/TYPO3 (use dependency-injection of Extbase)
      */
-    private function setAutoLoading()
+    private function setAutoLoading(): void
     {
         // set auto-loading for Extbase/TYPO3-classes
-        Scope::$resolver = function ($className) {
+        Scope::$resolver = static function ($className) {
             try {
                 return GeneralUtility::makeInstance($className);
             } catch (Error $error) {
@@ -178,7 +176,7 @@ class Builder implements SingletonInterface
     /**
      * configure cache-directory (where restler can write cache-files)
      */
-    private function setCacheDirectory()
+    private function setCacheDirectory(): void
     {
         Defaults::$cacheDirectory = $this->getCache()->getCacheDirectory();
     }
@@ -186,7 +184,7 @@ class Builder implements SingletonInterface
     /**
      * fix server-port (if not correct set)
      */
-    private function setServerConfiguration()
+    private function setServerConfiguration(): void
     {
         if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' && $_SERVER['SERVER_PORT'] === '80') {
             // Fix port for HTTPS
@@ -197,7 +195,6 @@ class Builder implements SingletonInterface
 
     /**
      * @return SimpleFileBackend
-     * @throws NoSuchCacheException
      */
     private function getCache()
     {
