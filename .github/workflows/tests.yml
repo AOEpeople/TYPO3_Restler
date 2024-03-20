@@ -65,13 +65,13 @@ jobs:
       - name: Unit Tests without coverage
         if: matrix.typo3 != '^11.5' || matrix.php != '8.3'
         run: |
-          export "UNIT_XML"=..Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml 
+          export "UNIT_XML"=..Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests-v10.xml 
           .Build/bin/phpunit --colors -c $UNIT_XML Tests/Unit
 
       - name: Unit Tests with coverage
         if: matrix.typo3 == '^11.5' && matrix.php == '8.3'
         run: |
-          export "UNIT_XML"=.Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests.xml 
+          export "UNIT_XML"=.Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests-v10.xml 
           .Build/bin/phpunit --coverage-filter Classes --coverage-clover=unittest-coverage.clover --colors -c $UNIT_XML Tests/Unit/
 
       - name: Upload coverage results to Scrutinizer
