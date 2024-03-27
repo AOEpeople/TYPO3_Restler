@@ -27,7 +27,7 @@ namespace Aoe\Restler\Tests\Unit\System\TYPO3;
  ***************************************************************/
 
 use Aoe\Restler\System\TYPO3\Cache;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 
@@ -37,7 +37,7 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
  *
  * @covers \Aoe\Restler\System\TYPO3\Cache
  */
-class CacheTest extends BaseTest
+class CacheTest extends BaseTestCase
 {
     /**
      * @var Cache

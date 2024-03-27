@@ -30,7 +30,7 @@ use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Restler\Builder;
 use Aoe\Restler\System\Restler\RestlerExtended;
 use Aoe\Restler\System\TYPO3\Cache;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\ValidConfiguration;
 use InvalidArgumentException;
 use Luracast\Restler\Defaults;
@@ -49,7 +49,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @covers \Aoe\Restler\System\Restler\Builder
  */
-class BuilderTest extends BaseTest
+class BuilderTest extends BaseTestCase
 {
     /**
      * @var Builder

@@ -28,7 +28,7 @@ namespace Aoe\Restler\Tests\Unit\Controller;
 
 use Aoe\Restler\Controller\FeUserAuthenticationController;
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Luracast\Restler\Data\ApiMethodInfo;
 use Luracast\Restler\Restler;
 
@@ -38,7 +38,7 @@ use Luracast\Restler\Restler;
  *
  * @covers \Aoe\Restler\Controller\FeUserAuthenticationController
  */
-class FeUserAuthenticationControllerTest extends BaseTest
+class FeUserAuthenticationControllerTest extends BaseTestCase
 {
     /**
      * @var FeUserAuthenticationController

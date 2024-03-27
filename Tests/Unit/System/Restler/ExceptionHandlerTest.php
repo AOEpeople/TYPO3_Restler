@@ -26,7 +26,7 @@ namespace Aoe\Restler\Tests\Unit\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\ExceptionHandler;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
@@ -37,7 +37,7 @@ use Luracast\Restler\Restler;
  *
  * @covers \Aoe\Restler\System\Restler\AbstractExceptionHandler
  */
-class ExceptionHandlerTest extends BaseTest
+class ExceptionHandlerTest extends BaseTestCase
 {
     /**
      * @dataProvider statusCodes

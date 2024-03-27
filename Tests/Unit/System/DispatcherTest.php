@@ -29,7 +29,7 @@ namespace Aoe\Restler\Tests\Unit\System;
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\Dispatcher;
 use Aoe\Restler\System\Restler\Builder;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Luracast\Restler\Restler;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Http\Uri;
@@ -41,7 +41,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @covers \Aoe\Restler\System\Dispatcher
  */
-class DispatcherTest extends BaseTest
+class DispatcherTest extends BaseTestCase
 {
     /**
      * @var Dispatcher

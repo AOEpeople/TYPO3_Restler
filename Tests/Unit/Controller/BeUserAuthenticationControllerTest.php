@@ -28,7 +28,7 @@ namespace Aoe\Restler\Tests\Unit\Controller;
 
 use Aoe\Restler\Controller\BeUserAuthenticationController;
 use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
 /**
@@ -37,7 +37,7 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
  *
  * @covers \Aoe\Restler\Controller\BeUserAuthenticationController
  */
-class BeUserAuthenticationControllerTest extends BaseTest
+class BeUserAuthenticationControllerTest extends BaseTestCase
 {
     /**
      * @var BeUserAuthenticationController

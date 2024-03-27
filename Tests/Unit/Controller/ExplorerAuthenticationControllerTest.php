@@ -27,7 +27,7 @@ namespace Aoe\Restler\Tests\Unit\Controller;
  ***************************************************************/
 
 use Aoe\Restler\Controller\ExplorerAuthenticationController;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Luracast\Restler\Data\ApiMethodInfo;
 use Luracast\Restler\Explorer\v2\Explorer;
 use Luracast\Restler\Restler;
@@ -38,7 +38,7 @@ use Luracast\Restler\Restler;
  *
  * @covers \Aoe\Restler\Controller\ExplorerAuthenticationController
  */
-class ExplorerAuthenticationControllerTest extends BaseTest
+class ExplorerAuthenticationControllerTest extends BaseTestCase
 {
     /**
      * @var ApiMethodInfo

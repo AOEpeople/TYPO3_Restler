@@ -29,7 +29,7 @@ namespace Aoe\Restler\Tests\Unit\System\RestApi;
 use Aoe\Restler\System\RestApi\RestApiRequest;
 use Aoe\Restler\System\RestApi\RestApiRequestScope;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Exception;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
@@ -40,7 +40,7 @@ use Luracast\Restler\Restler;
  *
  * @covers \Aoe\Restler\System\RestApi\RestApiRequest
  */
-class RestApiRequestTest extends BaseTest
+class RestApiRequestTest extends BaseTestCase
 {
     /**
      * @var array

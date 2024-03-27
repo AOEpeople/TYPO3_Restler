@@ -27,12 +27,12 @@ namespace Aoe\Restler\Tests\Unit\Configuration;
  ***************************************************************/
 
 use Aoe\Restler\Configuration\ExtensionConfiguration;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 
 /**
  * @covers \Aoe\Restler\Configuration\ExtensionConfiguration
  */
-class ExtensionConfigurationTest extends BaseTest
+class ExtensionConfigurationTest extends BaseTestCase
 {
     /**
      * @var ExtensionConfiguration

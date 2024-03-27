@@ -31,7 +31,7 @@ use Aoe\Restler\Controller\BeUserAuthenticationController;
 use Aoe\Restler\Controller\ExplorerAuthenticationController;
 use Aoe\Restler\Controller\FeUserAuthenticationController;
 use Aoe\Restler\System\Restler\Configuration;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Luracast\Restler\Explorer\v2\Explorer;
 use Luracast\Restler\Restler;
 
@@ -41,7 +41,7 @@ use Luracast\Restler\Restler;
  *
  * @covers \Aoe\Restler\System\Restler\Configuration
  */
-class ConfigurationTest extends BaseTest
+class ConfigurationTest extends BaseTestCase
 {
     /**
      * @var ExtensionConfiguration

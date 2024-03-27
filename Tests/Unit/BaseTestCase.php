@@ -32,7 +32,7 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
  * @package Restler
  * @subpackage Tests
  */
-class BaseTest extends UnitTestCase
+abstract class BaseTestCase extends UnitTestCase
 {
     /**
      * call unaccessible method of an object (to test it)

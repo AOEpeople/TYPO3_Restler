@@ -33,7 +33,7 @@ use Aoe\Restler\System\RestApi\RestApiRequestException;
 use Aoe\Restler\System\RestApi\RestApiRequestScope;
 use Aoe\Restler\System\Restler\Builder as RestlerBuilder;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
 
@@ -43,7 +43,7 @@ use Luracast\Restler\Restler;
  *
  * @covers \Aoe\Restler\System\RestApi\RestApiClient
  */
-class RestApiClientTest extends BaseTest
+class RestApiClientTest extends BaseTestCase
 {
     /**
      * @var ExtensionConfiguration
