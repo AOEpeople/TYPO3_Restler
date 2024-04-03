@@ -54,6 +54,7 @@ abstract class RestlerBuilderAware
         if ($this->restlerBuilder === null) {
             $this->restlerBuilder = GeneralUtility::makeInstance(Builder::class);
         }
+
         return $this->restlerBuilder;
     }
 
@@ -62,6 +63,7 @@ abstract class RestlerBuilderAware
         if ($this->isRestlerApiUrl($prefixedUrlPath)) {
             return true;
         }
+
         return $this->isRestlerApiExplorerUrl($prefixedUrlPath);
     }
 

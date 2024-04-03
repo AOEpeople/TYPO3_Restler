@@ -26,7 +26,7 @@ namespace Aoe\Restler\Tests\Unit\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\Tests\Unit\BaseTest;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Aoe\Restler\Tests\Unit\System\Restler\Fixtures\ExceptionHandler;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
@@ -37,25 +37,20 @@ use Luracast\Restler\Restler;
  *
  * @covers \Aoe\Restler\System\Restler\AbstractExceptionHandler
  */
-class ExceptionHandlerTest extends BaseTest
+class ExceptionHandlerTest extends BaseTestCase
 {
     /**
      * @dataProvider statusCodes
-     * @test
      */
-    public function canHandleAllExceptions($statusCode, $statusName)
+    public function testCanHandleAllExceptions(int $statusCode, string $statusName): void
     {
-        if ($statusName) {
-            $message = $statusName;
-        } else {
-            $message = 'dummy-message';
-        }
+        $message = $statusName !== '' && $statusName !== '0' ? $statusName : 'dummy-message';
 
         $restler = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
 
         $exceptionHandler = $this->getMockBuilder(ExceptionHandler::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getRestler', 'getRestlerException'])
+            ->onlyMethods(['getRestler', 'getRestlerException'])
             ->getMock();
         $exceptionHandler->expects(self::any())->method('getRestler')->willReturn($restler);
 
@@ -64,10 +59,10 @@ class ExceptionHandlerTest extends BaseTest
         $exceptionHandler->expects(self::any())->method('getRestlerException')->willReturn($restlerException);
 
         $functionName = 'handle' . $statusCode;
-        self::assertEquals($message, $exceptionHandler->$functionName());
+        $this->assertEquals($message, $exceptionHandler->{$functionName}());
     }
 
-    public function statusCodes()
+    public static function statusCodes(): array
     {
         return [
             [100, 'Continue'],
@@ -110,7 +105,7 @@ class ExceptionHandlerTest extends BaseTest
             [415, 'Unsupported Media Type'],
             [416, 'Requested Range Not Satisfiable'],
             [417, 'Expectation Failed'],
-            [418, 'I\'m a teapot'],
+            [418, "I'm a teapot"],
             [420, ''],
             [421, 'Misdirected Request'],
             [422, 'Unprocessable Entity'],

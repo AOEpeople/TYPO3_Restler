@@ -29,14 +29,11 @@ namespace Aoe\Restler\System\Restler;
 use Luracast\Restler\Restler;
 use TYPO3\CMS\Core\SingletonInterface;
 
-/**
- * @package Restler
- */
 interface ConfigurationInterface extends SingletonInterface
 {
     /**
      * This is the right place, where you can write your restler-code!
      * Use this method instead of the index.php-file, which you normally would use, to configuring/using restler!
      */
-    public function configureRestler(Restler $restler);
+    public function configureRestler(Restler $restler): void;
 }

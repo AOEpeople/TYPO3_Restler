@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit\System\RestApi;
 
 /***************************************************************
@@ -28,9 +29,9 @@ namespace Aoe\Restler\Tests\Unit\System\RestApi;
 use Aoe\Restler\System\RestApi\RestApiRequest;
 use Aoe\Restler\System\RestApi\RestApiRequestScope;
 use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
-use Aoe\Restler\Tests\Unit\BaseTest;
-use Luracast\Restler\RestException;
+use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Exception;
+use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
 
 /**
@@ -39,28 +40,33 @@ use Luracast\Restler\Restler;
  *
  * @covers \Aoe\Restler\System\RestApi\RestApiRequest
  */
-class RestApiRequestTest extends BaseTest
+class RestApiRequestTest extends BaseTestCase
 {
     /**
      * @var array
      */
     protected $originalGetVars;
+
     /**
      * @var array
      */
     protected $originalPostVars;
+
     /**
      * @var array
      */
     protected $originalServerSettings;
+
     /**
      * @var RestApiRequest
      */
     protected $restApiRequest;
+
     /**
      * @var RestApiRequestScope
      */
     protected $restApiRequestScopeMock;
+
     /**
      * @var Typo3Cache
      */
@@ -79,13 +85,15 @@ class RestApiRequestTest extends BaseTest
         $this->originalServerSettings = $_SERVER;
 
         $this->restApiRequestScopeMock = $this->getMockBuilder(RestApiRequestScope::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->typo3CacheMock = $this->getMockBuilder(Typo3Cache::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->restApiRequest = $this->getMockBuilder(RestApiRequest::class)
             ->setConstructorArgs([$this->restApiRequestScopeMock, $this->typo3CacheMock])
-            ->setMethods(['handle'])
+            ->onlyMethods(['handle'])
             ->getMock();
     }
 
@@ -102,14 +110,11 @@ class RestApiRequestTest extends BaseTest
         parent::tearDown();
     }
 
-    /**
-     * @test
-     */
-    public function canExecuteRestApiRequest()
+    public function testCanExecuteRestApiRequest(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
-        $getData  = ['context' => 'mobile'];
+        $getData = ['context' => 'mobile'];
         $postData = [];
         $result = ['id' => 1, 'name' => 'Test-Product'];
 
@@ -122,15 +127,13 @@ class RestApiRequestTest extends BaseTest
         $this->restApiRequestScopeMock->expects(self::once())->method('restoreOriginalRestApiRequest');
         $this->restApiRequestScopeMock->expects(self::once())->method('restoreOriginalRestApiAuthenticationObjects');
         $this->restApiRequest->expects(self::once())->method('handle')->willReturn($result);
-        self::assertEquals($result, $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData));
+        $this->assertSame($result, $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData));
     }
 
     /**
      * Test, that the restApiRequest-object restore the original data of $_GET, $_POST and $_SERVER and the original restApiRequest-object
-     *
-     * @test
      */
-    public function shouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestIsDone()
+    public function testShouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestIsDone(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
@@ -147,17 +150,15 @@ class RestApiRequestTest extends BaseTest
         $this->restApiRequest->expects(self::once())->method('handle')->willReturn($result);
         $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri);
 
-        self::assertEquals($this->originalGetVars, $_GET);
-        self::assertEquals($this->originalPostVars, $_POST);
-        self::assertEquals($this->originalServerSettings, $_SERVER);
+        $this->assertEquals($this->originalGetVars, $_GET);
+        $this->assertEquals($this->originalPostVars, $_POST);
+        $this->assertEquals($this->originalServerSettings, $_SERVER);
     }
 
     /**
      * Test, that the restApiRequest-object restore the original data of $_GET, $_POST and $_SERVER and the original restApiRequest-object
-     *
-     * @test
      */
-    public function shouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestFailsWithException()
+    public function testShouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestFailsWithException(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
@@ -178,17 +179,15 @@ class RestApiRequestTest extends BaseTest
         } catch (Exception $e) {
         }
 
-        self::assertEquals($this->originalGetVars, $_GET);
-        self::assertEquals($this->originalPostVars, $_POST);
-        self::assertEquals($this->originalServerSettings, $_SERVER);
+        $this->assertEquals($this->originalGetVars, $_GET);
+        $this->assertEquals($this->originalPostVars, $_POST);
+        $this->assertEquals($this->originalServerSettings, $_SERVER);
     }
 
     /**
      * Test, that the restApiRequest-object restore the original data of $_GET, $_POST and $_SERVER and the original restApiRequest-object
-     *
-     * @test
      */
-    public function shouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestFailsWithRestException()
+    public function testShouldRestoreOriginalRestApiRequestWhenExecutionOfRestApiRequestFailsWithRestException(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
@@ -209,19 +208,16 @@ class RestApiRequestTest extends BaseTest
         } catch (Exception $e) {
         }
 
-        self::assertEquals($this->originalGetVars, $_GET);
-        self::assertEquals($this->originalPostVars, $_POST);
-        self::assertEquals($this->originalServerSettings, $_SERVER);
+        $this->assertEquals($this->originalGetVars, $_GET);
+        $this->assertEquals($this->originalPostVars, $_POST);
+        $this->assertEquals($this->originalServerSettings, $_SERVER);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowRestExceptionWhenExecutionOfRestApiRequestFailsWithException()
+    public function testShouldThrowRestExceptionWhenExecutionOfRestApiRequestFailsWithException(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
-        $getData  = ['context' => 'mobile'];
+        $getData = ['context' => 'mobile'];
         $postData = [];
         $exception = new Exception();
 
@@ -234,14 +230,11 @@ class RestApiRequestTest extends BaseTest
         $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri, $getData, $postData);
     }
 
-    /**
-     * @test
-     */
-    public function shouldThrowRestExceptionWhenExecutionOfRestApiRequestFailsWithRestException()
+    public function testShouldThrowRestExceptionWhenExecutionOfRestApiRequestFailsWithRestException(): void
     {
         $requestMethod = 'GET';
         $requestUri = '/api/products/1';
-        $getData  = ['context' => 'mobile'];
+        $getData = ['context' => 'mobile'];
         $postData = [];
         $exception = new RestException(400, 'message');
 

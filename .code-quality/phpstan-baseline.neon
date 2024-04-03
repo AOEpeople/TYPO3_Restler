@@ -1,62 +1,66 @@
 parameters:
 		ignoreErrors:
 			-
-				message: "#^(.*)has no return typehint specified\\.$#"
-				path: ../
-			-
-				message: "#^Access to an undefined property Luracast\\\\Restler\\\\Restler\\:\\:\\$_authClasses\\.$#"
-				count: 1
-				path: ../Classes/System/RestApi/RestApiRequest.php
-
-			-
 				message: "#^Access to an undefined property Luracast\\\\Restler\\\\Restler\\:\\:\\$_authClasses\\.$#"
 				count: 2
 				path: ../Classes/System/RestApi/RestApiRequestScope.php
-
 			-
 				message: "#^Method Aoe\\\\Restler\\\\System\\\\RestApi\\\\RestApiRequestScope\\:\\:getOriginalRestApiRequest\\(\\) should return Luracast\\\\Restler\\\\Restler but returns Luracast\\\\Restler\\\\Scope\\.$#"
 				count: 1
 				path: ../Classes/System/RestApi/RestApiRequestScope.php
-
 			-
 				message: "#^Method Aoe\\\\Restler\\\\System\\\\Restler\\\\Builder\\:\\:getCache\\(\\) should return TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Backend\\\\SimpleFileBackend but returns TYPO3\\\\CMS\\\\Core\\\\Cache\\\\Backend\\\\BackendInterface\\.$#"
 				count: 1
 				path: ../Classes/System/Restler/Builder.php
-
-			-
-				message: "#^Cognitive complexity for \"Aoe\\\\Restler\\\\System\\\\Restler\\\\Format\\\\HalJsonFormat\\:\\:decode\\(\\)\" is 9, keep it under 8$#"
-				count: 1
-				path: ../Classes/System/Restler/Format/HalJsonFormat.php
-
-			-
-				message: "#^Cognitive complexity for \"Aoe\\\\Restler\\\\System\\\\Restler\\\\Format\\\\HalJsonFormat\\:\\:encode\\(\\)\" is 17, keep it under 8$#"
-				count: 1
-				path: ../Classes/System/Restler/Format/HalJsonFormat.php
-
-			-
-				message: "#^Cognitive complexity for \"Aoe\\\\Restler\\\\System\\\\Restler\\\\Format\\\\HalJsonFormat\\:\\:formatJson\\(\\)\" is 14, keep it under 8$#"
-				count: 1
-				path: ../Classes/System/Restler/Format/HalJsonFormat.php
-
-			-
-				message: "#^Cognitive complexity for \"Aoe\\\\Restler\\\\System\\\\Restler\\\\RestlerExtended\\:\\:getPath\\(\\)\" is 9, keep it under 8$#"
-				count: 1
-				path: ../Classes/System/Restler/RestlerExtended.php
-
-			-
-				message: "#^Cognitive complexity for \"Aoe\\\\Restler\\\\System\\\\Restler\\\\RestlerExtended\\:\\:handleRequestByTypo3Cache\\(\\)\" is 13, keep it under 8$#"
-				count: 1
-				path: ../Classes/System/Restler/RestlerExtended.php
-
-			-
-				message: "#^Cognitive complexity for \"Aoe\\\\Restler\\\\System\\\\Restler\\\\Routes\\:\\:containsUrl\\(\\)\" is 16, keep it under 8$#"
-				count: 1
-				path: ../Classes/System/Restler/Routes.php
 			-
 				message: "#^Strict comparison using \\=\\=\\= between bool and null will always evaluate to false\\.$#"
 				count: 1
 				path: ../Classes/System/Restler/Format/HalJsonFormat.php
 			-
-				message: "#^Cognitive complexity for \"Aoe\\\\Restler\\\\System\\\\Restler\\\\Builder\\:\\:addApiClassesByGlobalArray\\(\\)\" is 9, keep it under 8$#"
+				message: "#^Method Aoe\\\\Restler\\\\System\\\\TYPO3\\\\Cache\\:\\:getCacheEntry\\(\\) has no return type specified\\.$#"
+				count: 1
+				path: ../Classes/System/TYPO3/Cache.php
+			-
+				message: "#^Method Aoe\\\\Restler\\\\System\\\\Restler\\\\RestlerExtended\\:\\:handle\\(\\) has no return type specified\\.$#"
+				count: 1
+				path: ../Classes/System/Restler/RestlerExtended.php
+			-
+				message: "#^Method Aoe\\\\Restler\\\\System\\\\Restler\\\\RestlerExtended\\:\\:postCall\\(\\) has no return type specified\\.$#"
+				count: 1
+				path: ../Classes/System/Restler/RestlerExtended.php
+			-
+				message: "#^Dead catch \\- Error is never thrown in the try block\\.$#"
 				count: 1
 				path: ../Classes/System/Restler/Builder.php
+			-
+				message: "#^Anonymous variable in a `\\$request\\-\\>getAttribute\\('site'\\)\\-\\>\\.\\.\\.\\(\\)` method call can lead to false dead methods\\. Make sure the variable type is known$#"
+				count: 1
+				path: ../Classes/System/Dispatcher.php
+			-
+				message: "#^Anonymous variable in a `\\$request\\-\\>getAttribute\\('site'\\)\\-\\>getBase\\(\\)\\-\\>\\.\\.\\.\\(\\)` method call can lead to false dead methods\\. Make sure the variable type is known$#"
+				count: 1
+				path: ../Classes/System/Dispatcher.php
+			-
+				message: "#^Anonymous variable in a `\\$this\\-\\>request\\-\\>getAttribute\\('site'\\)\\-\\>\\.\\.\\.\\(\\)` method call can lead to false dead methods\\. Make sure the variable type is known$#"
+				count: 1
+				path: ../Classes/System/Restler/RestlerExtended.php
+			-
+				message: "#^Anonymous variable in a `\\$this\\-\\>request\\-\\>getAttribute\\('site'\\)\\-\\>getBase\\(\\)\\-\\>\\.\\.\\.\\(\\)` method call can lead to false dead methods\\. Make sure the variable type is known$#"
+				count: 1
+				path: ../Classes/System/Restler/RestlerExtended.php
+			-
+				message: "#^Method Aoe\\\\Restler\\\\System\\\\RestApi\\\\RestApiRequest\\:\\:composeHeaders\\(\\) has no return type specified\\.$#"
+				count: 1
+				path: ../Classes/System/RestApi/RestApiRequest.php
+			-
+				message: "#^Method Aoe\\\\Restler\\\\System\\\\RestApi\\\\RestApiRequest\\:\\:postCall\\(\\) has no return type specified\\.$#"
+				count: 1
+				path: ../Classes/System/RestApi/RestApiRequest.php
+			-
+				message: "#^Property Aoe\\\\Restler\\\\System\\\\RestApi\\\\RestApiRequestScope\\:\\:\\$originalRestApiRequest \\(Luracast\\\\Restler\\\\Scope\\) on left side of \\?\\? is not nullable\\.$#"
+				count: 1
+				path: ../Classes/System/RestApi/RestApiRequestScope.php
+			-
+				message: "#^Comparison operation \"\\>\" between int\\<1, max\\> and 0 is always true\\.$#"
+				count: 1
+				path: ../Classes/System/Restler/Format/HalJsonFormat.php

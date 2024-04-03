@@ -62,11 +62,8 @@ class ExplorerAuthenticationController implements iAuthenticate
     // phpcs:ignore
     public function __isAllowed()
     {
-        if ($this->restler->apiMethodInfo->className !== Explorer::class) {
-            // this controller is not responsible for the authentication
-            return false;
-        }
-        return true;
+        // this controller is not responsible for the authentication
+        return $this->restler->apiMethodInfo->className === Explorer::class;
     }
 
     /**

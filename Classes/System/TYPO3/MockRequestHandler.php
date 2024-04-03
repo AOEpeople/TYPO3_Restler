@@ -31,9 +31,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\NullResponse;
 
-/**
- * @package Restler
- */
 class MockRequestHandler implements RequestHandlerInterface
 {
     private ServerRequestInterface $request;

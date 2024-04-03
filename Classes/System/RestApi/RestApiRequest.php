@@ -27,13 +27,13 @@ namespace Aoe\Restler\System\RestApi;
  ***************************************************************/
 
 use Aoe\Restler\System\TYPO3\Cache;
-use Luracast\Restler\Restler;
-use Luracast\Restler\RestException;
+use Exception;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Format\JsonFormat;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use Exception;
+use Luracast\Restler\RestException;
+use Luracast\Restler\Restler;
 use stdClass;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This class represents a single REST-API-request, which can be called from PHP.
@@ -55,6 +55,7 @@ class RestApiRequest extends Restler
      * will be called recursive, so we MUST store the 'really original' data
      */
     private static array $originalGetVars;
+
     /**
      * store data from $_POST in this property
      *
@@ -63,6 +64,7 @@ class RestApiRequest extends Restler
      * will be called recursive, so we MUST store the 'really original' data
      */
     private static array $originalPostVars;
+
     /**
      * store data from $_SERVER in this property
      *
@@ -73,11 +75,14 @@ class RestApiRequest extends Restler
     private static array $originalServerSettings;
 
     private array $restApiGetData;
+
     private array $restApiPostData;
+
     /**
      * This property defines the request-uri (without GET-params, e.g. '/api/products/320'), which should be called
      */
     private string $restApiRequestUri;
+
     /**
      * This property defines the request-method (e.g. 'GET', 'POST', 'PUT' or 'DELETE'), which should be used while calling the rest-api
      */
@@ -86,8 +91,6 @@ class RestApiRequest extends Restler
     private RestApiRequestScope $restApiRequestScope;
 
     private Cache $typo3Cache;
-
-
 
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
@@ -111,8 +114,6 @@ class RestApiRequest extends Restler
     {
     }
 
-
-
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
     /* Block of methods, which does NOT override logic from parent-class *******************************************************/
@@ -122,7 +123,6 @@ class RestApiRequest extends Restler
      * @param array|stdClass $getData
      * @param array|stdClass $postData
      * @return mixed can be a primitive or array or object
-     * @throws RestException
      */
     public function executeRestApiRequest(string $requestMethod, string $requestUri, $getData = null, $postData = null)
     {
@@ -163,13 +163,14 @@ class RestApiRequest extends Restler
     public function getRequestData($includeQueryParameters = true): array
     {
         $requestData = [];
-        if ($this->restApiRequestMethod == 'PUT' || $this->restApiRequestMethod == 'PATCH' || $this->restApiRequestMethod == 'POST') {
+        if ($this->restApiRequestMethod === 'PUT' || $this->restApiRequestMethod === 'PATCH' || $this->restApiRequestMethod === 'POST') {
             $requestData = array_merge($this->restApiPostData, [Defaults::$fullRequestDataName => $this->restApiPostData]);
         }
 
         if ($includeQueryParameters) {
             return $requestData + $this->restApiGetData;
         }
+
         return $requestData;
     }
 
@@ -191,6 +192,7 @@ class RestApiRequest extends Restler
         if (Defaults::$useVendorMIMEVersioning) {
             $this->responseFormat = $this->negotiateResponseFormat();
         }
+
         $this->route();
         $this->negotiate();
         $this->preAuthFilter();
@@ -207,6 +209,7 @@ class RestApiRequest extends Restler
             return $this->getRestApiJsonFormat()
                 ->decode($this->responseData);
         }
+
         return $this->responseFormat->decode($this->responseData);
     }
 
@@ -241,16 +244,17 @@ class RestApiRequest extends Restler
     /**
      * @param array|stdClass $data
      * @return array
-     * @throws RestException
      */
     private function convertDataToArray($data)
     {
         if (!$data) {
             return [];
         }
+
         if (is_array($data)) {
             return $data;
         }
+
         if ($data instanceof stdClass) {
             return json_decode(json_encode($data), true); // convert stdClass to array
         }
@@ -258,7 +262,6 @@ class RestApiRequest extends Restler
 
     /**
      * @return mixed
-     * @throws RestException
      */
     private function handleRequestByTypo3Cache()
     {
@@ -273,6 +276,7 @@ class RestApiRequest extends Restler
             return $this->getRestApiJsonFormat()
                 ->decode($this->responseData);
         }
+
         return $this->responseFormat->decode($this->responseData);
     }
 
@@ -280,7 +284,7 @@ class RestApiRequest extends Restler
      * Override (the stored) data of $_GET, $_POST and $_SERVER (which are used in several restler-PHP-classes) and the original
      * REST-API-Request-object, because this data/object 'defines' the REST-API-request, which we want to call
      */
-    private function overrideOriginalRestApiRequest()
+    private function overrideOriginalRestApiRequest(): void
     {
         $_GET = $this->restApiGetData;
         $_POST = $this->restApiPostData;
@@ -293,9 +297,11 @@ class RestApiRequest extends Restler
             if (array_key_exists('CONTENT_TYPE', $_SERVER)) {
                 unset($_SERVER['CONTENT_TYPE']);
             }
+
             if (array_key_exists('HTTP_CONTENT_TYPE', $_SERVER)) {
                 unset($_SERVER['HTTP_CONTENT_TYPE']);
             }
+
             if (array_key_exists('CONTENT_LENGTH', $_SERVER)) {
                 unset($_SERVER['CONTENT_LENGTH']);
             }
@@ -316,7 +322,7 @@ class RestApiRequest extends Restler
     /**
      * Restore (the overridden) data of $_GET, $_POST and $_SERVER and the original REST-API-request-object
      */
-    private function restoreOriginalRestApiRequest()
+    private function restoreOriginalRestApiRequest(): void
     {
         $_GET = self::$originalGetVars;
         $_POST = self::$originalPostVars;
@@ -328,7 +334,7 @@ class RestApiRequest extends Restler
     /**
      * Store (the original) data of $_GET, $_POST and $_SERVER and the original REST-API-request-object
      */
-    private function storeOriginalRestApiRequest()
+    private function storeOriginalRestApiRequest(): void
     {
         if (!isset(self::$originalServerSettings)) {
             self::$originalGetVars = $_GET;

@@ -38,8 +38,6 @@ use Luracast\Restler\Restler;
  *  - add API- and authentication-class, when online-documentation is enabled
  *    (this can be configured via extension-manager)
  *  - add authentication-class, which can be used to check, if FE-user is logged in
- *
- * @package Restler
  */
 class Configuration implements ConfigurationInterface
 {

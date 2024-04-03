@@ -3,6 +3,7 @@
 
 # Build folder
 .Build
+Build/testing-docker/.env
 
 # PHP Dependencies + Dev
 /composer.lock

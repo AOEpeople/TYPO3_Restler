@@ -1,4 +1,5 @@
 <?php
+
 namespace Aoe\Restler\Tests\Unit;
 
 /***************************************************************
@@ -25,21 +26,18 @@ namespace Aoe\Restler\Tests\Unit;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Nimut\TestingFramework\TestCase\UnitTestCase;
-use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
  * @package Restler
  * @subpackage Tests
- *
  */
-abstract class BaseTest extends UnitTestCase
+abstract class BaseTestCase extends UnitTestCase
 {
     /**
      * call unaccessible method of an object (to test it)
      * @param  object $object
      * @param  string $methodName
-     * @param  array $methodParams
      * @return mixed
      */
     protected function callUnaccessibleMethodOfObject($object, $methodName, array $methodParams = [])
@@ -49,31 +47,5 @@ abstract class BaseTest extends UnitTestCase
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $methodParams);
-    }
-
-    /**
-     * Initialization.
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->setAutoLoadingForRestler();
-    }
-
-    /**
-     * use auto-loading for PHP-classes of restler-framework
-     */
-    private function setAutoLoadingForRestler()
-    {
-        // set auto-loading for restler
-        if (class_exists('\TYPO3\CMS\Core\Core\Environment')) {
-            $autoload = Environment::getPublicPath() . 'typo3conf/ext/restler/vendor/autoload.php';
-        } else {
-            $autoload = PATH_site . 'typo3conf/ext/restler/vendor/autoload.php';
-        }
-        if (file_exists($autoload)) {
-            require_once $autoload;
-        }
     }
 }

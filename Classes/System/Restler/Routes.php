@@ -36,6 +36,7 @@ class Routes extends \Luracast\Restler\Routes
                         );
                     }
                 }
+
                 if (preg_match($routeMatcher, $uri) === 1) {
                     return true;
                 }
