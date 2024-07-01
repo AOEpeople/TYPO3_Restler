@@ -44,6 +44,8 @@ class ExtensionConfigurationTest extends BaseTestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $mockedExtConfig = [
             'refreshCache' => '0',
             'productionContext' => '1',
