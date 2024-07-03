@@ -83,7 +83,15 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
         }
 
         if ($siteBasePath) {
-            return '/' . rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $request->getUri()->getPath()), '/');
+            return '/' . rtrim(
+                (string) preg_replace(
+                    '%^' . preg_quote((string) $siteBasePath, '%') . '%',
+                    '',
+                    $request->getUri()
+                        ->getPath()
+                ),
+                '/'
+            );
         }
 
         return $request->getUri()

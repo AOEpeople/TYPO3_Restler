@@ -37,10 +37,6 @@ use TYPO3\CMS\Core\Site\Entity\Site;
 
 class RestlerExtended extends Restler
 {
-    protected ?ServerRequestInterface $request;
-
-    private Cache $typo3Cache;
-
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
     /* Block of methods, which MUST be overriden from parent-class (otherwise we can't use the TYPO3-caching-framework) ********/
@@ -54,13 +50,13 @@ class RestlerExtended extends Restler
      *                                   every time to map it to the URL
      *
      * @param bool $refreshCache      will update the cache when set to true
-     * @param ServerRequestInterface $request     frontend request
+     * @param ServerRequestInterface $request frontend request
      */
     public function __construct(
-        Cache $typo3Cache,
+        private readonly Cache $typo3Cache,
         $productionMode = false,
         $refreshCache = false,
-        ServerRequestInterface $request = null
+        private readonly ?ServerRequestInterface $request = null
     ) {
         parent::__construct($productionMode, $refreshCache);
 
@@ -72,9 +68,6 @@ class RestlerExtended extends Restler
         // adds format support for application/hal+json
         Scope::$classAliases['HalJsonFormat'] = \Aoe\Restler\System\Restler\Format\HalJsonFormat::class;
         $this->setSupportedFormats('HalJsonFormat');
-
-        $this->typo3Cache = $typo3Cache;
-        $this->request = $request;
 
         // set pathes from request if present
         if ($this->request !== null) {
@@ -91,7 +84,7 @@ class RestlerExtended extends Restler
         try {
             // get information about the REST-request (this is required to check, if we can handle the REST-request by TYPO3-cache)
             $this->get();
-        } catch (RestException $restException) {
+        } catch (RestException) {
             // Exception occurred (e.g. 'Error encoding/decoding JSON') during getting information about REST-request:
             // Let restler handle the error (e.g. that JSON could not be read) - and NOT the TYPO3-exception-handling!
             return parent::handle();
@@ -143,7 +136,10 @@ class RestlerExtended extends Restler
                 ->withPath($siteBasePath);
 
             // set url with base path removed
-            return rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $this->request->getUri()->getPath()), '/');
+            return rtrim(
+                (string) preg_replace('%^' . preg_quote((string) $siteBasePath, '%') . '%', '', $this->request->getUri()->getPath()),
+                '/'
+            );
         }
 
         return parent::getPath();
@@ -163,7 +159,7 @@ class RestlerExtended extends Restler
                 $_GET,
                 $this->apiMethodInfo->metadata,
                 $this->responseData,
-                get_class($this->responseFormat),
+                $this->responseFormat::class,
                 headers_list()
             );
         }
@@ -180,7 +176,7 @@ class RestlerExtended extends Restler
         } else {
             // set/manipulate headers
             foreach ($cacheEntry['responseHeaders'] as $responseHeader) {
-                if (substr($responseHeader, 0, 8) === 'Expires:') {
+                if (str_starts_with((string) $responseHeader, 'Expires:')) {
                     if ($cacheEntry['frontendCacheExpires'] === 0) {
                         $expires = $cacheEntry['frontendCacheExpires'];
                     } else {

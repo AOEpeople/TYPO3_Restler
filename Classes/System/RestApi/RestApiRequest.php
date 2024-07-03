@@ -88,10 +88,6 @@ class RestApiRequest extends Restler
      */
     private string $restApiRequestMethod;
 
-    private RestApiRequestScope $restApiRequestScope;
-
-    private Cache $typo3Cache;
-
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
     /* Block of methods, which MUST be overridden from parent-class (otherwise this class can not work) *************************/
@@ -101,10 +97,10 @@ class RestApiRequest extends Restler
      * Override parent method...because we don't want to call it!
      * The original method would set some properties (e.g. set this object into static properties of global classes)
      */
-    public function __construct(RestApiRequestScope $restApiRequestScope, Cache $typo3Cache)
-    {
-        $this->restApiRequestScope = $restApiRequestScope;
-        $this->typo3Cache = $typo3Cache;
+    public function __construct(
+        private readonly RestApiRequestScope $restApiRequestScope,
+        private readonly Cache $typo3Cache
+    ) {
     }
 
     /**
@@ -235,7 +231,7 @@ class RestApiRequest extends Restler
                 $_GET,
                 $this->apiMethodInfo->metadata,
                 $this->responseData,
-                get_class($this->responseFormat),
+                $this->responseFormat::class,
                 [] // we don't know which headers would be 'normally' send - because this is an internal REST-API-call
             );
         }

@@ -42,7 +42,7 @@ abstract class BaseTestCase extends UnitTestCase
      */
     protected function callUnaccessibleMethodOfObject($object, $methodName, array $methodParams = [])
     {
-        $class = new \ReflectionClass(get_class($object));
+        $class = new \ReflectionClass($object::class);
         $method = $class->getMethod($methodName);
         $method->setAccessible(true);
 

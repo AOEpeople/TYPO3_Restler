@@ -39,11 +39,9 @@ abstract class RestlerBuilderAware
 
     private ?Builder $restlerBuilder = null;
 
-    private ExtensionConfiguration $extensionConfiguration;
-
-    public function __construct(ExtensionConfiguration $extensionConfiguration)
-    {
-        $this->extensionConfiguration = $extensionConfiguration;
+    public function __construct(
+        private readonly ExtensionConfiguration $extensionConfiguration
+    ) {
     }
 
     /**

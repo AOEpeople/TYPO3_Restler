@@ -1,6 +1,9 @@
 build:
     nodes:
         analysis:
+            image: default-bionic
+            environment:
+                php: 8.3.0
             tests:
                 override:
                     - php-scrutinizer-run

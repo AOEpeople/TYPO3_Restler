@@ -63,11 +63,9 @@ class BeUserAuthenticationController implements iAuthenticate
      */
     public $restler;
 
-    private Loader $typo3Loader;
-
-    public function __construct(Loader $typo3Loader)
-    {
-        $this->typo3Loader = $typo3Loader;
+    public function __construct(
+        private readonly Loader $typo3Loader
+    ) {
         $this->restler = Scope::get('Restler');
     }
 

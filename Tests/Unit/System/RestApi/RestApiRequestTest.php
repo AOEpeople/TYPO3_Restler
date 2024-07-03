@@ -176,7 +176,7 @@ class RestApiRequestTest extends BaseTestCase
 
         try {
             $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri);
-        } catch (Exception $e) {
+        } catch (Exception) {
         }
 
         $this->assertEquals($this->originalGetVars, $_GET);
@@ -205,7 +205,7 @@ class RestApiRequestTest extends BaseTestCase
 
         try {
             $this->restApiRequest->executeRestApiRequest($requestMethod, $requestUri);
-        } catch (Exception $e) {
+        } catch (Exception) {
         }
 
         $this->assertEquals($this->originalGetVars, $_GET);

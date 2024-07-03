@@ -41,14 +41,10 @@ use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class Builder implements SingletonInterface
 {
-    private ExtensionConfiguration $extensionConfiguration;
-
-    private CacheManager $cacheManager;
-
-    public function __construct(ExtensionConfiguration $extensionConfiguration, CacheManager $cacheManager)
-    {
-        $this->extensionConfiguration = $extensionConfiguration;
-        $this->cacheManager = $cacheManager;
+    public function __construct(
+        private readonly ExtensionConfiguration $extensionConfiguration,
+        private readonly CacheManager $cacheManager,
+    ) {
     }
 
     /**

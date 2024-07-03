@@ -51,32 +51,14 @@ use TYPO3\CMS\Frontend\Middleware\TypoScriptFrontendInitialization;
 
 class Loader implements SingletonInterface
 {
-    protected TimeTracker $timeTracker;
-
-    private BackendUserAuthenticator $backendUserAuthenticator;
-
-    private FrontendUserAuthenticator $frontendUserAuthenticator;
-
-    private MockRequestHandler $mockRequestHandler;
-
-    private RequestHandler $requestHandler;
-
-    private TypoScriptFrontendInitialization $typoScriptFrontendInitialization;
-
     public function __construct(
-        BackendUserAuthenticator $backendUserAuthenticator,
-        FrontendUserAuthenticator $frontendUserAuthenticator,
-        MockRequestHandler $mockRequestHandler,
-        RequestHandler $requestHandler,
-        TimeTracker $timeTracker,
-        TypoScriptFrontendInitialization $typoScriptFrontendInitialization
+        private readonly BackendUserAuthenticator $backendUserAuthenticator,
+        private readonly FrontendUserAuthenticator $frontendUserAuthenticator,
+        private readonly MockRequestHandler $mockRequestHandler,
+        private readonly RequestHandler $requestHandler,
+        private readonly TimeTracker $timeTracker,
+        private readonly TypoScriptFrontendInitialization $typoScriptFrontendInitialization
     ) {
-        $this->backendUserAuthenticator = $backendUserAuthenticator;
-        $this->frontendUserAuthenticator = $frontendUserAuthenticator;
-        $this->mockRequestHandler = $mockRequestHandler;
-        $this->requestHandler = $requestHandler;
-        $this->timeTracker = $timeTracker;
-        $this->typoScriptFrontendInitialization = $typoScriptFrontendInitialization;
     }
 
     /**
