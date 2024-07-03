@@ -28,7 +28,6 @@ namespace Aoe\Restler\System\Restler;
 
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\System\TYPO3\Cache;
-use Error;
 use InvalidArgumentException;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Scope;
@@ -37,7 +36,6 @@ use TYPO3\CMS\Core\Cache\Backend\SimpleFileBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 class Builder implements SingletonInterface
 {
@@ -139,32 +137,12 @@ class Builder implements SingletonInterface
     }
 
     /**
-     * use auto-loading for PHP-classes of restler-framework and Extbase/TYPO3 (use dependency-injection of Extbase)
+     * use autoload for PHP-classes of restler-framework and Extbase/TYPO3 (use dependency-injection of Extbase)
      */
     private function setAutoLoading(): void
     {
-        // set auto-loading for Extbase/TYPO3-classes
-        Scope::$resolver = static function ($className) {
-            try {
-                return GeneralUtility::makeInstance($className);
-            } catch (Error $error) {
-                // @TODO TYPO3 v12:
-                // Using of ObjectManager will be removed in TYPO3v12. Currently, we must use the ObjectManager
-                // as a fallback because it can happen, that e.g. the REST-controllers (which 3rd-party-extensions
-                // provide), are not supporting the new dependency-injection (via symfony) of TYPO3!
-
-                // Log deprecation-notice
-                $info = '%s should implement TYPO3\CMS\Core\SingletonInterface - otherwise the class can ';
-                $info .= 'not be created by GeneralUtility::makeInstance() in TYPO3v12 (error-code: %s)!';
-                trigger_error(
-                    sprintf($info, $className, (string) $error->getCode()),
-                    E_USER_DEPRECATED
-                );
-
-                // use legacy ObjectManager to create the required object
-                return GeneralUtility::makeInstance(ObjectManager::class)->get($className);
-            }
-        };
+        // set autoload for Extbase/TYPO3-classes
+        Scope::$resolver = static fn ($className): object => GeneralUtility::makeInstance($className);
     }
 
     /**

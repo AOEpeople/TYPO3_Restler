@@ -48,3 +48,7 @@ parameters:
 				message: "#^Interface (.*) has only single implementer. Consider using the class directly as there is no point in using the interface.$#"
 				count: 1
 				path: ../Classes/System/Restler/ConfigurationInterface.php
+			-
+				message: "#^Unable to resolve the template type T in call to method static method (.*)$#"
+				count: 2
+				path: ../Classes/System/Restler/Builder.php
