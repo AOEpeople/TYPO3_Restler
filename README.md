@@ -1,8 +1,11 @@
 # Restler for TYPO3
 
+[![Latest Stable Version](http://poser.pugx.org/aoe/restler/v)](https://packagist.org/packages/aoe/restler)
 [![Tests](https://github.com/AOEpeople/TYPO3_Restler/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/AOEpeople/TYPO3_Restler/actions)
 [![Code Coverage](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=main)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=main)
+[![License](http://poser.pugx.org/aoe/restler/license)](https://packagist.org/packages/aoe/restler)
+[![Total Downloads](http://poser.pugx.org/aoe/restler/downloads)](https://packagist.org/packages/aoe/restler)
 
 This is a TYPO3-Extension, that integrates the popular [PHP REST-framework Restler](https://github.com/Luracast/Restler) in TYPO3.
 
