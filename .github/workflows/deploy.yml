@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/checkout@v1
-      - uses: tomasnorre/typo3-upload-ter@v4
+      - uses: actions/checkout@v4
+      - uses: tomasnorre/typo3-upload-ter@v2
         with:
           api-token: ${{ secrets.TYPO3_ORG_API_TOKEN }}
