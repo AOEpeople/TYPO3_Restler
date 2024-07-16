@@ -114,7 +114,7 @@ class HalJsonFormat extends Format
         if (self::$unEscapedUnicode) {
             $result = preg_replace_callback(
                 '/\\\u(\w\w\w\w)/',
-                static function (array $matches) {
+                static function (array $matches): string|false {
                     if (function_exists('mb_convert_encoding')) {
                         return mb_convert_encoding(pack('H*', $matches[1]), 'UTF-8', 'UTF-16BE');
                     }
@@ -154,13 +154,13 @@ class HalJsonFormat extends Format
         }
 
         try {
-            $decoded = json_decode($data, false, 512, $options);
+            $decoded = json_decode((string) $data, false, 512, $options);
             $this->handleJsonError();
         } catch (\RuntimeException $runtimeException) {
             throw new RestException('400', $runtimeException->getMessage());
         }
 
-        if (strlen($data) && $decoded === null || $decoded === $data) {
+        if (strlen((string) $data) && $decoded === null || $decoded === $data) {
             throw new RestException('400', 'Error parsing JSON');
         }
 

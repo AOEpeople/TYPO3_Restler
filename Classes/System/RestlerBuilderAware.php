@@ -5,7 +5,7 @@ namespace Aoe\Restler\System;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2024 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -39,11 +39,9 @@ abstract class RestlerBuilderAware
 
     private ?Builder $restlerBuilder = null;
 
-    private ExtensionConfiguration $extensionConfiguration;
-
-    public function __construct(ExtensionConfiguration $extensionConfiguration)
-    {
-        $this->extensionConfiguration = $extensionConfiguration;
+    public function __construct(
+        private readonly ExtensionConfiguration $extensionConfiguration
+    ) {
     }
 
     /**

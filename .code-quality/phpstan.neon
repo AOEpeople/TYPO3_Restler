@@ -8,9 +8,10 @@ parameters:
     paths:
         - "../Classes/"
 
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+
     inferPrivatePropertyTypeFromConstructor: true
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
     checkAlwaysTrueCheckTypeFunctionCall: false
     checkAlwaysTrueStrictComparison: false
 

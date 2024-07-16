@@ -5,7 +5,7 @@ namespace Aoe\Restler\System\RestApi;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2024 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -53,13 +53,13 @@ class RestApiJsonFormat extends JsonFormat implements SingletonInterface
         }
 
         try {
-            $decoded = json_decode($data, false, 512, $options);
+            $decoded = json_decode((string) $data, false, 512, $options);
             $this->handleJsonError();
         } catch (\RuntimeException $runtimeException) {
             throw new RestException('400', $runtimeException->getMessage());
         }
 
-        if (strlen($data) && $decoded === null || $decoded === $data) {
+        if (strlen((string) $data) && $decoded === null || $decoded === $data) {
             throw new RestException('400', 'Error parsing JSON');
         }
 

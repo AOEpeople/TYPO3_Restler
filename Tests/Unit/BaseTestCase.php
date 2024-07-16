@@ -5,7 +5,7 @@ namespace Aoe\Restler\Tests\Unit;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 AOE GmbH <dev@aoe.com>
+ *  (c) 2024 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -42,7 +42,7 @@ abstract class BaseTestCase extends UnitTestCase
      */
     protected function callUnaccessibleMethodOfObject($object, $methodName, array $methodParams = [])
     {
-        $class = new \ReflectionClass(get_class($object));
+        $class = new \ReflectionClass($object::class);
         $method = $class->getMethod($methodName);
         $method->setAccessible(true);
 

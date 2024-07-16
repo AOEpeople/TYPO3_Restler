@@ -14,23 +14,23 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.1",
         "ext-json": "*",
         "ext-mbstring": "*",
         "ext-iconv": "*",
-        "typo3/cms-core": "^11.5",
+        "typo3/cms-core": "^12.4",
         "luracast/restler": "^5.0",
         "cweagans/composer-patches": "^1.7"
     },
     "require-dev": {
-        "typo3/testing-framework": "^7.0.4",
+        "typo3/testing-framework": "^8.0",
         "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpcov": "*",
+        "phpunit/phpcov": "^9.0.0",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpstan/phpstan": "^1.10",
         "rector/rector": "^1.0",
         "symplify/easy-coding-standard": "12.1.14",
-        "symplify/phpstan-rules": "12.4.8"
+        "symplify/phpstan-rules": "^13.0"
     },
     "keywords": [
         "TYPO3",
@@ -52,6 +52,7 @@
     "config": {
         "vendor-dir": ".Build/vendor",
         "bin-dir": ".Build/bin",
+        "process-timeout": 0,
         "allow-plugins": {
             "typo3/cms-composer-installers": true,
             "typo3/class-alias-loader": true,
@@ -65,20 +66,16 @@
         ],
         "test:unit": [
             "[ -e .Build/bin/phpunit ] || composer update",
-            "TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests-v10.xml Tests/Unit"
+            "XDEBUG_MODE=coverage TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c Tests/phpunit.xml Tests/Unit"
         ],
         "test:unit-filter": [
             "[ -e .Build/bin/phpunit ] || composer update",
-            "TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c .Build/vendor/typo3/testing-framework/Resources/Core/Build/UnitTests-v10.xml Tests/Unit --filter=ExceptionHandlerTest"
+            "XDEBUG_MODE=coverage TYPO3_PATH_ROOT=.Build/Web .Build/bin/phpunit -c Tests/phpunit.xml Tests/Unit --filter=ExceptionHandlerTest"
         ],
         "code-style": [
             "[ -e ./.Build/bin/rector ] || composer install",
             "./.Build/bin/ecs check --config .code-quality/ecs.php",
             "./.Build/bin/rector process --dry-run --config .code-quality/rector.php"
-        ],
-        "code-style-upgrade": [
-            "[ -e ./.Build/bin/rector ] || composer install",
-            "./.Build/bin/rector process --dry-run --config .code-quality/rector-8_0.php"
         ],
         "code-analysis": [
             "./.Build/bin/phpstan analyse -c .code-quality/phpstan.neon --memory-limit=1G"
@@ -87,11 +84,9 @@
             "./.Build/bin/phpstan analyse -c .code-quality/phpstan.neon --memory-limit=1G --generate-baseline --allow-empty-baseline"
         ],
         "code-compatibility": [
-            "[ -e ./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs ] || composer install",
+            "[ -e ./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs ] || composer update",
             "[ -d ./reports/php_checkstyle ] || mkdir -p reports/php_checkstyle/",
             "./.code-quality/configure-checkstyle.sh",
-            "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/*,*.min.js -p . --runtime-set testVersion 7.4",
-            "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/*,*.min.js -p . --runtime-set testVersion 8.0",
             "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/*,*.min.js -p . --runtime-set testVersion 8.1",
             "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/*,*.min.js -p . --runtime-set testVersion 8.2",
             "./.Build/vendor/symplify/easy-coding-standard/vendor/squizlabs/php_codesniffer/bin/phpcs -d memory_limit=1G --standard=PHPCompatibility --colors --ignore=*/.Build/*,*.min.js -p . --runtime-set testVersion 8.3"
@@ -102,12 +97,8 @@
             "@composer code-compatibility"
         ],
         "extension-release": [
-            "rm -rf .github",
-            "rm -rf .Build",
-            "rm -rf .code-quality",
-            "rm -rf Tests/",
-            "rm .gitignore",
-            "rm .scrutinizer.yml"
+            "@composer install --no-dev",
+            "rm -rf .github .Build code-quality Tests .gitignore scrutinizer.yml"
         ]
     },
     "scripts-descriptions": {
@@ -115,7 +106,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "11.0.x-dev"
+            "dev-main": "12.0.x-dev"
         },
         "typo3/cms": {
             "cms-package-dir": "{$vendor-dir}/typo3/cms",

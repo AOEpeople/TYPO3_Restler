@@ -21,7 +21,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class RestlerEnhancer extends RestlerBuilderAware implements DecoratingEnhancerInterface
 {
-    private string $default;
+    private readonly string $default;
 
     public function __construct(array $configuration)
     {

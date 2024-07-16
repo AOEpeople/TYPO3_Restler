@@ -29,26 +29,6 @@ parameters:
 				count: 1
 				path: ../Classes/System/Restler/RestlerExtended.php
 			-
-				message: "#^Dead catch \\- Error is never thrown in the try block\\.$#"
-				count: 1
-				path: ../Classes/System/Restler/Builder.php
-			-
-				message: "#^Anonymous variable in a `\\$request\\-\\>getAttribute\\('site'\\)\\-\\>\\.\\.\\.\\(\\)` method call can lead to false dead methods\\. Make sure the variable type is known$#"
-				count: 1
-				path: ../Classes/System/Dispatcher.php
-			-
-				message: "#^Anonymous variable in a `\\$request\\-\\>getAttribute\\('site'\\)\\-\\>getBase\\(\\)\\-\\>\\.\\.\\.\\(\\)` method call can lead to false dead methods\\. Make sure the variable type is known$#"
-				count: 1
-				path: ../Classes/System/Dispatcher.php
-			-
-				message: "#^Anonymous variable in a `\\$this\\-\\>request\\-\\>getAttribute\\('site'\\)\\-\\>\\.\\.\\.\\(\\)` method call can lead to false dead methods\\. Make sure the variable type is known$#"
-				count: 1
-				path: ../Classes/System/Restler/RestlerExtended.php
-			-
-				message: "#^Anonymous variable in a `\\$this\\-\\>request\\-\\>getAttribute\\('site'\\)\\-\\>getBase\\(\\)\\-\\>\\.\\.\\.\\(\\)` method call can lead to false dead methods\\. Make sure the variable type is known$#"
-				count: 1
-				path: ../Classes/System/Restler/RestlerExtended.php
-			-
 				message: "#^Method Aoe\\\\Restler\\\\System\\\\RestApi\\\\RestApiRequest\\:\\:composeHeaders\\(\\) has no return type specified\\.$#"
 				count: 1
 				path: ../Classes/System/RestApi/RestApiRequest.php
@@ -64,3 +44,11 @@ parameters:
 				message: "#^Comparison operation \"\\>\" between int\\<1, max\\> and 0 is always true\\.$#"
 				count: 1
 				path: ../Classes/System/Restler/Format/HalJsonFormat.php
+			-
+				message: "#^Interface (.*) has only single implementer. Consider using the class directly as there is no point in using the interface.$#"
+				count: 1
+				path: ../Classes/System/Restler/ConfigurationInterface.php
+			-
+				message: "#^Unable to resolve the template type T in call to method static method (.*)$#"
+				count: 2
+				path: ../Classes/System/Restler/Builder.php

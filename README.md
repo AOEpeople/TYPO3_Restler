@@ -1,8 +1,11 @@
 # Restler for TYPO3
 
+[![Latest Stable Version](http://poser.pugx.org/aoe/restler/v)](https://packagist.org/packages/aoe/restler)
 [![Tests](https://github.com/AOEpeople/TYPO3_Restler/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/AOEpeople/TYPO3_Restler/actions)
 [![Code Coverage](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/coverage.png?b=main)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=main)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/badges/quality-score.png?b=main)](https://scrutinizer-ci.com/g/AOEpeople/TYPO3_Restler/?branch=main)
+[![License](http://poser.pugx.org/aoe/restler/license)](https://packagist.org/packages/aoe/restler)
+[![Total Downloads](http://poser.pugx.org/aoe/restler/downloads)](https://packagist.org/packages/aoe/restler)
 
 This is a TYPO3-Extension, that integrates the popular [PHP REST-framework Restler](https://github.com/Luracast/Restler) in TYPO3.
 
@@ -16,12 +19,13 @@ composer require aoe/restler
 
 ## Versions and Support
 
-| Release  | TYPO3 | PHP   | Fixes will contain
-|---|---|---|---|
-| 10.x.y | 10.4-11.5 | 7.2-7.4 | Features, Bugfixes, Security Updates
-| 9.x.y  | 9.5       | 7.2-7.4 | Security Updates
-| 8.x.y  | 8.7       | 7.2-7.4 | Bugfixes, Security Updates
-| 2.x.y  | 7.6       | 5.5-5.6 | End of life
+| Release | TYPO3     | PHP     | Fixes will contain                   |
+|---------|-----------|---------|--------------------------------------|
+| 12.x.y  | 12.4      | 8.1-8.3 | Features, Bugfixes, Security Updates |
+| 11.x.y  | 11.5      | 7.4-8.3 | Security Updates                     |
+| 10.x.y  | 10.4-11.5 | 7.2-7.4 | End of life                          |
+| 9.x.y   | 9.5       | 7.2-7.4 | End of life                          |
+| 8.x.y   | 8.7       | 7.2-7.4 | End of life                          |
 
 ## Documentation
 

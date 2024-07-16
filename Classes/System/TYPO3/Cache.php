@@ -5,7 +5,7 @@ namespace Aoe\Restler\System\TYPO3;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2016 AOE GmbH <dev@aoe.com>
+ *  (c) 2024 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -64,7 +64,7 @@ class Cache implements SingletonInterface
      */
     public const API_METHOD_TYPO3CACHE_TAGS = 'restler_typo3cache_tags';
 
-    private FrontendInterface $cache;
+    private readonly FrontendInterface $cache;
 
     public function __construct(CacheManager $cacheManager)
     {
@@ -93,7 +93,7 @@ class Cache implements SingletonInterface
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
         $frontendCacheExpires = (int) ($apiMethodInfoMetadata['expires'] ?? 0);
         $typo3CacheExpires = (int) $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_EXPIRES];
-        $typo3CacheTags = explode(',', $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_TAGS]);
+        $typo3CacheTags = explode(',', (string) $apiMethodInfoMetadata[self::API_METHOD_TYPO3CACHE_TAGS]);
 
         $cacheData = [];
         $cacheData['responseCode'] = $responseCode;

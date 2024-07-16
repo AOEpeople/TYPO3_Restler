@@ -17,7 +17,7 @@ class Routes extends \Luracast\Restler\Routes
     {
         foreach (self::findAll() as $routes) {
             foreach ($routes as $route) {
-                $routeMatcher = '/^' . preg_quote('/' . rtrim($route['route']['url'], '/*'), '/') . '/';
+                $routeMatcher = '/^' . preg_quote('/' . rtrim((string) $route['route']['url'], '/*'), '/') . '/';
 
                 if (is_array($route['route']['arguments'])) {
                     foreach ($route['route']['arguments'] as $argumentName => $argumentNumber) {

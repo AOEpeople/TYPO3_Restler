@@ -5,7 +5,7 @@ namespace Aoe\Restler\System\Restler;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2021 AOE GmbH <dev@aoe.com>
+ *  (c) 2024 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -41,11 +41,9 @@ use Luracast\Restler\Restler;
  */
 class Configuration implements ConfigurationInterface
 {
-    private ExtensionConfiguration $extensionConfiguration;
-
-    public function __construct(ExtensionConfiguration $extensionConfiguration)
-    {
-        $this->extensionConfiguration = $extensionConfiguration;
+    public function __construct(
+        private readonly ExtensionConfiguration $extensionConfiguration
+    ) {
     }
 
     /**

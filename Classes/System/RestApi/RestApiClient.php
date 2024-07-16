@@ -5,7 +5,7 @@ namespace Aoe\Restler\System\RestApi;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2024 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -37,24 +37,15 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class RestApiClient implements SingletonInterface
 {
-    private Cache $typo3Cache;
-
-    private ExtensionConfiguration $extensionConfiguration;
-
     private bool $isExecutingRequest = false;
 
     private bool $isRequestPrepared = false;
 
-    private RestApiRequestScope $restApiRequestScope;
-
     public function __construct(
-        ExtensionConfiguration $extensionConfiguration,
-        RestApiRequestScope $restApiRequestScope,
-        Cache $typo3Cache
+        private readonly ExtensionConfiguration $extensionConfiguration,
+        private readonly RestApiRequestScope $restApiRequestScope,
+        private readonly Cache $typo3Cache
     ) {
-        $this->extensionConfiguration = $extensionConfiguration;
-        $this->restApiRequestScope = $restApiRequestScope;
-        $this->typo3Cache = $typo3Cache;
     }
 
     public function isExecutingRequest(): bool

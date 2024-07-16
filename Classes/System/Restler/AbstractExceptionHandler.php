@@ -5,7 +5,7 @@ namespace Aoe\Restler\System\Restler;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2024 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -26,7 +26,6 @@ namespace Aoe\Restler\System\Restler;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
@@ -37,13 +36,6 @@ use Luracast\Restler\Scope;
  */
 abstract class AbstractExceptionHandler
 {
-    protected ExtensionConfiguration $extensionConfiguration;
-
-    public function __construct(ExtensionConfiguration $extensionConfiguration)
-    {
-        $this->extensionConfiguration = $extensionConfiguration;
-    }
-
     /**
      * handle HTTP-Status-Codes of type 1xx
      */

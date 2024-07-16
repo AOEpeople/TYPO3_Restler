@@ -5,7 +5,7 @@ namespace Aoe\Restler\System;
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2015 AOE GmbH <dev@aoe.com>
+ *  (c) 2024 AOE GmbH <dev@aoe.com>
  *
  *  All rights reserved
  *
@@ -83,7 +83,15 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
         }
 
         if ($siteBasePath) {
-            return '/' . rtrim(preg_replace('%^' . preg_quote($siteBasePath, '%') . '%', '', $request->getUri()->getPath()), '/');
+            return '/' . rtrim(
+                (string) preg_replace(
+                    '%^' . preg_quote((string) $siteBasePath, '%') . '%',
+                    '',
+                    $request->getUri()
+                        ->getPath()
+                ),
+                '/'
+            );
         }
 
         return $request->getUri()
