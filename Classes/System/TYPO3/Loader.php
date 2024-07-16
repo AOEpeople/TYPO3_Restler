@@ -38,9 +38,8 @@ use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\TimeTracker\TimeTracker;
-use TYPO3\CMS\Core\TypoScript\TemplateService;
+use TYPO3\CMS\Core\TypoScript\FrontendTypoScript;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 use TYPO3\CMS\Frontend\Http\RequestHandler;
@@ -175,15 +174,7 @@ class Loader implements SingletonInterface
             $controller->getContext()
                 ->setAspect('typoscript', new TypoScriptAspect($forcedTemplateParsing));
         }
-
-        if (VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version()) > 11005000) {
-            // it's TYPO3v11 or higher
-            $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($this->timeTracker);
-        } else {
-            // it's TYPO3v10 or lower
-            $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($GLOBALS['TSFE']);
-        }
-
+        $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($this->timeTracker);
         $prepareTypoScriptFrontendRendering->process($this->getRequest(), $this->mockRequestHandler);
         self::setRequest($this->mockRequestHandler->getRequest());
     }
@@ -212,7 +203,8 @@ class Loader implements SingletonInterface
 
     private function isFrontendInitialized(): bool
     {
-        return ($GLOBALS['TSFE'] ?? null) instanceof TypoScriptFrontendController &&
-            $GLOBALS['TSFE']->tmpl instanceof TemplateService;
+        return ($GLOBALS['TYPO3_REQUEST'] ?? null) instanceof ServerRequestInterface &&
+            $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.controller') instanceof TypoScriptFrontendController &&
+            $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.typoscript') instanceof FrontendTypoScript;
     }
 }
