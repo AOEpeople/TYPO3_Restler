@@ -30,12 +30,13 @@ use Aoe\Restler\System\TYPO3\Loader;
 use Luracast\Restler\iAuthenticate;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Scope;
+use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * This class checks, if client is allowed to access the requested and protected API-class
  * This class checks, if FE-user is logged in
  */
-class FeUserAuthenticationController implements iAuthenticate
+class FeUserAuthenticationController implements iAuthenticate, SingletonInterface
 {
     /**
      * This property defines (when it's set), the argument-name, which contains the pageId,
