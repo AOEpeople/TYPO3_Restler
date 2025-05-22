@@ -34,8 +34,6 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\Controller\BeUserAuthenticationController
  */
 class BeUserAuthenticationControllerTest extends BaseTestCase
 {
@@ -49,9 +47,6 @@ class BeUserAuthenticationControllerTest extends BaseTestCase
      */
     protected $typo3LoaderMock;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();

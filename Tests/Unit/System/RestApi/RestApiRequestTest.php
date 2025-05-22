@@ -37,8 +37,6 @@ use Luracast\Restler\Restler;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\RestApi\RestApiRequest
  */
 class RestApiRequestTest extends BaseTestCase
 {
@@ -72,9 +70,6 @@ class RestApiRequestTest extends BaseTestCase
      */
     protected $typo3CacheMock;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -97,9 +92,6 @@ class RestApiRequestTest extends BaseTestCase
             ->getMock();
     }
 
-    /**
-     * tear down
-     */
     protected function tearDown(): void
     {
         // restore the global data ($_GET, $_POST, $_SERVER)

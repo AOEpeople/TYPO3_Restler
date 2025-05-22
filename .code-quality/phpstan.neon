@@ -12,8 +12,6 @@ parameters:
         - identifier: missingType.iterableValue
 
     inferPrivatePropertyTypeFromConstructor: true
-    checkAlwaysTrueCheckTypeFunctionCall: false
-    checkAlwaysTrueStrictComparison: false
 
 services:
     -

@@ -38,8 +38,6 @@ use Luracast\Restler\Restler;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\Restler\Configuration
  */
 class ConfigurationTest extends BaseTestCase
 {
@@ -58,9 +56,6 @@ class ConfigurationTest extends BaseTestCase
      */
     protected $configuration;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();

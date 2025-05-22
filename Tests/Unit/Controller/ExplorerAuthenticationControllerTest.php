@@ -35,8 +35,6 @@ use Luracast\Restler\Restler;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\Controller\ExplorerAuthenticationController
  */
 class ExplorerAuthenticationControllerTest extends BaseTestCase
 {
@@ -50,9 +48,6 @@ class ExplorerAuthenticationControllerTest extends BaseTestCase
      */
     protected $controller;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();

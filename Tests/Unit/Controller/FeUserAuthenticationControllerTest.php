@@ -35,8 +35,6 @@ use Luracast\Restler\Restler;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\Controller\FeUserAuthenticationController
  */
 class FeUserAuthenticationControllerTest extends BaseTestCase
 {
@@ -50,9 +48,6 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
      */
     protected $typo3LoaderMock;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -101,6 +96,7 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
         /** @var Restler $restlerMock */
         $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
+
         $this->controller->restler = $restlerMock;
 
         $this->controller->checkAuthentication = true;
@@ -129,6 +125,7 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
         /** @var Restler $restlerMock */
         $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
+
         $this->controller->restler = $restlerMock;
 
         $this->controller->checkAuthentication = true;

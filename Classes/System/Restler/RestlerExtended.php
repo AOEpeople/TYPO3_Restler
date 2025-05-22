@@ -43,8 +43,6 @@ class RestlerExtended extends Restler
     /***************************************************************************************************************************/
     /***************************************************************************************************************************/
     /**
-     * Constructor
-     *
      * @param bool $productionMode    When set to false, it will run in
      *                                   debug mode and parse the class files
      *                                   every time to map it to the URL

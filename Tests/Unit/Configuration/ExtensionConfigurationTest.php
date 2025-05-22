@@ -29,9 +29,6 @@ namespace Aoe\Restler\Tests\Unit\Configuration;
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\Tests\Unit\BaseTestCase;
 
-/**
- * @covers \Aoe\Restler\Configuration\ExtensionConfiguration
- */
 class ExtensionConfigurationTest extends BaseTestCase
 {
     /**
@@ -39,9 +36,6 @@ class ExtensionConfigurationTest extends BaseTestCase
      */
     protected $configuration;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();

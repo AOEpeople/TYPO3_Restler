@@ -254,6 +254,8 @@ class RestApiRequest extends Restler
         if ($data instanceof stdClass) {
             return json_decode(json_encode($data), true); // convert stdClass to array
         }
+
+        return [];
     }
 
     /**

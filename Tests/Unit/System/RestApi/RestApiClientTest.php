@@ -40,8 +40,6 @@ use Luracast\Restler\Restler;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\RestApi\RestApiClient
  */
 class RestApiClientTest extends BaseTestCase
 {
@@ -75,9 +73,6 @@ class RestApiClientTest extends BaseTestCase
      */
     protected $typo3CacheMock;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();

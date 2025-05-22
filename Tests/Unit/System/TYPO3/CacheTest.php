@@ -34,8 +34,6 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\TYPO3\Cache
  */
 class CacheTest extends BaseTestCase
 {
@@ -49,9 +47,6 @@ class CacheTest extends BaseTestCase
      */
     protected $frontendCacheMock;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();

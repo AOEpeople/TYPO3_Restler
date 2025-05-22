@@ -174,6 +174,7 @@ class Loader implements SingletonInterface
             $controller->getContext()
                 ->setAspect('typoscript', new TypoScriptAspect($forcedTemplateParsing));
         }
+
         $prepareTypoScriptFrontendRendering = new PrepareTypoScriptFrontendRendering($this->timeTracker);
         $prepareTypoScriptFrontendRendering->process($this->getRequest(), $this->mockRequestHandler);
         self::setRequest($this->mockRequestHandler->getRequest());

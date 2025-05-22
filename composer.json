@@ -23,14 +23,14 @@
         "cweagans/composer-patches": "^1.7"
     },
     "require-dev": {
-        "typo3/testing-framework": "^8.0",
+        "typo3/testing-framework": "^8.0 || ^9.0",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpunit/phpcov": "^9.0.0",
         "phpcompatibility/php-compatibility": "^9.3",
-        "phpstan/phpstan": "^1.10",
-        "rector/rector": "^1.0",
-        "symplify/easy-coding-standard": "12.1.14",
-        "symplify/phpstan-rules": "^13.0"
+        "phpstan/phpstan": "^2.1",
+        "rector/rector": "^2.0",
+        "symplify/easy-coding-standard": "^12.0",
+        "symplify/phpstan-rules": "^14.6"
     },
     "keywords": [
         "TYPO3",
@@ -77,6 +77,10 @@
             "./.Build/bin/ecs check --config .code-quality/ecs.php",
             "./.Build/bin/rector process --dry-run --config .code-quality/rector.php"
         ],
+        "code-style-upgrade": [
+            "[ -e ./.Build/bin/rector ] || composer install",
+            "./.Build/bin/rector process --dry-run --config .code-quality/rector-upgrade.php"
+        ],
         "code-analysis": [
             "./.Build/bin/phpstan analyse -c .code-quality/phpstan.neon --memory-limit=1G"
         ],
@@ -93,6 +97,7 @@
         ],
         "code-check-pipeline": [
             "@composer code-style",
+            "@composer code-style-upgrade",
             "@composer code-analysis",
             "@composer code-compatibility"
         ],

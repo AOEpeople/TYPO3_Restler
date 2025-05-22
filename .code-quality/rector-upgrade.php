@@ -5,13 +5,10 @@ declare(strict_types=1);
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
-use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector;
 use Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEqualsToSameRector;
-use Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWithMethodRector;
 use Rector\Set\ValueObject\SetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictSetUpRector;
 
@@ -33,6 +30,7 @@ return RectorConfig::configure()
         SetList::PRIVATIZATION,
         SetList::TYPE_DECLARATION,
         SetList::INSTANCEOF,
+        SetList::PHP_84,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY
     ])
     ->withSkip([
@@ -43,11 +41,6 @@ return RectorConfig::configure()
         AssertEqualsToSameRector::class => [
             __DIR__ . '/../Tests/Unit/System/Restler/ExceptionHandlerTest.php',
         ],
-
-        // todo: fix this later
-        PreferPHPUnitThisCallRector::class,
-        UseSpecificWithMethodRector::class,
-        TypedPropertyFromCreateMockAssignRector::class
     ])
     ->withAutoloadPaths([__DIR__ . '/../Classes'])
     ->registerService(RemoveUnusedPrivatePropertyRector::class);

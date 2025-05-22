@@ -111,7 +111,7 @@ class HalJsonFormat extends Format
             $result = $this->formatJson($result);
         }
 
-        if (self::$unEscapedUnicode) {
+        if (self::$unEscapedUnicode === true) {
             $result = preg_replace_callback(
                 '/\\\u(\w\w\w\w)/',
                 static function (array $matches): string|false {

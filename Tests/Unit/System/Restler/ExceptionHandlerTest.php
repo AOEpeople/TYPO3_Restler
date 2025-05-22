@@ -34,8 +34,6 @@ use Luracast\Restler\Restler;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\Restler\AbstractExceptionHandler
  */
 class ExceptionHandlerTest extends BaseTestCase
 {

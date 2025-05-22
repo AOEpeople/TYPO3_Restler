@@ -38,8 +38,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\Dispatcher
  */
 class DispatcherTest extends BaseTestCase
 {
@@ -53,9 +51,6 @@ class DispatcherTest extends BaseTestCase
      */
     protected $restlerBuilder;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();

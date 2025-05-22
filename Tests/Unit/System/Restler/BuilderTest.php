@@ -46,8 +46,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * @package Restler
  * @subpackage Tests
- *
- * @covers \Aoe\Restler\System\Restler\Builder
  */
 class BuilderTest extends BaseTestCase
 {
@@ -78,9 +76,6 @@ class BuilderTest extends BaseTestCase
      */
     protected $cacheManagerMock;
 
-    /**
-     * setup
-     */
     protected function setUp(): void
     {
         parent::setUp();
