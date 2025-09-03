@@ -146,7 +146,7 @@ class RestApiRequest extends Restler
     /**
      * Override parent method...because we don't want to call it (the original method would send some headers to the client)!
      */
-    public function composeHeaders(RestException $e = null)
+    public function composeHeaders(?RestException $e = null)
     {
     }
 
