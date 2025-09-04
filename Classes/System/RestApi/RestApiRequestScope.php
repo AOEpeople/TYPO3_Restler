@@ -106,7 +106,7 @@ class RestApiRequestScope extends Scope implements SingletonInterface
      *
      * @param Restler $originalRestApiRequest optional, default is null (normally, the object already exists in the 'Scope-Repository')
      */
-    public function storeOriginalRestApiRequest(Restler $originalRestApiRequest = null): void
+    public function storeOriginalRestApiRequest(?Restler $originalRestApiRequest = null): void
     {
         if ($originalRestApiRequest instanceof Restler) {
             static::set('Restler', $originalRestApiRequest);

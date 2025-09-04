@@ -104,7 +104,6 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
 
         $reflection = new \ReflectionClass($this->controller);
         $method = $reflection->getMethod('determinePageIdFromArguments');
-        $method->setAccessible(true);
 
         $this->assertSame('0', $method->invoke($this->controller));
     }
@@ -133,7 +132,6 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
 
         $reflection = new \ReflectionClass($this->controller);
         $method = $reflection->getMethod('determinePageIdFromArguments');
-        $method->setAccessible(true);
 
         $this->assertSame('4711', $method->invoke($this->controller));
     }

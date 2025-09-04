@@ -40,7 +40,7 @@ class ExtensionConfiguration implements SingletonInterface
     /**
      * constructor - loading the current localconf configuration for restler extension
      */
-    public function __construct(Typo3ExtensionConfiguration $configuration = null)
+    public function __construct(?Typo3ExtensionConfiguration $configuration = null)
     {
         if ($configuration === null) {
             $configuration = GeneralUtility::makeInstance(TYPO3ExtensionConfiguration::class);

@@ -44,7 +44,6 @@ abstract class BaseTestCase extends UnitTestCase
     {
         $class = new \ReflectionClass($object::class);
         $method = $class->getMethod($methodName);
-        $method->setAccessible(true);
 
         return $method->invokeArgs($object, $methodParams);
     }
