@@ -122,7 +122,8 @@
         "patches": {
             "luracast/restler": {
                 "BUGFIX Add url annotation for swagger": "https://raw.githubusercontent.com/AOEpeople/TYPO3_Restler/main/patches/0001-BUGFIX-Add-url-annotation-for-swagger-json.patch",
-                "FEATURE Group endpoints by resource path": "https://raw.githubusercontent.com/AOEpeople/TYPO3_Restler/main/patches/0002-FEATURE-Group-endpoints-by-resource-path.patch"
+                "FEATURE Group endpoints by resource path": "https://raw.githubusercontent.com/AOEpeople/TYPO3_Restler/main/patches/0002-FEATURE-Group-endpoints-by-resource-path.patch",
+                "BUGFIX Fix deprecated PHP8.4-stuff": "https://raw.githubusercontent.com/AOEpeople/TYPO3_Restler/main/patches/0003-BUGFIX-fix-deprecated-php84-stuff.patch"
             }
         }
     }
