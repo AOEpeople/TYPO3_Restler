@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\Tests\Unit\System\TYPO3;
 
 /***************************************************************
@@ -28,6 +30,7 @@ namespace Aoe\Restler\Tests\Unit\System\TYPO3;
 
 use Aoe\Restler\System\TYPO3\Cache;
 use Aoe\Restler\Tests\Unit\BaseTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
 
@@ -35,27 +38,22 @@ use TYPO3\CMS\Core\Cache\Frontend\FrontendInterface;
  * @package Restler
  * @subpackage Tests
  */
-class CacheTest extends BaseTestCase
+final class CacheTest extends BaseTestCase
 {
-    /**
-     * @var Cache
-     */
-    protected $cache;
+    private Cache $cache;
 
-    /**
-     * @var FrontendInterface
-     */
-    protected $frontendCacheMock;
+    private FrontendInterface&MockObject $frontendCacheMock;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->frontendCacheMock = $this->getMockBuilder(FrontendInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $cacheManagerMock = $this->getMockBuilder(CacheManager::class)->disableOriginalConstructor()->getMock();
-        $cacheManagerMock->expects(self::once())->method('getCache')->with('restler')->willReturn($this->frontendCacheMock);
+        $this->frontendCacheMock = $this->createMock(FrontendInterface::class);
+        $cacheManagerMock = $this->createMock(CacheManager::class);
+        $cacheManagerMock->expects($this->once())
+            ->method('getCache')
+            ->with('restler')
+            ->willReturn($this->frontendCacheMock);
 
         $this->cache = new Cache($cacheManagerMock);
     }
@@ -113,7 +111,9 @@ class CacheTest extends BaseTestCase
         $typo3CacheTags = ['tag_a', 'tag_b'];
         $typo3CacheExpires = $apiMethodInfoMetadata[Cache::API_METHOD_TYPO3CACHE_EXPIRES];
 
-        $this->frontendCacheMock->expects(self::once())->method('set')->with($identifier, $cacheData, $typo3CacheTags, $typo3CacheExpires);
+        $this->frontendCacheMock->expects($this->once())
+            ->method('set')
+            ->with($identifier, $cacheData, $typo3CacheTags, $typo3CacheExpires);
 
         $this->cache->cacheResponseByTypo3Cache(
             $responseCode,
@@ -133,7 +133,10 @@ class CacheTest extends BaseTestCase
         $response = 'this-would-be-the-json-response-from-cache';
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
 
-        $this->frontendCacheMock->expects(self::once())->method('get')->with($identifier)->willReturn($response);
+        $this->frontendCacheMock->expects($this->once())
+            ->method('get')
+            ->with($identifier)
+            ->willReturn($response);
         $this->assertSame($response, $this->cache->getCacheEntry($requestUri, $requestGetData));
     }
 
@@ -143,7 +146,10 @@ class CacheTest extends BaseTestCase
         $requestGetData = ['limit' => 10];
         $identifier = $this->buildIdentifier($requestUri, $requestGetData);
 
-        $this->frontendCacheMock->expects(self::once())->method('has')->with($identifier)->willReturn(true);
+        $this->frontendCacheMock->expects($this->once())
+            ->method('has')
+            ->with($identifier)
+            ->willReturn(true);
         $this->assertTrue($this->cache->hasCacheEntry($requestUri, $requestGetData));
     }
 

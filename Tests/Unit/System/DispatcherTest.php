@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\Tests\Unit\System;
 
 /***************************************************************
@@ -39,17 +41,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Restler
  * @subpackage Tests
  */
-class DispatcherTest extends BaseTestCase
+final class DispatcherTest extends BaseTestCase
 {
-    /**
-     * @var Dispatcher
-     */
-    protected $dispatcher;
+    private Dispatcher $dispatcher;
 
-    /**
-     * @var Builder
-     */
-    protected $restlerBuilder;
+    private Builder&MockObject $restlerBuilder;
 
     protected function setUp(): void
     {
@@ -73,9 +69,10 @@ class DispatcherTest extends BaseTestCase
         /** @var Restler|MockObject $restlerMock */
         $restlerMock = $this->createMock(Restler::class);
         $restlerMock->url = '/no/api/url';
-        $this->restlerBuilder->expects(self::any())->method('build')->willReturn($restlerMock);
+        $this->restlerBuilder->method('build')
+            ->willReturn($restlerMock);
 
-        $requestUri = $this->getMockBuilder(Uri::class)->getMock();
+        $requestUri = $this->createMock(Uri::class);
         $requestUri->method('getPath')
             ->willReturn('/no/api/url');
         $requestUri->method('withQuery')
@@ -83,14 +80,12 @@ class DispatcherTest extends BaseTestCase
         $requestUri->method('withPath')
             ->willReturn($requestUri);
 
-        $request = $this->getMockBuilder(\Psr\Http\Message\ServerRequestInterface::class)
-            ->getMock();
+        $request = $this->createMock(\Psr\Http\Message\ServerRequestInterface::class);
         $request->method('getUri')
             ->willReturn($requestUri);
 
-        $handler = $this->getMockBuilder(\Psr\Http\Server\RequestHandlerInterface::class)
-            ->getMock();
-        $handler->expects(self::once())
+        $handler = $this->createMock(\Psr\Http\Server\RequestHandlerInterface::class);
+        $handler->expects($this->once())
             ->method('handle');
 
         $this->dispatcher->process($request, $handler);

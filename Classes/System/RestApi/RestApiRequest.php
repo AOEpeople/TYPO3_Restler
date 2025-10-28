@@ -159,7 +159,7 @@ class RestApiRequest extends Restler
     public function getRequestData($includeQueryParameters = true): array
     {
         $requestData = [];
-        if ($this->restApiRequestMethod === 'PUT' || $this->restApiRequestMethod === 'PATCH' || $this->restApiRequestMethod === 'POST') {
+        if (in_array($this->restApiRequestMethod, ['PUT', 'PATCH', 'POST'], true)) {
             $requestData = array_merge($this->restApiPostData, [Defaults::$fullRequestDataName => $this->restApiPostData]);
         }
 

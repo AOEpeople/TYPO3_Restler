@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\Tests\Unit\Configuration;
 
 /***************************************************************
@@ -29,12 +31,9 @@ namespace Aoe\Restler\Tests\Unit\Configuration;
 use Aoe\Restler\Configuration\ExtensionConfiguration;
 use Aoe\Restler\Tests\Unit\BaseTestCase;
 
-class ExtensionConfigurationTest extends BaseTestCase
+final class ExtensionConfigurationTest extends BaseTestCase
 {
-    /**
-     * @var ExtensionConfiguration
-     */
-    protected $configuration;
+    private ExtensionConfiguration $configuration;
 
     protected function setUp(): void
     {
@@ -47,10 +46,11 @@ class ExtensionConfigurationTest extends BaseTestCase
             'pathToOnlineDocumentation' => 'api_explorer',
         ];
 
-        $typo3ExtensionConfiguration = $this->getMockBuilder(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $typo3ExtensionConfiguration->expects(self::once())->method('get')->with('restler')->willReturn($mockedExtConfig);
+        $typo3ExtensionConfiguration = $this->createMock(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class);
+        $typo3ExtensionConfiguration->expects($this->once())
+            ->method('get')
+            ->with('restler')
+            ->willReturn($mockedExtConfig);
 
         $this->configuration = new ExtensionConfiguration($typo3ExtensionConfiguration);
     }

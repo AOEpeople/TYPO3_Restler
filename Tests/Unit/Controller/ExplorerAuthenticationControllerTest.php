@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\Tests\Unit\Controller;
 
 /***************************************************************
@@ -36,27 +38,21 @@ use Luracast\Restler\Restler;
  * @package Restler
  * @subpackage Tests
  */
-class ExplorerAuthenticationControllerTest extends BaseTestCase
+final class ExplorerAuthenticationControllerTest extends BaseTestCase
 {
-    /**
-     * @var ApiMethodInfo
-     */
-    protected $apiMethodInfoMock;
+    private ApiMethodInfo $apiMethodInfo;
 
-    /**
-     * @var ExplorerAuthenticationController
-     */
-    protected $controller;
+    private ExplorerAuthenticationController $controller;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->apiMethodInfoMock = new ApiMethodInfo();
+        $this->apiMethodInfo = new ApiMethodInfo();
 
         /** @var \Luracast\Restler\Restler $restlerMock */
-        $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
-        $restlerMock->apiMethodInfo = $this->apiMethodInfoMock;
+        $restlerMock = $this->createMock(Restler::class);
+        $restlerMock->apiMethodInfo = $this->apiMethodInfo;
 
         $this->controller = new ExplorerAuthenticationController();
         $this->controller->restler = $restlerMock;
@@ -64,19 +60,19 @@ class ExplorerAuthenticationControllerTest extends BaseTestCase
 
     public function testCheckThatAuthenticationWillFail(): void
     {
-        $this->apiMethodInfoMock->className = 'NoneExplorerClass';
+        $this->apiMethodInfo->className = 'NoneExplorerClass';
         $this->assertFalse($this->controller->__isAllowed());
     }
 
     public function testCheckThatAuthenticationWillBeSuccessful(): void
     {
-        $this->apiMethodInfoMock->className = Explorer::class;
+        $this->apiMethodInfo->className = Explorer::class;
         $this->assertTrue($this->controller->__isAllowed());
     }
 
     public function testCheckForCorrectAuthenticationString(): void
     {
-        $this->apiMethodInfoMock->className = Explorer::class;
+        $this->apiMethodInfo->className = Explorer::class;
         $this->assertSame('Query name="api_key"', $this->controller->__getWWWAuthenticateString());
     }
 }

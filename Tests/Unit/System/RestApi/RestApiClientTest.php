@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\Tests\Unit\System\RestApi;
 
 /***************************************************************
@@ -36,74 +38,49 @@ use Aoe\Restler\System\TYPO3\Cache as Typo3Cache;
 use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Luracast\Restler\RestException;
 use Luracast\Restler\Restler;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @package Restler
  * @subpackage Tests
  */
-class RestApiClientTest extends BaseTestCase
+final class RestApiClientTest extends BaseTestCase
 {
-    /**
-     * @var ExtensionConfiguration
-     */
-    protected $extensionConfigurationMock;
+    private ExtensionConfiguration&MockObject $extensionConfigurationMock;
 
-    /**
-     * @var RestApiClient
-     */
-    protected $restApiClient;
+    private RestApiClient&MockObject $restApiClient;
 
-    /**
-     * @var RestApiRequest
-     */
-    protected $restApiRequestMock;
+    private RestApiRequest&MockObject $restApiRequestMock;
 
-    /**
-     * @var RestApiRequestScope
-     */
-    protected $restApiRequestScopeMock;
+    private RestApiRequestScope&MockObject $restApiRequestScopeMock;
 
-    /**
-     * @var RestlerBuilder
-     */
-    protected $restlerBuilderMock;
-
-    /**
-     * @var Typo3Cache
-     */
-    protected $typo3CacheMock;
+    private RestlerBuilder&MockObject $restlerBuilderMock;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->extensionConfigurationMock = $this->getMockBuilder(ExtensionConfiguration::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->restApiRequestMock = $this->getMockBuilder(RestApiRequest::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->restApiRequestScopeMock = $this->getMockBuilder(RestApiRequestScope::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->restlerBuilderMock = $this->getMockBuilder(RestlerBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->typo3CacheMock = $this->getMockBuilder(Typo3Cache::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->extensionConfigurationMock = $this->createMock(ExtensionConfiguration::class);
+        $this->restApiRequestMock = $this->createMock(RestApiRequest::class);
+        $this->restApiRequestScopeMock = $this->createMock(RestApiRequestScope::class);
+        $this->restlerBuilderMock = $this->createMock(RestlerBuilder::class);
+        $typo3CacheMock = $this->createMock(Typo3Cache::class);
 
         $this->restApiClient = $this->getMockBuilder(RestApiClient::class)
-            ->setConstructorArgs([$this->extensionConfigurationMock, $this->restApiRequestScopeMock, $this->typo3CacheMock])
+            ->setConstructorArgs([$this->extensionConfigurationMock, $this->restApiRequestScopeMock, $typo3CacheMock])
             ->onlyMethods(['createRequest', 'getRestlerBuilder', 'isRequestPreparationRequired'])
             ->getMock();
-        $this->restApiClient->expects(self::any())->method('createRequest')->willReturn($this->restApiRequestMock);
-        $this->restApiClient->expects(self::any())->method('getRestlerBuilder')->willReturn($this->restlerBuilderMock);
+        $this->restApiClient->method('createRequest')
+            ->willReturn($this->restApiRequestMock);
+        $this->restApiClient->method('getRestlerBuilder')
+            ->willReturn($this->restlerBuilderMock);
     }
 
     public function testCanCheckIfProductionContextIsSet(): void
     {
-        $this->extensionConfigurationMock->expects(self::once())->method('isProductionContextSet')->willReturn(true);
+        $this->extensionConfigurationMock->expects($this->once())
+            ->method('isProductionContextSet')
+            ->willReturn(true);
         $this->assertTrue($this->restApiClient->isProductionContextSet());
     }
 
@@ -124,11 +101,15 @@ class RestApiClientTest extends BaseTestCase
         $result = ['id' => 1, 'name' => 'Test-Product'];
 
         // Test, that we don't must create the 'original' REST-API-Request (aka Restler-object) before we can execute the REST-API-request
-        $this->restApiClient->expects(self::once())->method('isRequestPreparationRequired')->willReturn(false);
-        $this->restlerBuilderMock->expects(self::never())->method('build');
-        $this->restApiRequestScopeMock->expects(self::never())->method('storeOriginalRestApiRequest');
+        $this->restApiClient->expects($this->once())
+            ->method('isRequestPreparationRequired')
+            ->willReturn(false);
+        $this->restlerBuilderMock->expects($this->never())
+            ->method('build');
+        $this->restApiRequestScopeMock->expects($this->never())
+            ->method('storeOriginalRestApiRequest');
 
-        // Test, that we get an result when we execute the REST-API-request
+        // Test, that we get a result when we execute the REST-API-request
         $this->restApiRequestMock->expects($this->once())
             ->method('executeRestApiRequest')
             ->with($requestMethod, $requestUri, $getData, $postData)
@@ -148,7 +129,7 @@ class RestApiClientTest extends BaseTestCase
         $result = ['id' => 1, 'name' => 'Test-Product'];
 
         // Test, that we must create the 'original' REST-API-Request (aka Restler-object) before we can execute the REST-API-request
-        $originalRestApiRequestMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $originalRestApiRequestMock = $this->createMock(Restler::class);
         $this->restApiClient->expects($this->once())
             ->method('isRequestPreparationRequired')
             ->willReturn(true);
@@ -159,7 +140,7 @@ class RestApiClientTest extends BaseTestCase
             ->method('storeOriginalRestApiRequest')
             ->with($originalRestApiRequestMock);
 
-        // Test, that we get an result when we execute the REST-API-request
+        // Test, that we get a result when we execute the REST-API-request
         $this->restApiRequestMock->expects($this->once())
             ->method('executeRestApiRequest')
             ->with($requestMethod, $requestUri, $getData, $postData)

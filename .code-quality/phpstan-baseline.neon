@@ -45,8 +45,8 @@ parameters:
 				count: 1
 				path: ../Classes/System/Restler/Format/HalJsonFormat.php
 			-
-				message: "#^Unable to resolve the template type T in call to method static method (.*)$#"
-				count: 2
+				message: "#^Unable to resolve the template type T in call to static method TYPO3\\\\CMS\\\\Core\\\\Utility\\\\GeneralUtility\\:\\:makeInstance\\(\\)$#"
+				count: 1
 				path: ../Classes/System/Restler/Builder.php
 			-
 				message: '#^Instanceof between stdClass and stdClass will always evaluate to true\.$#'

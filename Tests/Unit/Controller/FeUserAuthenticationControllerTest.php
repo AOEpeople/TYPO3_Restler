@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\Tests\Unit\Controller;
 
 /***************************************************************
@@ -31,37 +33,32 @@ use Aoe\Restler\System\TYPO3\Loader as TYPO3Loader;
 use Aoe\Restler\Tests\Unit\BaseTestCase;
 use Luracast\Restler\Data\ApiMethodInfo;
 use Luracast\Restler\Restler;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @package Restler
  * @subpackage Tests
  */
-class FeUserAuthenticationControllerTest extends BaseTestCase
+final class FeUserAuthenticationControllerTest extends BaseTestCase
 {
-    /**
-     * @var FeUserAuthenticationController
-     */
-    protected $controller;
+    private FeUserAuthenticationController $controller;
 
-    /**
-     * @var TYPO3Loader
-     */
-    protected $typo3LoaderMock;
+    private TYPO3Loader&MockObject $typo3LoaderMock;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->typo3LoaderMock = $this->getMockBuilder(TYPO3Loader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->typo3LoaderMock = $this->createMock(TYPO3Loader::class);
         $this->controller = new FeUserAuthenticationController($this->typo3LoaderMock);
     }
 
     public function testCheckThatAuthenticationWillFailWhenControllerIsNotResponsibleForAuthenticationCheck(): void
     {
-        $this->typo3LoaderMock->expects(self::never())->method('initializeFrontendUser');
-        $this->typo3LoaderMock->expects(self::never())->method('hasActiveFrontendUser');
+        $this->typo3LoaderMock->expects($this->never())
+            ->method('initializeFrontendUser');
+        $this->typo3LoaderMock->expects($this->never())
+            ->method('hasActiveFrontendUser');
         $this->assertFalse($this->controller->__isAllowed());
     }
 
@@ -70,8 +67,12 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
         $this->controller->argumentNameOfPageId = '5';
         $this->controller->checkAuthentication = true;
 
-        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontendUser')->with('5');
-        $this->typo3LoaderMock->expects(self::once())->method('hasActiveFrontendUser')->willReturn(false);
+        $this->typo3LoaderMock->expects($this->once())
+            ->method('initializeFrontendUser')
+            ->with('5');
+        $this->typo3LoaderMock->expects($this->once())
+            ->method('hasActiveFrontendUser')
+            ->willReturn(false);
 
         $this->assertFalse($this->controller->__isAllowed());
     }
@@ -82,8 +83,12 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
         $this->controller->checkAuthentication = true;
 
         // determinePageId should determine page id from class var argumentNameOfPageId
-        $this->typo3LoaderMock->expects(self::once())->method('initializeFrontendUser')->with('5');
-        $this->typo3LoaderMock->expects(self::once())->method('hasActiveFrontendUser')->willReturn(true);
+        $this->typo3LoaderMock->expects($this->once())
+            ->method('initializeFrontendUser')
+            ->with('5');
+        $this->typo3LoaderMock->expects($this->once())
+            ->method('hasActiveFrontendUser')
+            ->willReturn(true);
 
         $this->assertTrue($this->controller->__isAllowed());
     }
@@ -91,10 +96,10 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
     public function testShouldSetPageIdZeroIfArgumentDoesNotExist(): void
     {
         /** @var ApiMethodInfo $apiMethodInfoMock */
-        $apiMethodInfoMock = $this->getMockBuilder(ApiMethodInfo::class)->disableOriginalConstructor()->getMock();
+        $apiMethodInfoMock = $this->createMock(ApiMethodInfo::class);
 
         /** @var Restler $restlerMock */
-        $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $restlerMock = $this->createMock(Restler::class);
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
 
         $this->controller->restler = $restlerMock;
@@ -111,7 +116,7 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
     public function testShouldSetPageIdIfArgumentDoesExist(): void
     {
         /** @var \Luracast\Restler\Data\ApiMethodInfo $apiMethodInfoMock */
-        $apiMethodInfoMock = $this->getMockBuilder(ApiMethodInfo::class)->disableOriginalConstructor()->getMock();
+        $apiMethodInfoMock = $this->createMock(ApiMethodInfo::class);
         $apiMethodInfoMock->arguments = array_merge(
             $apiMethodInfoMock->arguments,
             ['pid' => 0]
@@ -122,7 +127,7 @@ class FeUserAuthenticationControllerTest extends BaseTestCase
         );
 
         /** @var Restler $restlerMock */
-        $restlerMock = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $restlerMock = $this->createMock(Restler::class);
         $restlerMock->apiMethodInfo = $apiMethodInfoMock;
 
         $this->controller->restler = $restlerMock;

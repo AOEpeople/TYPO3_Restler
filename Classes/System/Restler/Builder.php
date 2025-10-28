@@ -142,7 +142,7 @@ class Builder implements SingletonInterface
     private function setAutoLoading(): void
     {
         // set autoload for Extbase/TYPO3-classes
-        Scope::$resolver = static fn ($className): object => GeneralUtility::makeInstance($className);
+        Scope::$resolver = GeneralUtility::makeInstance(...);
     }
 
     /**

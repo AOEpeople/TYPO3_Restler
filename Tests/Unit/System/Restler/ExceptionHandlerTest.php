@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\Tests\Unit\System\Restler;
 
 /***************************************************************
@@ -35,7 +37,7 @@ use Luracast\Restler\Restler;
  * @package Restler
  * @subpackage Tests
  */
-class ExceptionHandlerTest extends BaseTestCase
+final class ExceptionHandlerTest extends BaseTestCase
 {
     /**
      * @dataProvider statusCodes
@@ -44,17 +46,19 @@ class ExceptionHandlerTest extends BaseTestCase
     {
         $message = $statusName !== '' && $statusName !== '0' ? $statusName : 'dummy-message';
 
-        $restler = $this->getMockBuilder(Restler::class)->disableOriginalConstructor()->getMock();
+        $restler = $this->createMock(Restler::class);
 
         $exceptionHandler = $this->getMockBuilder(ExceptionHandler::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getRestler', 'getRestlerException'])
             ->getMock();
-        $exceptionHandler->expects(self::any())->method('getRestler')->willReturn($restler);
+        $exceptionHandler->method('getRestler')
+            ->willReturn($restler);
 
         $restlerException = new RestException($statusCode, $message);
 
-        $exceptionHandler->expects(self::any())->method('getRestlerException')->willReturn($restlerException);
+        $exceptionHandler->method('getRestlerException')
+            ->willReturn($restlerException);
 
         $functionName = 'handle' . $statusCode;
         $this->assertEquals($message, $exceptionHandler->{$functionName}());

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Aoe\Restler\Tests\Unit\System\Restler;
 
 /***************************************************************
@@ -47,34 +49,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package Restler
  * @subpackage Tests
  */
-class BuilderTest extends BaseTestCase
+final class BuilderTest extends BaseTestCase
 {
-    /**
-     * @var Builder
-     */
-    protected $builder;
+    private Builder $builder;
 
-    /**
-     * original config of the restler-Extension
-     * @var array
-     */
-    protected $originalRestlerConfigurationClasses;
+    private array $originalRestlerConfigurationClasses;
 
     /**
      * original server-configuration ($_SERVER)
-     * @var array
      */
-    protected $originalServerVars;
+    private array $originalServerVars;
 
-    /**
-     * @var ExtensionConfiguration|MockObject
-     */
-    protected $extensionConfigurationMock;
+    private ExtensionConfiguration&MockObject $extensionConfigurationMock;
 
-    /**
-     * @var CacheManager|MockObject
-     */
-    protected $cacheManagerMock;
+    private CacheManager&MockObject $cacheManagerMock;
 
     protected function setUp(): void
     {
@@ -94,9 +82,7 @@ class BuilderTest extends BaseTestCase
         $this->originalRestlerConfigurationClasses = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'];
         $this->originalServerVars = $_SERVER;
 
-        $this->extensionConfigurationMock = $this->getMockBuilder(ExtensionConfiguration::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->extensionConfigurationMock = $this->createMock(ExtensionConfiguration::class);
         $this->cacheManagerMock = $this->getMockBuilder(CacheManager::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getCache'])
@@ -122,25 +108,31 @@ class BuilderTest extends BaseTestCase
     public function testCanCreateRestlerObject(): void
     {
         $this->extensionConfigurationMock
-            ->expects(self::once())->method('isProductionContextSet')
+            ->expects($this->once())
+            ->method('isProductionContextSet')
             ->willReturn(false);
         $this->extensionConfigurationMock
-            ->expects(self::once())->method('isCacheRefreshingEnabled')
+            ->expects($this->once())
+            ->method('isCacheRefreshingEnabled')
             ->willReturn(true);
 
-        $typo3CacheMock = $this->getMockBuilder(Cache::class)->disableOriginalConstructor()->getMock();
+        $typo3CacheMock = $this->createMock(Cache::class);
         GeneralUtility::setSingletonInstance(Cache::class, $typo3CacheMock);
 
-        $typo3RequestMock = $this->getMockBuilder(ServerRequest::class)->disableOriginalConstructor()->getMock();
+        $typo3RequestMock = $this->createMock(ServerRequest::class);
 
-        $requestUri = $this->getMockBuilder(Uri::class)->getMock();
-        $requestUri->expects(self::atLeastOnce())->method('getPath')->willReturn('/api/device');
+        $requestUri = $this->createMock(Uri::class);
+        $requestUri->expects($this->atLeastOnce())
+            ->method('getPath')
+            ->willReturn('/api/device');
         $requestUri->method('withQuery')
             ->willReturn($requestUri);
         $requestUri->method('withPath')
             ->willReturn($requestUri);
 
-        $typo3RequestMock->expects(self::atLeastOnce())->method('getUri')->willReturn($requestUri);
+        $typo3RequestMock->expects($this->atLeastOnce())
+            ->method('getUri')
+            ->willReturn($requestUri);
 
         $createdObj = $this->callUnaccessibleMethodOfObject($this->builder, 'createRestlerObject', [$typo3RequestMock]);
         $this->assertInstanceOf(RestlerExtended::class, $createdObj);
@@ -148,13 +140,13 @@ class BuilderTest extends BaseTestCase
 
     public function testCanConfigureRestlerObject(): void
     {
-        $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->createMock(RestlerExtended::class);
 
         $configurationClass = ValidConfiguration::class;
-        $configurationMock = $this->getMockBuilder($configurationClass)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configurationMock->expects(self::once())->method('configureRestler')->with($restlerObj);
+        $configurationMock = $this->createMock($configurationClass);
+        $configurationMock->expects($this->once())
+            ->method('configureRestler')
+            ->with($restlerObj);
 
         GeneralUtility::setSingletonInstance(ValidConfiguration::class, $configurationMock);
 
@@ -167,13 +159,13 @@ class BuilderTest extends BaseTestCase
 
     public function testCanConfigureRestlerWithExternalConfigurationClassObject(): void
     {
-        $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->createMock(RestlerExtended::class);
 
         $configurationClass = ValidConfiguration::class;
-        $configurationMock = $this->getMockBuilder($configurationClass)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $configurationMock->expects(self::exactly(2))->method('configureRestler')->with($restlerObj);
+        $configurationMock = $this->createMock($configurationClass);
+        $configurationMock->expects($this->exactly(2))
+            ->method('configureRestler')
+            ->with($restlerObj);
 
         GeneralUtility::setSingletonInstance(ValidConfiguration::class, $configurationMock);
 
@@ -191,7 +183,7 @@ class BuilderTest extends BaseTestCase
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = '';
 
-        $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->createMock(RestlerExtended::class);
         $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', [$restlerObj]);
     }
 
@@ -202,7 +194,7 @@ class BuilderTest extends BaseTestCase
         // override test-restler-configuration
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'] = [];
 
-        $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
+        $restlerObj = $this->createMock(RestlerExtended::class);
         $this->callUnaccessibleMethodOfObject($this->builder, 'configureRestler', [$restlerObj]);
     }
 
@@ -232,17 +224,23 @@ class BuilderTest extends BaseTestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getCacheDirectory'])
             ->getMock();
-        $simpleFileBackend->expects(self::once())->method('getCacheDirectory')->willReturn(
-            'typo3temp/Cache/Data/tx_restler_cache'
-        );
+        $simpleFileBackend->expects($this->once())
+            ->method('getCacheDirectory')
+            ->willReturn(
+                'typo3temp/Cache/Data/tx_restler_cache'
+            );
 
         $cacheFrontend = $this->getMockBuilder(PhpFrontend::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getBackend'])
             ->getMock();
-        $cacheFrontend->expects(self::once())->method('getBackend')->willReturn($simpleFileBackend);
+        $cacheFrontend->expects($this->once())
+            ->method('getBackend')
+            ->willReturn($simpleFileBackend);
 
-        $this->cacheManagerMock->expects(self::once())->method('getCache')->willReturn($cacheFrontend);
+        $this->cacheManagerMock->expects($this->once())
+            ->method('getCache')
+            ->willReturn($cacheFrontend);
 
         $this->callUnaccessibleMethodOfObject($this->builder, 'setCacheDirectory');
         $this->assertSame('typo3temp/Cache/Data/tx_restler_cache', Defaults::$cacheDirectory);
@@ -265,8 +263,10 @@ class BuilderTest extends BaseTestCase
         unset($GLOBALS['TYPO3_Restler']['addApiClass']);
         $GLOBALS['TYPO3_Restler']['addApiClass']['foopath'][] = 'BarController';
 
-        $restlerObj = $this->getMockBuilder(RestlerExtended::class)->disableOriginalConstructor()->getMock();
-        $restlerObj->expects(self::once())->method('addAPIClass')->with('BarController', 'foopath');
+        $restlerObj = $this->createMock(RestlerExtended::class);
+        $restlerObj->expects($this->once())
+            ->method('addAPIClass')
+            ->with('BarController', 'foopath');
 
         //verifiy
         $this->callUnaccessibleMethodOfObject($this->builder, 'addApiClassesByGlobalArray', [$restlerObj]);
