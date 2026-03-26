@@ -1,0 +1,3 @@
+# The api_explorer/.* MUST not hit TYPO3 (index.php) otherwise the requests will fail.
+# This / (target) is only to prevent this to happen.
+RewriteRule ^api_explorer/.*$ / [NC,QSA,L]

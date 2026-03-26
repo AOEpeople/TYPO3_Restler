@@ -13,8 +13,10 @@ Screenshots
 
 Extension configuration:
 
-.. image:: /Images/restler-configuration.png
+..  figure:: /Images/restler-configuration.png
+    :alt: Restler Configuration Example
 
 API Explorer:
 
-.. image:: /Images/api_explorer.png
+..  figure:: /Images/api_explorer.png
+    :alt: API Explorer
