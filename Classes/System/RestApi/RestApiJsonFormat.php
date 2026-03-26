@@ -39,17 +39,7 @@ class RestApiJsonFormat extends JsonFormat implements SingletonInterface
     {
         $options = 0;
         if (self::$bigIntAsString) {
-            if ((PHP_MAJOR_VERSION === 5 && PHP_MINOR_VERSION >= 4) // PHP >= 5.4
-                || PHP_MAJOR_VERSION > 5 // PHP >= 6.0
-            ) {
-                $options |= JSON_BIGINT_AS_STRING;
-            } else {
-                $data = preg_replace(
-                    '/:\s*(\-?\d+(\.\d+)?([e|E][\-|\+]\d+)?)/',
-                    ': "$1"',
-                    $data
-                );
-            }
+            $options |= JSON_BIGINT_AS_STRING;
         }
 
         try {
