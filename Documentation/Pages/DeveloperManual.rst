@@ -54,14 +54,8 @@ Inside your PHP-class, you can configure the Restler framework:
 Any class that implements the "Aoe\Restler\System\Restler\ConfigurationInterface" interface, must be declared in your
 extension "ext_localconf.php" file.
 
-.. code:: php
-
-  // Add the configuration class (in Extension 'restler'):
-  // In that configuration class, we can:
-  // - configure the cache directory
-  // - enable the extbase DI container
-  // - enable the online API documentation (if enabled in extension-configuration)
-  $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['restler']['restlerConfigurationClasses'][] = 'Aoe\\Restler\\System\\RestlerConfiguration';
+..  literalinclude:: DeveloperManual/_restler_ext_localconf.php
+    :language: php
 
 This way the following will be achieved:
 
@@ -76,31 +70,19 @@ Using TYPO3 Restler from PHP libraries
 If you like to register API classes to the Restler object that are located outside of TYPO3 use the alternative GLOBAL array
 to set your configuration class which implements the "Aoe\Restler\System\Restler\ConfigurationInterface" interface:
 
-.. code:: php
-
-    // register API-Controller to TYPO3_Restler
-    $GLOBALS['TYPO3_Restler']['restlerConfigurationClasses'][] =
-        yourNamespace\Configuration::class;
+..  literalinclude:: DeveloperManual/_restler_register_configuration.php
+    :language: php
 
 or you can directly register your REST-controller to an endpoint by using the GLOBAL array:
 
-.. code:: php
-
-    // register API-Controller to Restler
-    $GLOBALS['TYPO3_Restler']['addApiClass']['<YOUR_ENDPOINT_PATH>'][] =
-        yourNamespace\yourRestController::class;
-
+..  literalinclude:: DeveloperManual/_restler_register_controller.php
+    :language: php
 
 You just have to make sure that this setting is loaded by auto-loading.
 For example (via composer);
 
-.. code:: json
-
-    "autoload": {
-        "files": [
-            "fileWithGlobalConfigurationRegistration.php"
-        ]
-    }
+..  literalinclude:: DeveloperManual/_composer_autoload.json
+    :language: json
 
 Caching of REST-endpoints - via TYPO3-Caching-Framework (experimental)
 -------------------------------------
@@ -112,26 +94,8 @@ this two phpdoc-annotations in your REST-endpoint:
 
 Example:
 
-.. code:: php
-
-    /**
-     * The response of this REST-endpoint will be cached by TYPO3-caching-framework, because:
-     *  - it's a GET-request/method
-     *  - annotation 'restler_typo3cache_expires' (define seconds, after cache is expired; '0' means cache will never expire) is set
-     *  - annotation 'restler_typo3cache_tags' (comma-separated list of cache-tags) is set
-     *
-     * The cache is stored in this TYPO3-tables:
-     *  - cache_restler
-     *  - cache_restler_tags
-     *
-     * @url GET my-rest-endpoint-which-should-be-cached
-     *
-     * @restler_typo3cache_expires 180
-     * @restler_typo3cache_tags typo3cache_examples,typo3cache_example_car
-     */
-    public function myRestEndpointWhichShouldBeCached() {
-
-    }
+..  literalinclude:: DeveloperManual/_restler_docs.php
+    :language: php
 
 For details examples please refer to the restler_examples extension.
 
@@ -149,9 +113,8 @@ You can practically decouple various components by exposing an internal API whic
 
 Example:
 
-.. code:: php
-
-    $this->restApiClient->executeRequest('GET', '/api/rest-api-client/internal_endpoint/cars/1')
+..  literalinclude:: DeveloperManual/_restapi_client.php
+    :language: php
 
 For details examples please refer to the restler_examples extension.
 

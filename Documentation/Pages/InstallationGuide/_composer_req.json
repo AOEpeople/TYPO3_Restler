@@ -1,0 +1,4 @@
+"require": {
+    ...
+    "aoe/restler": "2.*"
+},

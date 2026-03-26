@@ -13,3 +13,4 @@ Build/testing-docker/.env
 /typo3conf
 /vendor
 /var
+Documentation-GENERATED-temp

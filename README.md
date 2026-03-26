@@ -26,10 +26,20 @@ composer require aoe/restler
 
 ## Documentation
 
+## Documentation
+
 The documentation is available online at [docs.typo3.org][2].
 
-To render the documentation locally, please use the official TYPO3 Documentation rendering Docker Tool.
-<https://github.com/t3docs/docker-render-documentation>
+If you want you can also render the documentation locally, this can be really helpful when adjusting
+the documentation to check before commiting.
+
+The local rendering requires docker and can be done like this:
+
+```bash
+docker run --rm --pull always -v $(pwd):/project -it ghcr.io/typo3-documentation/render-guides:latest --config=Documentation
+```
+
+And then open `Documentation-GENERATED-temp/Index.html` with your browser.
 
 ## Copyright / License
 
