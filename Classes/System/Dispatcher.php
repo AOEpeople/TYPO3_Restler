@@ -75,7 +75,7 @@ class Dispatcher extends RestlerBuilderAware implements MiddlewareInterface
                 ->getPath();
             if ($siteBasePath === '/' || $siteBasePath === '') {
                 $siteBasePath = null;
-            } elseif ($siteBasePath[-1] !== '/') {
+            } elseif (!str_ends_with($siteBasePath, '/')) {
                 $siteBasePath .= '/';
             }
         } else {
