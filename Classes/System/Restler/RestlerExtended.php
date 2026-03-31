@@ -122,7 +122,7 @@ class RestlerExtended extends Restler
                 $siteBasePath = $this->request->getAttribute('site')
                     ->getBase()
                     ->getPath();
-                if ($siteBasePath !== '/' && $siteBasePath[-1] !== '/') {
+                if ($siteBasePath !== '/' && !str_ends_with($siteBasePath, '/')) {
                     $siteBasePath .= '/';
                 }
             } else {
