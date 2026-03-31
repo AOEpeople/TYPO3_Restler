@@ -45,4 +45,4 @@ Copyright: (c) 2015 - 2024, AOE GmbH
 License: GPLv3, <http://www.gnu.org/licenses/gpl-3.0.en.html>  
 
 [1]: https://extensions.typo3.org/extension/restler
-[2]: https://docs.typo3.org/p/aoepeople/restler/
+[2]: https://docs.typo3.org/p/aoe/restler/main/en-us/
