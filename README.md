@@ -41,7 +41,7 @@ And then open `Documentation-GENERATED-temp/Index.html` with your browser.
 
 ## Copyright / License
 
-Copyright: (c) 2015 - 2024, AOE GmbH
+Copyright: (c) 2015 - 2026, AOE GmbH
 License: GPLv3, <http://www.gnu.org/licenses/gpl-3.0.en.html>  
 
 [1]: https://extensions.typo3.org/extension/restler
